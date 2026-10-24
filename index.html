@@ -93,6 +93,10 @@ dialog h3{margin:0 0 14px;font-size:19px}
 .dys input{width:auto;margin-right:4px}
 #toast{position:fixed;bottom:96px;left:50%;transform:translateX(-50%);background:#2b2118;color:#fff;padding:10px 20px;border-radius:99px;opacity:0;transition:opacity .2s;pointer-events:none;z-index:20}
 #toast.on{opacity:1}
+
+/* Stock report dashboard */
+.report-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:start}.report-grid .card{margin-bottom:0;min-width:0}.rbar{margin:13px 0}.rbar-head{display:flex;justify-content:space-between;gap:10px;font-size:13px;margin-bottom:5px}.rbar-head span{overflow-wrap:anywhere}.rbar-head b{white-space:nowrap}.rbar-track{height:9px;background:#f3f4f6;border-radius:99px;overflow:hidden}.rbar-track i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#f59e0b,#fbbf24)}.report-grid .card:nth-child(4) .rbar-track i{background:linear-gradient(90deg,#ef4444,#fca5a5)}.rlist-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid var(--ln)}.rlist-row:last-child{border-bottom:0}.rlist-row span{min-width:0}.rlist-row b{display:block;font-size:13px}.rlist-row small{display:block;color:var(--mu);font-size:11px}.rlist-row strong{font-size:12px;white-space:nowrap}.warn-txt{color:#b45309}.legend{display:flex;gap:16px;font-size:12px;color:var(--mu);margin:4px 0 12px}.legend span{display:flex;align-items:center;gap:6px}.legend i{display:inline-block;width:10px;height:10px;border-radius:3px}.lg-in,.move-in{background:#10b981}.lg-out,.move-out{background:#ef4444}.move-chart{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px;align-items:end;min-height:170px}.move-day{display:flex;flex-direction:column;align-items:center;gap:5px;min-width:0}.move-bars{height:100px;width:100%;display:flex;align-items:end;justify-content:center;gap:4px;border-bottom:1px solid var(--ln)}.move-bars i{display:block;width:30%;max-width:20px;min-height:0;border-radius:4px 4px 0 0}.move-day small{font-size:10px;white-space:nowrap}.move-day span{font-size:9px;color:var(--mu);text-align:center;line-height:1.3}.report-total{font-size:25px;font-weight:700;color:#b91c1c;margin:8px 0}.report-total small{font-size:12px;font-weight:400;color:var(--mu)}.month-chart{height:175px;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;align-items:end}.month-col{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:end;gap:5px;min-width:0}.month-col b{font-size:10px;color:var(--mu);white-space:nowrap}.month-track{height:110px;width:100%;display:flex;align-items:end;justify-content:center;background:#f9fafb;border-radius:7px 7px 0 0;overflow:hidden}.month-track i{display:block;width:65%;background:#f59e0b;border-radius:5px 5px 0 0}.month-col small{font-size:11px}.report-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.report-stats div{padding:12px;border-radius:12px;background:#fffbeb}.report-stats span{display:block;font-size:12px;color:var(--mu)}.report-stats b{display:block;font-size:18px}@media(max-width:760px){.report-grid{grid-template-columns:1fr}.move-chart{gap:4px}.move-day span{font-size:8px}.month-col b{font-size:9px}.report-grid .card{padding:16px}}
+
 @media(max-width:760px){.g2{grid-template-columns:1fr}.sr{flex-direction:column}.f{grid-template-columns:1fr}.w{padding:0 12px}h2.t{font-size:20px}}
 .kp6{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:16px}
 .kc{background:#fff;border:2px solid transparent;border-radius:14px;box-shadow:var(--sh);padding:12px 14px;text-align:left;color:var(--tx)}
@@ -156,7 +160,7 @@ html body .it > span.vb.o {
 html body .it > span.vb.w { background-color: #f59e0b !important; }
 html body .it > span.vb:not(.w):not(.o) { background-color: #10b981 !important; }
 html body .it > span.vb.o { background-color: #ef4444 !important; }
-.ib2{flex:1;min-width:0}.nm{font-size:16px}
+.ib2{flex:1;min-width:0}.nm{font-size:16px;line-height:1.25}.product-meta{font-size:12px;line-height:1.25;color:var(--mu);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
 .tgc{display:inline-block;font-size:12px;border-radius:8px;padding:1px 8px;font-weight:600;margin-left:4px}
 .ql{font-size:14px;color:var(--mu)}.ql b{color:#059669}.ql b.w{color:#d97706}.ql b.o{color:#dc2626}
 .stp{display:inline-block;border-radius:99px;padding:1px 10px;font-size:12.5px;font-weight:600;background:#d1fae5;color:#047857}.stp.w{background:#fef3c7;color:#b45309}.stp.o{background:#fee2e2;color:#b91c1c}
@@ -180,7 +184,7 @@ html body .it > span.vb.o { background-color: #ef4444 !important; }
 .sb{padding:4px 18px 16px;background:rgba(255,255,255,.55)}
 .li{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-top:1px solid rgba(0,0,0,.06)}
 @media(max-width:700px){.sc4{grid-template-columns:repeat(2,1fr)}.it{padding:10px 12px;flex-wrap:wrap}}
-.rq{width:110px;text-align:right;border:2px solid #ef4444;background:#fef2f2;color:#b91c1c;font-weight:600}
+.rq{width:54px!important;min-width:54px;max-width:54px;padding:7px 5px;text-align:center;border:2px solid #ef4444;background:#fef2f2;color:#b91c1c;font-weight:600;font-variant-numeric:tabular-nums}
 .rq:focus{border-color:#dc2626;box-shadow:0 0 0 3px rgba(239,68,68,.22)}
 #rv td:first-child,#rv th:first-child{position:sticky;left:0;z-index:2;background:#fff;box-shadow:2px 0 4px rgba(120,80,0,.08)}
 #rv th:first-child{background:var(--th)}
@@ -228,7 +232,7 @@ header{background:#fff;color:var(--tx);border-bottom:1px solid #e5e7eb;box-shado
  .it input[type=checkbox]{flex:0 0 auto;margin:0 1px;}
  .it .ib2{position:sticky;left:0;flex:0 0 128px;width:128px;min-width:128px;max-width:128px;z-index:4;background:#fff;overflow:hidden;}
  .it .nm{font-size:12px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
- .it .nm small{font-size:10px;}
+ .it .product-meta{font-size:10px;line-height:1.15;color:var(--mu);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px;}
  .stock-col,.latest-col,.time-col{margin-left:0;min-width:48px;gap:1px;font-size:11px;}
  .stock-col b{font-size:13px;}
  .stock-col small{font-size:10px;}
@@ -266,7 +270,7 @@ const seed=()=>({seq:100,br:'ร้านหลัก',branches:['ร้าน�
  orders:[],moves:[],tx:[]});
 let S;try{S=JSON.parse(localStorage.getItem(KEY))}catch(e){}
 if(!S||!S.products)S=seed();
-S.docs=S.docs||[];S.pin=S.pin||'123456';
+S.docs=S.docs||[];S.pin=S.pin||'123456';S.expCats=S.expCats||['ค่าน้ำ','ค่าไฟฟ้า','ค่าแรง','ค่าเดินทาง','ค่าอุปกรณ์','ค่าเช่า','ค่าอินเทอร์เน็ต','อื่นๆ'];
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){toast('บันทึกในเบราว์เซอร์ไม่ได้ กรุณาส่งออกข้อมูลสำรอง')}};
 const $=s=>document.querySelector(s);
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -281,7 +285,7 @@ const fd=t=>{const d=new Date(t);return `${d.getDate()} ${MON[d.getMonth()].slic
 const low=p=>p.qty<=p.min;
 const poNo=o=>'PO-'+String(o.id).padStart(4,'0');
 let tab='stock',fs='all',q='',onlyLow=false,pv=null;
-const TABS=[['stock','📦','สต๊อก'],['order','🚚','สั่งของ'],['mv','📤','เบิกออก'],['hist','🕘','ประวัติ'],['cash','💵','รายรับ-จ่าย'],['rep','📊','รายงาน']];
+const TABS=[['stock','📦','สต๊อก'],['order','🚚','สั่งของ'],['mv','📤','เบิกออก'],['hist','🕘','ประวัติ'],['cash','💵','รายจ่าย'],['rep','📊','รายงาน']];
 function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>t.classList.remove('on'),2200)}
 function tick(){const d=new Date();$('#dt').textContent=`${DAYS[d.getDay()].replace('วัน','').slice(0,10)} ${d.getDate()} ${MON[d.getMonth()]} ${d.getFullYear()+543}`;$('#tm').textContent=`${z(d.getHours())}:${z(d.getMinutes())}:${z(d.getSeconds())}`}
 setInterval(tick,1000);
@@ -323,7 +327,7 @@ const prow=p=>{
  const last=(S.moves||[]).filter(m=>m.pid==p.id&&m.br==S.br).sort((a,b)=>(b.t||0)-(a.t||0))[0];
  const recent=last?`<span class="last-move ${last.d>0?'up':'down'}"><b>${last.d>0?'↑':'↓'}${Math.abs(last.d)}</b></span>`:'<span class="last-none">—</span>';
  const when=last&&last.t?new Date(last.t).toLocaleString('th-TH',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false}):'—';
- return `<div class="it"><input type="checkbox" data-sel="${p.id}" ${SEL.has(p.id)?'checked':''} aria-label="เลือก ${esc(p.name)}"><span class="vb ${v}"></span><div class="ib2"><div class="nm">${esc(p.name)} <small class="sub">${p.brand?esc(p.brand)+' · ':''}${esc(p.size)}</small></div></div><div class="stock-col"><span class="col-label">คงเหลือ</span><b class="${v}">${p.qty.toFixed(2)}</b><small>${esc(p.unit||'')}</small></div><div class="latest-col"><span class="col-label">ล่าสุด</span>${recent}</div><div class="time-col"><span class="col-label">เวลาเปลี่ยนแปลง</span><span>${when}</span></div><div class="ra"><button class="ib" style="color:var(--or)" data-act="p-edit" data-id="${p.id}" aria-label="แก้ไข">✎</button><button class="ib" style="color:var(--rd)" data-act="p-del" data-id="${p.id}" aria-label="ลบ">🗑</button></div></div>`};
+ return `<div class="it"><input type="checkbox" data-sel="${p.id}" ${SEL.has(p.id)?'checked':''} aria-label="เลือก ${esc(p.name)}"><span class="vb ${v}"></span><div class="ib2"><div class="nm">${esc(p.name)}</div><div class="product-meta">${p.brand?esc(p.brand):'ไม่ระบุยี่ห้อ'} · ${esc(p.size||'ไม่ระบุขนาด')}</div></div><div class="stock-col"><span class="col-label">คงเหลือ</span><b class="${v}">${p.qty.toFixed(2)}</b><small>${esc(p.unit||'')}</small></div><div class="latest-col"><span class="col-label">ล่าสุด</span>${recent}</div><div class="time-col"><span class="col-label">เวลาเปลี่ยนแปลง</span><span>${when}</span></div><div class="ra"><button class="ib" style="color:var(--or)" data-act="p-edit" data-id="${p.id}" aria-label="แก้ไข">✎</button><button class="ib" style="color:var(--rd)" data-act="p-del" data-id="${p.id}" aria-label="ลบ">🗑</button></div></div>`};
 function tbl(){
  const list=B(S.products).filter(p=>(fs=='all'||p.sup==fs)&&(!fst||(fst=='ok'?!low(p):fst=='low'?low(p)&&p.qty>0:p.qty<=0))&&(p.name+p.sku+p.size+p.cat).toLowerCase().includes(q.toLowerCase())).sort((a,b)=>(a.cat||'~').localeCompare(b.cat||'~','th')||a.name.localeCompare(b.name,'th'));
  const g={};list.forEach(p=>(g[p.cat||'ไม่ระบุหมวด']??=[]).push(p));
@@ -332,13 +336,23 @@ function tbl(){
 }
 const selN=()=>{const e=$('#sn');if(e)e.textContent='เลือกไว้ '+SEL.size+' รายการ'};
 function mv(p,d,note,type,no,date){p.qty=r3(Math.max(0,p.qty+d));S.moves.push({t:Date.now(),date:date||today(),br:S.br,pid:p.id,name:p.name,cat:p.cat||'',d,note:note||'',type:type||'adj',no:no||'',by:WHO,after:p.qty})}
+function makeSku(supId,cat){
+ const sup=SP(+supId)||{};
+ const existing=(S.products||[]).filter(x=>x.cat===cat&&x.sku).map(x=>String(x.sku).split('-')[0]).find(Boolean);
+ const catCode=existing||({"นม/เครื่องดื่ม":"FD","กาแฟ":"BE"}[cat]||String(cat||'CAT').replace(/[^A-Za-z0-9]/g,'').slice(0,3).toUpperCase()||'CAT');
+ const supCode=String(sup.code||sup.name||'SUP').replace(/[^A-Za-z0-9]/g,'').slice(0,3).toUpperCase()||'SUP';
+ const prefix=`${catCode}-${supCode}-`;
+ const nums=(S.products||[]).filter(x=>String(x.sku||'').startsWith(prefix)).map(x=>parseInt(String(x.sku).slice(prefix.length),10)).filter(Number.isFinite);
+ return prefix+String(Math.max(0,...nums)+1).padStart(3,'0');
+}
+function refreshAutoSku(){const sku=$('#f_sku'),sup=$('#f_sup'),cat=$('#f_cat');if(!sku||sku.dataset.manual==='1')return;sku.value=makeSku(sup?.value,cat?.value?.trim());}
 function pForm(p={}){
  dlg(`<h3>${p.id?'แก้ไขสินค้า':'เพิ่มสินค้าใหม่'}</h3><div class="f">
- <div><label class="l">รหัสสินค้า</label><input id="f_sku" value="${esc(p.sku)}"></div>
+ <div><label class="l">รหัสสินค้า</label><input id="f_sku" value="${esc(p.sku||'')}" ${p.id?'':'readonly placeholder="ระบบสร้างรหัสให้อัตโนมัติ"'}></div>
  <div class="fw"><label class="l">ซัพพลายเออร์</label><div style="display:flex;gap:8px;align-items:center"><select id="f_sup" style="flex:1">${S.sups.map(s=>`<option value="${s.id}" ${s.id==p.sup?'selected':''}>${esc(s.name)}</option>`).join('')}</select><button type="button" class="bo" data-act="p-sup-add" style="white-space:nowrap">＋ เพิ่มซัพพลายเออร์</button></div></div>
  <div class="fw"><label class="l">ชื่อสินค้า / ยี่ห้อ</label><input id="f_name" value="${esc(p.name)}"></div>
- <div><label class="l">ยี่ห้อ</label><input id="f_brand" value="${esc(p.brand)}"></div>
- <div><label class="l">หมวดหมู่</label><input id="f_cat" list="cl" value="${esc(p.cat)}"><datalist id="cl">${cats().map(c=>`<option>${esc(c)}</option>`).join('')}</datalist></div>
+ <div><label class="l">ยี่ห้อ</label><input id="f_brand" list="brandopts" value="${esc(p.brand||'')}" placeholder="พิมพ์เพื่อค้นหายี่ห้อ"><datalist id="brandopts">${[...new Set((S.products||[]).map(x=>x.brand).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'th')).map(x=>`<option value="${esc(x)}">`).join('')}</datalist></div>
+ <div><label class="l">หมวดหมู่</label><input id="f_cat" list="cl" value="${esc(p.cat||'')}" placeholder="พิมพ์เพื่อค้นหาหมวดหมู่"><datalist id="cl">${[...new Set([...cats(),'นม/เครื่องดื่ม','กาแฟ'])].sort((a,b)=>a.localeCompare(b,'th')).map(c=>`<option value="${esc(c)}">`).join('')}</datalist></div>
  <div><label class="l">ขนาด / รายละเอียด</label><input id="f_size" value="${esc(p.size)}"></div>
  <div><label class="l">หน่วย</label><input id="f_unit" list="unitopts" value="${esc(p.unit||'ชิ้น')}" placeholder="เลือกหรือพิมพ์หน่วย"><datalist id="unitopts">${[...new Set([...(S.products||[]).map(x=>x.unit).filter(Boolean),'ชิ้น'])].sort().map(u=>`<option value="${esc(u)}">`).join('')}</datalist></div>
  <div><label class="l">ราคาแม็คโคร</label><input id="f_market" type="number" min="0" step="any" value="${p.market??0}"></div>
@@ -346,9 +360,10 @@ function pForm(p={}){
  <div><label class="l">คงเหลือ</label><input id="f_qty" type="number" min="0" value="${p.qty??0}"></div>
  <div><label class="l">ขั้นต่ำ</label><input id="f_min" type="number" min="0" value="${p.min??5}"></div></div>
  <div class="ac"><button class="bo" data-act="close">ยกเลิก</button><button class="bt sm" data-act="p-save" data-id="${p.id||''}">บันทึก</button></div>`);
+ if(!p.id){const sku=$('#f_sku');refreshAutoSku();$('#f_sup')?.addEventListener('change',refreshAutoSku);$('#f_cat')?.addEventListener('input',refreshAutoSku);sku?.addEventListener('input',()=>{sku.dataset.manual='1'});}
 }
 /* ---------- order ---------- */
-let ov='buy',OX={};
+let ov='buy',OX={},poDraft=null;
 const MA=['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
 const lead=s=>{const l=s.lead??1;return l==0?'ส่งวันนี้':l==1?'ส่งวันถัดไป':'ส่ง '+l+' วัน'};
 const sg=p=>Math.max(Math.ceil(p.min*2-p.qty),1);
@@ -377,7 +392,7 @@ function poForm(sid,pre){
  dlg(`<h3>สร้างใบสั่งซื้อ</h3><label class="l">ซัพพลายเออร์</label><select id="po_sup">${S.sups.map(s=>`<option value="${s.id}" ${s.id==sid?'selected':''}>${esc(s.name)}</option>`).join('')}</select>
  <div class="l" style="margin:12px 0 6px">รายชื่อสินค้าในใบสั่งซื้อ</div><div id="lines"></div>
  ${ps.length?'<button class="bo sm" data-act="line">+ เพิ่มรายการ</button>':'<div class="em">ซัพพลายเออร์นี้ยังไม่มีสินค้า</div>'}
- <div class="ac"><button class="bo" data-act="close">ยกเลิก</button><button class="bt sm" data-act="po-save">สร้างใบสั่งซื้อ</button></div>`);
+ <div class="ac"><button class="bo" data-act="close">ยกเลิก</button><button class="bt sm" data-act="po-save">ตรวจสอบใบสั่งซื้อ</button></div>`);
  window._ps=ps;const lw=ps.filter(low).map(p=>({pid:p.id,qty:Math.max(p.min*2-p.qty,1)}));
  (pre||(lw.length?lw:ps.slice(0,1).map(p=>({pid:p.id,qty:1})))).forEach(addLine);
 }
@@ -394,24 +409,44 @@ function schForm(s){
 }
 /* ---------- cash ---------- */
 function cash(){
- const tx=B(S.tx),now=new Date(),ym=now.getFullYear()+'-'+now.getMonth();
+ const tx=B(S.tx).filter(t=>t.type=='out'),now=new Date(),ym=now.getFullYear()+'-'+now.getMonth();
  const mo=tx.filter(t=>{const d=new Date(t.t);return d.getFullYear()+'-'+d.getMonth()==ym});
  const sum=(a,ty)=>a.filter(t=>t.type==ty).reduce((s,t)=>s+t.amt,0),i=sum(mo,'in'),e=sum(mo,'out');
- return `<div class="row"><h2 class="t">💵 รายรับ-จ่าย</h2></div>
- <div class="kp"><div><span>รายรับเดือนนี้</span><b class="in2">${m2(i)}</b></div><div><span>รายจ่ายเดือนนี้</span><b class="ex">${m2(e)}</b></div><div><span>กำไรสุทธิเดือนนี้</span><b>${m2(i-e)}</b></div></div>
- <div class="card"><h3>บันทึกรายการ</h3><div class="fm"><div><label class="l">ประเภท</label><select id="t_ty"><option value="in">รายรับ</option><option value="out">รายจ่าย</option></select></div><div><label class="l">จำนวนเงิน</label><input id="t_amt" type="number" min="0" step="any"></div><div><label class="l">หมวดหมู่</label><input id="t_cat" list="cats" placeholder="เช่น ยอดขาย, ค่าน้ำไฟ"><datalist id="cats"><option>ยอดขาย<option>ซื้อสินค้า<option>ค่าน้ำไฟ<option>ค่าแรง<option>อื่นๆ</datalist></div><div><label class="l">หมายเหตุ</label><input id="t_note"></div><button class="bt" data-act="tx-add">บันทึก</button></div></div>
- <div class="tw">${tx.length?`<table style="min-width:600px"><tr><th>เวลา</th><th>ประเภท</th><th>หมวดหมู่</th><th>หมายเหตุ</th><th class="n">จำนวนเงิน</th><th></th></tr>${[...tx].reverse().slice(0,200).map(t=>`<tr><td>${fd(t.t)}</td><td class="${t.type=='in'?'in2':'ex'}">${t.type=='in'?'รายรับ':'รายจ่าย'}</td><td>${esc(t.cat)}</td><td>${esc(t.note)}</td><td class="n"><b>${m2(t.amt)}</b></td><td><button class="ib" style="color:var(--rd)" data-act="tx-del" data-id="${t.id}" aria-label="ลบ">🗑</button></td></tr>`).join('')}</table>`:'<div class="em">ยังไม่มีรายการ</div>'}</div>`;
+ return `<div class="row"><h2 class="t">💵 รายจ่าย</h2></div>
+ <div class="kp"><div><span>รายจ่ายเดือนนี้</span><b class="ex">${m2(e)}</b></div></div>
+ <div class="card"><h3>บันทึกรายการ</h3><div class="fm"><div><label class="l">จำนวนเงิน</label><input id="t_amt" type="number" min="0" step="any"></div><div><label class="l">หมวดหมู่</label><select id="t_cat" required><option value="">เลือกหมวดหมู่</option>${S.expCats.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join('')}</select></div><div><label class="l">หมายเหตุ</label><input id="t_note"></div><button class="bt" data-act="tx-add">บันทึก</button></div></div>
+ <div class="tw">${tx.length?`<table style="min-width:600px"><tr><th>เวลา</th><th>หมวดหมู่</th><th>หมายเหตุ</th><th class="n">จำนวนเงิน</th><th></th></tr>${[...tx].reverse().slice(0,200).map(t=>`<tr><td>${fd(t.t)}</td><td>${esc(t.cat)}</td><td>${esc(t.note)}</td><td class="n"><b>${m2(t.amt)}</b></td><td><button class="ib" style="color:var(--rd)" data-act="tx-del" data-id="${t.id}" aria-label="ลบ">🗑</button></td></tr>`).join('')}</table>`:'<div class="em">ยังไม่มีรายการ</div>'}</div>`;
 }
 /* ---------- report ---------- */
 function rep(){
- const ps=B(S.products),cost=ps.reduce((a,p)=>a+p.qty*p.cost,0),mk=ps.reduce((a,p)=>a+p.qty*p.market,0),tx=B(S.tx);
- const i=tx.filter(t=>t.type=='in').reduce((a,t)=>a+t.amt,0),e=tx.filter(t=>t.type=='out').reduce((a,t)=>a+t.amt,0);
- const mvs=B(S.moves).slice(-15).reverse(),lw=ps.filter(low);
- return `<div class="row"><h2 class="t">📊 รายงาน</h2></div>
- <div class="kp"><div><span>มูลค่าสต๊อก (ต้นทุนจริง)</span><b>${m2(cost)}</b></div><div><span>มูลค่าตามราคาแม็คโคร</span><b>${m2(mk)}</b></div><div><span>ประหยัดเทียบแม็คโคร</span><b class="in2">${m2(mk-cost)}</b></div><div><span>สินค้าใกล้หมด/หมด</span><b>${lw.length} รายการ</b></div></div>
- <div class="kp"><div><span>รายรับทั้งหมด</span><b class="in2">${m2(i)}</b></div><div><span>รายจ่ายทั้งหมด</span><b class="ex">${m2(e)}</b></div><div><span>กำไรสุทธิ</span><b>${m2(i-e)}</b></div></div>
- <div class="card"><h3 class="k">📊 วิเคราะห์ทุกสาขา</h3><div class="tw" style="box-shadow:none"><table style="min-width:560px"><tr><th>สาขา</th><th class="n">สินค้า</th><th class="n">ใกล้หมด/หมด</th><th class="n">มูลค่าสต๊อก</th><th class="n">รับเข้า 30 วัน</th><th class="n">เบิกออก 30 วัน</th></tr>${S.branches.map(b=>{const pp=S.products.filter(p=>p.br==b),mm=S.moves.filter(m=>m.br==b&&m.t>Date.now()-2592e6);return `<tr><td>${esc(b)}</td><td class="n">${pp.length}</td><td class="n">${pp.filter(low).length}</td><td class="n">${m2(pp.reduce((a,p)=>a+p.qty*p.cost,0))}</td><td class="n">${mm.filter(m=>m.type=='in').reduce((a,m)=>a+m.d,0)}</td><td class="n">${-mm.filter(m=>m.type=='out').reduce((a,m)=>a+m.d,0)}</td></tr>`}).join('')}</table></div></div>
- <div class="card"><h3 class="k">ความเคลื่อนไหวสต๊อกล่าสุด</h3>${mvs.length?`<div class="tw" style="box-shadow:none"><table style="min-width:500px"><tr><th>เวลา</th><th>สินค้า</th><th class="n">จำนวน</th><th>หมายเหตุ</th></tr>${mvs.map(m=>`<tr><td>${fd(m.t)}</td><td>${esc(m.name)}</td><td class="n ${m.d>0?'in2':'ex'}">${m.d>0?'+':''}${m.d}</td><td>${esc(m.note)}</td></tr>`).join('')}</table></div>`:'<div class="em">ยังไม่มีความเคลื่อนไหว</div>'}</div>`;
+ const ps=B(S.products),cost=ps.reduce((a,p)=>a+(+p.qty||0)*(+p.cost||0),0),mk=ps.reduce((a,p)=>a+(+p.qty||0)*(+p.market||0),0);
+ const lowPs=ps.filter(low).sort((a,b)=>(a.qty-a.min)-(b.qty-b.min));
+ const mv=B(S.moves),tx=B(S.tx).filter(t=>t.type=='out'),now=Date.now(),days=7*864e5;
+ const sum=(arr,fn)=>arr.reduce((a,x)=>a+fn(x),0),m2v=n=>m2(n);
+ const catStock={};ps.forEach(p=>{const c=p.cat||'ไม่ระบุหมวด';catStock[c]=(catStock[c]||0)+(+p.qty||0)*(+p.cost||0)});
+ const stockBars=Object.entries(catStock).sort((a,b)=>b[1]-a[1]).slice(0,8),stockMax=Math.max(1,...stockBars.map(x=>x[1]));
+ const expenseCats={};tx.forEach(t=>{const c=t.cat||'อื่นๆ';expenseCats[c]=(expenseCats[c]||0)+(+t.amt||0)});
+ const expenseBars=Object.entries(expenseCats).sort((a,b)=>b[1]-a[1]).slice(0,8),expenseMax=Math.max(1,...expenseBars.map(x=>x[1]));
+ const dateKey=d=>d.getFullYear()+'-'+z(d.getMonth()+1)+'-'+z(d.getDate());
+ const last7=[...Array(7)].map((_,i)=>{const d=new Date(now-(6-i)*864e5),key=dateKey(d),items=mv.filter(m=>(m.date||dateKey(new Date(m.t||now)))==key);return {label:d.toLocaleDateString('th-TH',{day:'numeric',month:'short'}),ins:sum(items.filter(m=>m.d>0),m=>m.d),outs:sum(items.filter(m=>m.d<0),m=>-m.d)}});
+ const moveMax=Math.max(1,...last7.flatMap(d=>[d.ins,d.outs]));
+ const months=[...Array(6)].map((_,i)=>{const d=new Date();d.setDate(1);d.setMonth(d.getMonth()-(5-i));const key=d.getFullYear()+'-'+d.getMonth();return {label:d.toLocaleDateString('th-TH',{month:'short'}),amount:sum(tx.filter(t=>{const x=new Date(t.t);return x.getFullYear()+'-'+x.getMonth()==key}),t=>+t.amt||0)}});
+ const monthMax=Math.max(1,...months.map(x=>x.amount));
+ const bars=(arr,max,format)=>arr.length?arr.map(([label,val])=>`<div class="rbar"><div class="rbar-head"><span>${esc(label)}</span><b>${format(val)}</b></div><div class="rbar-track"><i style="width:${Math.max(val>0?2:0,val/max*100)}%"></i></div></div>`).join(''):'<div class="em">ยังไม่มีข้อมูล</div>';
+ const moveChart=last7.map(d=>`<div class="move-day"><div class="move-bars"><i class="move-in" title="รับเข้า ${d.ins}" style="height:${Math.max(d.ins?3:0,d.ins/moveMax*100)}%"></i><i class="move-out" title="เบิกออก ${d.outs}" style="height:${Math.max(d.outs?3:0,d.outs/moveMax*100)}%"></i></div><small>${d.label}</small><span>รับ ${r3(d.ins)} · เบิก ${r3(d.outs)}</span></div>`).join('');
+ const received=B(S.orders).filter(o=>o.status=='received'),purchaseTotal=sum(received,o=>+o.total||0),expenseTotal=sum(tx,t=>+t.amt||0);
+ const purchaseTx=tx.filter(t=>t.cat=='ซื้อสินค้า');
+ return `<div class="row"><div><h2 class="t">📊 รายงานสต๊อกและค่าใช้จ่าย</h2><div class="sub2">สรุปจากข้อมูลสินค้า การเคลื่อนไหว ใบสั่งซื้อที่รับจริง และรายจ่ายที่บันทึก</div></div><button class="bo sm" data-act="rep-refresh">↻ อัปเดตรายงาน</button></div>
+ <div class="kp"><div><span>จำนวนสินค้าในระบบ</span><b>${ps.length.toLocaleString('th-TH')} รายการ</b></div><div><span>มูลค่าสต๊อกตามต้นทุน</span><b>${m2(cost)}</b></div><div><span>สินค้าใกล้ขั้นต่ำ/หมด</span><b class="${lowPs.length?'ex':'in2'}">${lowPs.length} รายการ</b></div><div><span>มูลค่าอ้างอิงราคาแม็คโคร</span><b>${m2(mk)}</b></div></div>
+ <div class="report-grid">
+ <div class="card"><h3 class="k">📦 มูลค่าสต๊อกแยกตามหมวดหมู่</h3><p class="sub">คำนวณจากจำนวนคงเหลือ × ต้นทุนจริงต่อสินค้า</p>${bars(stockBars,stockMax,m2v)}</div>
+ <div class="card"><h3 class="k">⚠️ รายการที่ควรตรวจสอบ/สั่งซื้อ</h3>${lowPs.length?`<div class="rlist">${lowPs.slice(0,10).map(p=>`<div class="rlist-row"><span><b>${esc(p.name)}</b><small>${esc(p.cat||'ไม่ระบุหมวด')} · ขั้นต่ำ ${p.min} ${esc(p.unit||'')}</small></span><strong class="${p.qty<=0?'ex':'warn-txt'}">เหลือ ${r3(p.qty)} ${esc(p.unit||'')}</strong></div>`).join('')}</div>`:'<div class="em">ไม่มีสินค้าใกล้หมด</div>'}</div>
+ <div class="card"><h3 class="k">📈 ความเคลื่อนไหว 7 วันล่าสุด</h3><div class="legend"><span><i class="lg-in"></i>รับเข้า</span><span><i class="lg-out"></i>เบิกออก</span></div><div class="move-chart">${moveChart}</div><p class="sub">แสดงจำนวนรวมตามหน่วยของสินค้าแต่ละรายการ จึงควรใช้ดูแนวโน้ม ไม่ใช่ผลรวมหน่วยที่เทียบกันได้โดยตรง</p></div>
+ <div class="card"><h3 class="k">💸 รายจ่ายแยกตามหมวดหมู่</h3><p class="sub">รวมรายจ่ายที่บันทึกในสาขานี้ รวมถึงค่าซื้อสินค้าที่ระบบลงให้อัตโนมัติเมื่อยืนยันรับของ</p><div class="report-total">${m2(expenseTotal)} <small>รายจ่ายสะสม</small></div>${bars(expenseBars,expenseMax,m2v)}</div>
+ <div class="card"><h3 class="k">🗓️ แนวโน้มรายจ่าย 6 เดือน</h3><div class="month-chart">${months.map(m=>`<div class="month-col"><b>${m.amount?m2(m.amount):'฿0'}</b><div class="month-track"><i style="height:${Math.max(m.amount?3:0,m.amount/monthMax*100)}%"></i></div><small>${m.label}</small></div>`).join('')}</div></div>
+ <div class="card"><h3 class="k">🧾 สรุปการสั่งซื้อและรับสินค้าจริง</h3><div class="report-stats"><div><span>ใบสั่งซื้อทั้งหมด</span><b>${B(S.orders).length}</b></div><div><span>รับสินค้าแล้ว</span><b>${received.length}</b></div><div><span>ยอดซื้อที่รับจริง</span><b>${m2(purchaseTotal)}</b></div><div><span>รายจ่ายหมวดซื้อสินค้า</span><b>${m2(sum(purchaseTx,t=>+t.amt||0))}</b></div></div><p class="sub">ระบบบันทึกค่าใช้จ่ายหมวด “ซื้อสินค้า” เมื่อกดยืนยันรับสินค้า และใช้ยอดตามจำนวนที่ได้รับจริง × ราคาจริง</p></div>
+ </div>
+ <div class="card"><h3 class="k">🕘 ความเคลื่อนไหวสต๊อกล่าสุด</h3>${mv.length?`<div class="tw" style="box-shadow:none"><table style="min-width:500px"><tr><th>เวลา</th><th>สินค้า</th><th>หมวดหมู่</th><th class="n">จำนวน</th><th>หมายเหตุ</th></tr>${[...mv].sort((a,b)=>(b.t||0)-(a.t||0)).slice(0,12).map(m=>`<tr><td>${fd(m.t)}</td><td>${esc(m.name)}</td><td>${esc(m.cat||'-')}</td><td class="n ${m.d>0?'in2':'ex'}">${m.d>0?'+':''}${m.d}</td><td>${esc(m.note)}</td></tr>`).join('')}</table></div>`:'<div class="em">ยังไม่มีความเคลื่อนไหว</div>'}</div>`;
 }
 /* ---------- ledger: รับเข้า / เบิกออก / ประวัติ ---------- */
 const TY={in:'รับเข้า',out:'เบิกออก',open:'ยอดยกมา',adj:'ปรับยอด',cancel:'ยกเลิกเอกสาร'};
@@ -475,8 +510,8 @@ function cancelDoc(no){const d=S.docs.find(x=>x.no==no);if(!d||d.cancelled)retur
 function histRows(){const q=H.q.toLowerCase();return B(S.moves).filter(m=>(!q||(m.name+(m.no||'')).toLowerCase().includes(q))&&(!H.type||(m.type||(m.d>0?'in':'out'))==H.type)&&(!H.from||(m.date||'')>=H.from)&&(!H.to||(m.date||'')<=H.to)&&(!H.by||m.by==H.by)&&(!H.cat||m.cat==H.cat)).sort((a,b)=>b.t-a.t)}
 function histV(){const by=[...new Set(B(S.moves).map(m=>m.by).filter(Boolean))];
  return `<div class="row"><h2 class="t">🕘 ประวัติการเคลื่อนไหว</h2><button class="bo" data-act="hexp">ส่งออก CSV</button></div>
- <div class="sr"><div class="in">🔍<input type="text" data-h="q" placeholder="ค้นหาชื่อสินค้า / เลขที่เอกสาร" value="${esc(H.q)}"></div><button class="bo" data-act="hr" data-r="t">วันนี้</button><button class="bo" data-act="hr" data-r="y">เมื่อวาน</button><button class="bo" data-act="hr" data-r="">ทั้งหมด</button></div>
- <div class="sr"><input type="date" data-h="from" value="${H.from}"><input type="date" data-h="to" value="${H.to}"><select data-h="type"><option value="">ทุกประเภท</option>${Object.entries(TY).map(([k,v])=>`<option value="${k}" ${H.type==k?'selected':''}>${v}</option>`).join('')}</select><select data-h="cat">${catOpts(H.cat)}</select><select data-h="by"><option value="">ทุกผู้บันทึก</option>${by.map(b=>`<option ${H.by==b?'selected':''}>${esc(b)}</option>`).join('')}</select></div>
+ <div class="sr hist-shortcuts"><div class="in">🔍<input type="text" data-h="q" placeholder="ค้นหาชื่อสินค้า / เลขที่เอกสาร" value="${esc(H.q)}"></div><div class="hist-preset"><button class="bo" data-act="hr" data-r="t">วันนี้</button><button class="bo" data-act="hr" data-r="y">เมื่อวาน</button><button class="bo" data-act="hr" data-r="">ทั้งหมด</button></div></div>
+ <div class="sr hist-filters"><input type="date" data-h="from" value="${H.from}"><input type="date" data-h="to" value="${H.to}"><select data-h="type"><option value="">ทุกประเภท</option>${Object.entries(TY).map(([k,v])=>`<option value="${k}" ${H.type==k?'selected':''}>${v}</option>`).join('')}</select><select data-h="cat">${catOpts(H.cat)}</select><select data-h="by"><option value="">ทุกผู้บันทึก</option>${by.map(b=>`<option ${H.by==b?'selected':''}>${esc(b)}</option>`).join('')}</select></div>
  <div class="tw" id="ht"></div>`}
 function htbl(){const L=histRows();$('#ht').innerHTML=L.length?`<table style="min-width:900px"><tr><th>เลขที่เอกสาร</th><th>วันที่</th><th>เวลา</th><th>สินค้า</th><th>ประเภท</th><th class="n">รับเข้า</th><th class="n">เบิกออก</th><th class="n">คงเหลือ</th><th>หมายเหตุ</th><th>ผู้บันทึก</th></tr>${L.slice(0,300).map(m=>`<tr><td>${m.no&&S.docs.some(d=>d.no==m.no)?`<button class="ib sku" data-act="doc" data-no="${esc(m.no)}">${esc(m.no)}</button>`:esc(m.no||'-')}</td><td>${dmy(m.date||'')}</td><td>${new Date(m.t).toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'})}</td><td>${esc(m.name)}</td><td>${tyl(m)}</td><td class="n in2">${m.d>0?'+'+m.d:''}</td><td class="n ex">${m.d<0?m.d:''}</td><td class="n">${m.after??''}</td><td>${esc(m.note)}</td><td>${esc(m.by)}</td></tr>`).join('')}</table>`:'<div class="em">ไม่พบประวัติ</div>'}
 function parseCSV(t){t=t.replace(/^\ufeff/,'');const R=[];let r=[],c='',qq=false;for(let i=0;i<t.length;i++){const ch=t[i];if(qq){if(ch=='"'){if(t[i+1]=='"'){c+='"';i++}else qq=false}else c+=ch}else if(ch=='"')qq=true;else if(ch==','){r.push(c);c=''}else if(ch=='\n'||ch=='\r'){if(ch=='\r'&&t[i+1]=='\n')i++;r.push(c);R.push(r);r=[];c=''}else c+=ch}if(c||r.length){r.push(c);R.push(r)}return R.filter(x=>x.some(v=>v.trim()))}
@@ -511,12 +546,22 @@ function recvForm(id){
 }
 function recalc(){let g=0;document.querySelectorAll('#rv tr[data-i]').forEach(r=>{const pr=+r.querySelector('[data-rp]').value||0,q=+r.querySelector('[data-rq]').value||0;g+=pr*q;$('#rt'+r.dataset.i).innerHTML='<b>'+m2(pr*q)+'</b>'});$('#rg').textContent=m2(g)}
 /* ---------- utils ---------- */
+
+function copyFallback(text){const ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();try{document.execCommand('copy');toast('คัดลอกข้อความแล้ว')}catch(e){toast('คัดลอกไม่ได้ กรุณาเลือกข้อความแล้วคัดลอกเอง')}ta.remove()}
+function saveOrderImage(o){
+ const lines=poTxt(o).split('\n'),scale=2,pad=42,lineH=34,width=1000,height=pad*2+lines.length*lineH+20;
+ const c=document.createElement('canvas');c.width=width*scale;c.height=height*scale;const ctx=c.getContext('2d');ctx.scale(scale,scale);
+ ctx.fillStyle='#fffdf6';ctx.fillRect(0,0,width,height);ctx.fillStyle='#29251f';ctx.font='bold 30px Arial, sans-serif';ctx.fillText('SMART STOCK · ใบสั่งซื้อ',pad,pad+4);
+ ctx.strokeStyle='#e7dfd0';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(pad,pad+24);ctx.lineTo(width-pad,pad+24);ctx.stroke();
+ ctx.font='24px Arial, sans-serif';let y=pad+68;for(const line of lines){ctx.fillStyle=line.startsWith('ใบสั่งซื้อ')?'#b45309':'#29251f';ctx.fillText(line.slice(0,65),pad,y);y+=lineH;}
+ c.toBlob(blob=>{if(!blob)return toast('บันทึกรูปไม่สำเร็จ');const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=`${poNo(o)}.png`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);toast('สร้างรูปใบสั่งซื้อแล้ว หากมือถือไม่บันทึกอัตโนมัติ ให้เปิดรูปแล้วเลือกบันทึก')},'image/png');
+}
 function dlg(h){const d=$('#dlg');d.style.width='';d.innerHTML=h;if(!d.open)d.showModal()}
 function download(n,t,x){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([x],{type:t}));a.download=n;a.click();URL.revokeObjectURL(a.href)}
 function settings(){
  dlg(`<h3>ตั้งค่า</h3><div class="f"><div class="fw"><label class="l">เพิ่มสาขา / ร้าน</label><div style="display:flex;gap:6px"><input id="s_br" placeholder="ชื่อสาขา"><button class="bo" data-act="br-add">เพิ่ม</button></div></div>
  <div class="fw"><label class="l">เพิ่มซัพพลายเออร์</label><div style="display:flex;gap:6px"><input id="s_sn" placeholder="ชื่อ"><input id="s_sc" placeholder="รหัสย่อ" style="width:110px"><button class="bo" data-act="sup-add">เพิ่ม</button></div></div>
- <div class="fw" style="display:flex;gap:8px;flex-wrap:wrap"><button class="bo" data-act="export">ส่งออกข้อมูล (JSON)</button><button class="bo" data-act="csv">ส่งออกสินค้า (CSV)</button><button class="bo" data-act="import">นำเข้าข้อมูล</button><button class="bo" data-act="imp-csv">นำเข้า CSV</button><button class="bo" data-act="tpl">ไฟล์ตัวอย่าง CSV</button><button class="bo" data-act="hexp">ส่งออกประวัติ (CSV)</button><button class="bo" data-act="pin-set">เปลี่ยนรหัสแอดมิน</button><button class="bo" style="color:var(--rd)" data-act="reset">ล้างข้อมูลทั้งหมด</button></div></div>
+ <div class="fw"><label class="l">หมวดหมู่รายจ่าย (แยกจากหมวดหมู่สินค้า)</label><div style="display:flex;gap:6px;flex-wrap:wrap"><input id="s_ec" placeholder="เช่น ค่าน้ำ ค่าไฟ" style="flex:1;min-width:150px"><button class="bo" data-act="exp-cat-add">เพิ่มหมวดหมู่</button></div><div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px">${S.expCats.map(c=>`<span class="sp2">${esc(c)} <button class="ib" style="font-size:13px;color:var(--rd)" data-act="exp-cat-del" data-cat="${esc(c)}" aria-label="ลบหมวดหมู่ ${esc(c)}">×</button></span>`).join()}</div></div><div class="fw" style="display:flex;gap:8px;flex-wrap:wrap"><button class="bo" data-act="export">ส่งออกข้อมูล (JSON)</button><button class="bo" data-act="csv">ส่งออกสินค้า (CSV)</button><button class="bo" data-act="import">นำเข้าข้อมูล</button><button class="bo" data-act="imp-csv">นำเข้า CSV</button><button class="bo" data-act="tpl">ไฟล์ตัวอย่าง CSV</button><button class="bo" data-act="hexp">ส่งออกประวัติ (CSV)</button><button class="bo" data-act="pin-set">เปลี่ยนรหัสแอดมิน</button><button class="bo" style="color:var(--rd)" data-act="reset">ล้างข้อมูลทั้งหมด</button></div></div>
  <div class="ac"><button class="bt sm" data-act="close">ปิด</button></div>`);
 }
 document.addEventListener('click',e=>{
@@ -535,7 +580,7 @@ document.addEventListener('click',e=>{
  case'p-save':{
   if(!g('name'))return toast('กรุณากรอกชื่อสินค้า');
   if(id&&!pin('แก้ไขสินค้า'))return;
-  const d={sku:g('sku'),brand:g('brand'),cat:g('cat'),name:g('name'),size:g('size'),sup:+$('#f_sup').value,unit:g('unit')||'ชิ้น',market:+g('market')||0,cost:+g('cost')||0,min:+g('min')||0},qn=+g('qty')||0;
+  const d={sku:g('sku')||(id?'':makeSku($('#f_sup').value,g('cat'))),brand:g('brand'),cat:g('cat'),name:g('name'),size:g('size'),sup:+$('#f_sup').value,unit:g('unit')||'ชิ้น',market:+g('market')||0,cost:+g('cost')||0,min:+g('min')||0},qn=+g('qty')||0;
   if(S.products.some(x=>x.br==S.br&&x.id!=id&&x.name.trim().toLowerCase()==d.name.toLowerCase())&&!confirm('มีสินค้าชื่อนี้อยู่แล้ว ต้องการบันทึกซ้ำหรือไม่?'))return;
   if(id){const p=P(id);Object.assign(p,d);if(qn!=p.qty)mv(p,qn-p.qty,'แก้ไขยอดคงเหลือ','adj')}
   else{const p={id:uid(),br:S.br,qty:0,...d};S.products.push(p);if(qn>0)mv(p,qn,'ยอดยกมา','open')}
@@ -563,8 +608,15 @@ document.addEventListener('click',e=>{
  case'po-save':{
   const items=[...document.querySelectorAll('#lines .ln')].map(r=>({pid:+r.children[0].value,qty:+r.children[1].value})).filter(i=>i.qty>0);
   if(!items.length)return toast('เพิ่มรายการสินค้าอย่างน้อย 1 รายการ');
-  const o={id:uid(),br:S.br,sup:+$('#po_sup').value,date:Date.now(),items,status:'ordered'};S.orders.push(o);pv=o.id;
-  save();$('#dlg').close();tab='order';render();return toast('สร้างใบสั่งซื้อแล้ว')}
+  if(items.some(i=>!P(i.pid)||!(i.qty>0)))return toast('ตรวจสอบสินค้าและจำนวนที่สั่ง');
+  poDraft={id:uid(),br:S.br,sup:+$('#po_sup').value,date:Date.now(),items,status:'ordered'};
+  const lines=poTxt(poDraft);
+  dlg(`<h3>ตรวจสอบใบสั่งซื้อก่อนยืนยัน</h3><p class="sub">ตรวจสอบรายการให้เรียบร้อย แล้วคัดลอกข้อความหรือบันทึกเป็นรูปลงมือถือได้ ก่อนกดยืนยันสร้างใบสั่งซื้อ</p><div class="pv" id="po-draft-text">${esc(lines)}</div><div class="ac" style="flex-wrap:wrap"><button class="bo" data-act="po-edit-draft">กลับไปแก้ไข</button><button class="bo" data-act="po-copy-draft">📋 คัดลอกข้อความ</button><button class="bo" data-act="po-image">🖼 เซฟเป็นรูป</button><button class="bt g sm" data-act="po-confirm">✓ ยืนยันสร้างใบสั่งซื้อ</button></div>`);
+  return}
+ case'po-edit-draft':{if(!poDraft)return toast('ไม่พบใบสั่งซื้อ');const d=poDraft;poDraft=null;return poForm(d.sup,d.items)}
+ case'po-copy-draft':{if(!poDraft)return toast('ไม่พบใบสั่งซื้อ');const text=poTxt(poDraft);if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(text).then(()=>toast('คัดลอกข้อความแล้ว'),()=>copyFallback(text))}else copyFallback(text);return}
+ case'po-image':{if(!poDraft)return toast('ไม่พบใบสั่งซื้อ');return saveOrderImage(poDraft)}
+ case'po-confirm':{if(!poDraft)return toast('ไม่พบใบสั่งซื้อ');S.orders.push(poDraft);pv=poDraft.id;poDraft=null;save();$('#dlg').close();tab='order';ov='recv';render();return toast('ยืนยันสร้างใบสั่งซื้อแล้ว')}
  case'po-view':return poV(id);
  case'copy2':{const o=S.orders.find(o=>o.id==id);navigator.clipboard?.writeText(poTxt(o)).then(()=>toast('คัดลอกแล้ว'),()=>toast('คัดลอกไม่ได้'));return}
  case'copy':{const o=S.orders.find(o=>o.id==pv);navigator.clipboard?.writeText($('.pv').textContent).then(()=>toast('คัดลอกแล้ว'),()=>toast('คัดลอกไม่ได้'));return}
@@ -581,9 +633,12 @@ document.addEventListener('click',e=>{
  case'po-cancel':{const o=S.orders.find(o=>o.id==id);if(o&&o.status=='ordered'&&confirm('ยกเลิกใบสั่งซื้อ '+poNo(o)+' ?')){o.status='cancelled';o.cancelAt=Date.now();if(pv==id)pv=null;save();if($('#dlg').open)$('#dlg').close();render();toast('ยกเลิกใบสั่งซื้อแล้ว')}return}
  case'sch':return schForm(SP(id));
  case'sch-save':{const s=SP(id);s.days=[...document.querySelectorAll('.dys input:checked')].map(x=>+x.value);s.time=$('#sc_t').value||'12:00';s.lead=+$('#sc_l').value||0;save();$('#dlg').close();render();return toast('บันทึกเวลาแล้ว')}
- case'tx-add':{const amt=+$('#t_amt').value;if(!(amt>0))return toast('กรุณากรอกจำนวนเงิน');
-  S.tx.push({id:uid(),br:S.br,t:Date.now(),type:$('#t_ty').value,amt,cat:$('#t_cat').value.trim()||'อื่นๆ',note:$('#t_note').value.trim()});save();render();return toast('บันทึกแล้ว')}
+ case'tx-add':{const amt=+$('#t_amt').value,cat=$('#t_cat').value;if(!(amt>0))return toast('กรุณากรอกจำนวนเงิน');if(!cat)return toast('กรุณาเลือกหมวดหมู่');
+  S.tx.push({id:uid(),br:S.br,t:Date.now(),type:'out',amt,cat,note:$('#t_note').value.trim()});save();render();return toast('บันทึกรายจ่ายแล้ว')}
  case'tx-del':S.tx=S.tx.filter(x=>x.id!=id);save();render();return;
+ case'exp-cat-add':{const n=$('#s_ec').value.trim();if(!n)return toast('กรุณากรอกชื่อหมวดหมู่');if(S.expCats.some(c=>c.toLowerCase()==n.toLowerCase()))return toast('มีหมวดหมู่นี้แล้ว');S.expCats.push(n);save();settings();return toast('เพิ่มหมวดหมู่รายจ่ายแล้ว')}
+ case'exp-cat-del':{const c=t.dataset.cat;if(S.tx.some(x=>x.cat==c))return toast('หมวดหมู่นี้มีประวัติรายจ่ายอยู่ จึงลบไม่ได้');S.expCats=S.expCats.filter(x=>x!=c);save();settings();return toast('ลบหมวดหมู่แล้ว')}
+ case'rep-refresh':return render();
  case'br-add':{const n=$('#s_br').value.trim();if(!n||S.branches.includes(n))return toast('ชื่อสาขาว่างหรือซ้ำ');S.branches.push(n);save();render();return toast('เพิ่มสาขาแล้ว')}
  case'sup-add':{const n=$('#s_sn').value.trim();if(!n)return toast('กรุณากรอกชื่อ');S.sups.push({id:uid(),name:n,code:$('#s_sc').value.trim().toUpperCase(),days:[],time:'12:00'});save();render();return toast('เพิ่มซัพพลายเออร์แล้ว')}
  case'export':return download('smart-stock-backup.json','application/json',JSON.stringify(S,null,1));
@@ -620,3 +675,29 @@ tick();render();
 </script>
 </body>
 </html>
+
+<style>
+/* Compact issue quantity input: typical quantity is one or two digits */
+#mt .rq{width:54px!important;min-width:54px!important;max-width:54px!important}
+/* History filters stay on a single line per group when space allows */
+.hist-shortcuts{align-items:center;gap:8px}
+.hist-shortcuts .in{min-width:220px}
+.hist-preset{display:flex;gap:6px;flex:0 0 auto;white-space:nowrap}
+.hist-preset .bo{padding:8px 13px}
+.hist-filters{display:flex;align-items:center;gap:8px;flex-wrap:nowrap}
+.hist-filters input[type=date]{flex:1 1 130px;min-width:118px;padding:9px 7px}
+.hist-filters select{flex:1 1 140px;min-width:0;padding:9px 7px}
+#ht{margin-bottom:0}
+#ht .em{padding:14px 10px}
+body:has(#ht){padding-bottom:0}
+@media(max-width:760px){
+ .sr.hist-shortcuts{flex-direction:row;flex-wrap:nowrap;gap:6px}
+ .hist-shortcuts .in{flex:1 1 auto;min-width:0;padding:0 8px}
+ .hist-shortcuts input[type=text]{min-width:0;padding:10px 0;font-size:12px}
+ .hist-preset{gap:4px}
+ .hist-preset .bo{padding:7px 8px;font-size:12px;white-space:nowrap}
+ .sr.hist-filters{flex-direction:row;flex-wrap:nowrap;gap:5px}
+ .hist-filters input[type=date]{min-width:0;width:22%;font-size:10px;padding:8px 2px}
+ .hist-filters select{min-width:0;width:19%;font-size:10px;padding:8px 2px}
+}
+</style>
