@@ -132,6 +132,18 @@ main{padding-top:90px}
 header{position:sticky;top:0;z-index:20}
 @media(max-width:760px){nav{top:68px;padding:5px 3px}nav button i{width:38px;font-size:20px}nav button .nav-label{font-size:10px}main{padding-top:82px}}
 .sc4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
+/* Sticky compact stock status filters: stay directly below the fixed app header/nav */
+.stock-filter-sticky{position:sticky;top:128px;z-index:18;background:#fff;padding:6px 0 8px;margin:0 0 10px;border-bottom:1px solid var(--ln);transition:padding .18s ease}
+.stock-filter-sticky .sc4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr)) 36px;align-items:center;gap:6px;margin:0}
+.stock-filter-sticky .sc{height:54px;min-height:54px;max-height:54px;border-radius:10px;padding:3px 2px;font-size:11px}
+.stock-filter-sticky .sc b{font-size:20px}
+.stock-filter-add{width:36px;height:36px;min-width:36px;padding:0;font-size:23px;justify-self:end;border-radius:10px}
+body.scrolled .stock-filter-sticky{padding:4px 0 5px;box-shadow:0 3px 8px rgba(15,23,42,.07)}
+body.scrolled .stock-filter-sticky .sc{height:36px;min-height:36px;max-height:36px;border-width:1px;border-radius:8px;padding:1px;font-size:10px}
+body.scrolled .stock-filter-sticky .sc b{font-size:15px;line-height:1}
+body.scrolled .stock-filter-sticky .stock-filter-add{height:30px;width:32px;min-width:32px;font-size:21px}
+@media(max-width:760px){.stock-filter-sticky{top:108px}.stock-filter-sticky .sc4{gap:4px;grid-template-columns:repeat(4,minmax(0,1fr)) 32px}.stock-filter-sticky .sc{font-size:10px}.stock-filter-sticky .stock-filter-add{width:32px;min-width:32px}}
+
 .sc{box-sizing:border-box;height:60px;min-height:60px;max-height:60px;overflow:hidden;border:2px solid transparent;border-radius:14px;padding:5px 8px;text-align:center;font-size:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0}
 .sc b{display:block;font-size:23px;line-height:1.05;margin-top:2px}
 .sc.a{background:#eef2f9;color:#1e293b}.sc.b{background:#d1fae5;color:#047857}.sc.c{background:#fef3c7;color:#b45309}.sc.d{background:#fee2e2;color:#b91c1c}
@@ -341,8 +353,8 @@ function stock(){
  const k=(l,v,s,c)=>`<button class="sc ${c} ${s&&fst==s?'on':''}" data-act="fst" data-s="${s}"><b>${v}</b><span>${l}</span></button>`;
  const chip=(id,l,list)=>{const n=list.filter(low).length,s=id!='all'?SP(id):null,st=s&&s.days.length?supState(s):null;
   return `<button class="chip ${fs==id?'on':''}" data-act="fs" data-id="${id}">${esc(l)} (${list.length})${n?` <em>⚠${n}</em>`:''}</button>`};
- return `<div class="row stock-heading"><div><h2 class="t">หน้าสต๊อกคงเหลือ</h2><div class="sub2">${esc(S.br)} — จัดการสินค้าทั้งหมด · วันนี้รับเข้า ${ti} · เบิกออก ${to} รายการ</div></div><button class="bt add-icon" data-act="p-new" title="เพิ่มสินค้าใหม่" aria-label="เพิ่มสินค้าใหม่">+</button></div>
- <div class="sc4">${k('ทั้งหมด',ps.length,'','a')}${k('พอเพียง',n.ok,'ok','b')}${k('ใกล้หมด',n.low,'low','c')}${k('หมดสต๊อก',n.out,'out','d')}</div>
+ return `<div class="row stock-heading"><div><h2 class="t">หน้าสต๊อกคงเหลือ</h2><div class="sub2">${esc(S.br)} — จัดการสินค้าทั้งหมด · วันนี้รับเข้า ${ti} · เบิกออก ${to} รายการ</div></div></div>
+ <div class="stock-filter-sticky"><div class="sc4">${k('ทั้งหมด',ps.length,'','a')}${k('พอเพียง',n.ok,'ok','b')}${k('ใกล้หมด',n.low,'low','c')}${k('หมดสต๊อก',n.out,'out','d')}<button class="bt add-icon stock-filter-add" data-act="p-new" title="เพิ่มสินค้าใหม่" aria-label="เพิ่มสินค้าใหม่">+</button></div></div>
  <div class="sr"><div class="in">🔍<input type="text" id="q" placeholder="ค้นหาสินค้า..." value="${esc(q)}"></div></div>
  <div class="chips">${chip('all','ทั้งหมด',ps)}${S.sups.map(s=>chip(s.id,s.name,ps.filter(p=>p.sup==s.id))).join('')}</div>
  <div id="tbl"></div>`;
