@@ -129,7 +129,7 @@ nav button.on i{background:#fef3c7}
 .ch{color:var(--mu);font-size:18px;margin-left:6px}
 .it{display:flex;align-items:center;gap:12px;padding:10px 20px}
 .it input[type=checkbox]{width:auto}
-.vb{width:6px;align-self:stretch;min-height:50px;border-radius:99px;background:#10b981;flex:none}.vb.w{background:#f59e0b}.vb.o{background:#ef4444}
+.vb{width:6px;height:50px;min-height:50px;max-height:50px;align-self:center;border-radius:99px;background:#10b981;flex:0 0 6px}.vb.w,.vb.o{width:6px;height:50px;min-height:50px;max-height:50px;flex:0 0 6px;align-self:center}.vb.w{background:#f59e0b}.vb.o{background:#ef4444}
 .ib2{flex:1;min-width:0}.nm{font-size:16px}
 .tgc{display:inline-block;font-size:12px;border-radius:8px;padding:1px 8px;font-weight:600;margin-left:4px}
 .ql{font-size:14px;color:var(--mu)}.ql b{color:#059669}.ql b.w{color:#d97706}.ql b.o{color:#dc2626}
@@ -158,6 +158,14 @@ nav button.on i{background:#fef3c7}
 .rq:focus{border-color:#dc2626;box-shadow:0 0 0 3px rgba(239,68,68,.22)}
 #rv td:first-child,#rv th:first-child{position:sticky;left:0;z-index:2;background:#fff;box-shadow:2px 0 4px rgba(120,80,0,.08)}
 #rv th:first-child{background:var(--th)}
+
+/* User-requested clean white theme and full-width layout */
+:root{--bg:#ffffff;--sf:#ffffff;--tx:#202124;--mu:#6b7280;--ln:#e5e7eb;--th:#f8fafc;--sh:0 1px 5px rgba(15,23,42,.06)}
+body,main{background:#fff}
+.w{width:100%;max-width:none;margin:0;padding-left:clamp(14px,2.2vw,36px);padding-right:clamp(14px,2.2vw,36px)}
+header{background:#fff;color:var(--tx);border-bottom:1px solid #e5e7eb;box-shadow:none}
+.logo{color:#d97706}.clock{background:#f3f4f6;color:#374151}
+.card,.tw,.kp div,.acc,.kc{box-shadow:0 1px 4px rgba(15,23,42,.06)}
 </style>
 </head>
 <body>
@@ -241,7 +249,7 @@ const SC=['#fee2e2:#b91c1c','#dbeafe:#1d4ed8','#d1fae5:#047857','#ede9fe:#6d28d9
 const scc=id=>SC[Math.max(S.sups.findIndex(s=>s.id==id),0)%SC.length].split(':');
 const scs=id=>{const[b,c]=scc(id);return `background:${b};color:${c}`};
 const prow=p=>{const s=SP(p.sup),pc=p.market?(p.cost-p.market)/p.market*100:0,v=p.qty<=0?'o':low(p)?'w':'k';
- return `<div class="it"><input type="checkbox" data-sel="${p.id}" ${SEL.has(p.id)?'checked':''} aria-label="เลือก ${esc(p.name)}"><span class="vb ${v}"></span><div class="ib2"><div class="nm">${esc(p.name)} <small class="sub">${p.brand?esc(p.brand)+' · ':''}${esc(p.size)}</small> ${s?`<span class="tgc" style="${scs(p.sup)}">${esc(s.code||s.name)}</span>`:''}${p.sku?`<span class="sku" style="margin-left:6px">${esc(p.sku)}</span>`:''}</div><div class="ql">คงเหลือ: <b class="${v}">${p.qty.toFixed(2)}</b> ${esc(p.unit)} <span class="stp ${v}">${v=='o'?'✕ หมดสต๊อก':v=='w'?'⚠ ใกล้หมด':'✓ พอเพียง'}</span> <small>ขั้นต่ำ ${p.min}</small></div><div class="pl">ต้นทุน ${m2(p.cost)} · แม็คโคร ${m2(p.market)} <span class="${pc>0?'up':'dn'}">(${pc.toFixed(1)}%)</span></div></div><div class="ra"><button class="pb" data-act="adj" data-id="${p.id}" data-d="1" aria-label="เพิ่ม 1">+</button><button class="mb" data-act="adj" data-id="${p.id}" data-d="-1" aria-label="ลด 1">−</button><button class="ib" style="color:var(--or)" data-act="p-edit" data-id="${p.id}" aria-label="แก้ไข">✎</button><button class="ib" style="color:var(--rd)" data-act="p-del" data-id="${p.id}" aria-label="ลบ">🗑</button></div></div>`};
+ return `<div class="it"><input type="checkbox" data-sel="${p.id}" ${SEL.has(p.id)?'checked':''} aria-label="เลือก ${esc(p.name)}"><span class="vb ${v}"></span><div class="ib2"><div class="nm">${esc(p.name)} <small class="sub">${p.brand?esc(p.brand)+' · ':''}${esc(p.size)}</small> ${s?`<span class="tgc" style="${scs(p.sup)}">${esc(s.code||s.name)}</span>`:''}${p.sku?`<span class="sku" style="margin-left:6px">${esc(p.sku)}</span>`:''}</div><div class="ql">คงเหลือ: <b class="${v}">${p.qty.toFixed(2)}</b> ${esc(p.unit)} <small>ขั้นต่ำ ${p.min}</small></div><div class="pl">ต้นทุน ${m2(p.cost)} · แม็คโคร ${m2(p.market)} <span class="${pc>0?'up':'dn'}">(${pc.toFixed(1)}%)</span></div></div><div class="ra"><button class="ib" style="color:var(--or)" data-act="p-edit" data-id="${p.id}" aria-label="แก้ไข">✎</button><button class="ib" style="color:var(--rd)" data-act="p-del" data-id="${p.id}" aria-label="ลบ">🗑</button></div></div>`};
 function tbl(){
  const list=B(S.products).filter(p=>(fs=='all'||p.sup==fs)&&(!fst||(fst=='ok'?!low(p):fst=='low'?low(p)&&p.qty>0:p.qty<=0))&&(p.name+p.sku+p.size+p.cat).toLowerCase().includes(q.toLowerCase())).sort((a,b)=>(a.cat||'~').localeCompare(b.cat||'~','th')||a.name.localeCompare(b.name,'th'));
  const g={};list.forEach(p=>(g[p.cat||'ไม่ระบุหมวด']??=[]).push(p));
@@ -253,12 +261,12 @@ function mv(p,d,note,type,no,date){p.qty=r3(Math.max(0,p.qty+d));S.moves.push({t
 function pForm(p={}){
  dlg(`<h3>${p.id?'แก้ไขสินค้า':'เพิ่มสินค้าใหม่'}</h3><div class="f">
  <div><label class="l">รหัสสินค้า</label><input id="f_sku" value="${esc(p.sku)}"></div>
- <div><label class="l">ซัพพลายเออร์</label><select id="f_sup">${S.sups.map(s=>`<option value="${s.id}" ${s.id==p.sup?'selected':''}>${esc(s.name)}</option>`).join('')}</select></div>
+ <div class="fw"><label class="l">ซัพพลายเออร์</label><div style="display:flex;gap:8px;align-items:center"><select id="f_sup" style="flex:1">${S.sups.map(s=>`<option value="${s.id}" ${s.id==p.sup?'selected':''}>${esc(s.name)}</option>`).join('')}</select><button type="button" class="bo" data-act="p-sup-add" style="white-space:nowrap">＋ เพิ่มซัพพลายเออร์</button></div></div>
  <div class="fw"><label class="l">ชื่อสินค้า / ยี่ห้อ</label><input id="f_name" value="${esc(p.name)}"></div>
  <div><label class="l">ยี่ห้อ</label><input id="f_brand" value="${esc(p.brand)}"></div>
  <div><label class="l">หมวดหมู่</label><input id="f_cat" list="cl" value="${esc(p.cat)}"><datalist id="cl">${cats().map(c=>`<option>${esc(c)}</option>`).join('')}</datalist></div>
  <div><label class="l">ขนาด / รายละเอียด</label><input id="f_size" value="${esc(p.size)}"></div>
- <div><label class="l">หน่วย</label><input id="f_unit" value="${esc(p.unit||'ชิ้น')}"></div>
+ <div><label class="l">หน่วย</label><input id="f_unit" list="unitopts" value="${esc(p.unit||'ชิ้น')}" placeholder="เลือกหรือพิมพ์หน่วย"><datalist id="unitopts">${[...new Set([...(S.products||[]).map(x=>x.unit).filter(Boolean),'ชิ้น'])].sort().map(u=>`<option value="${esc(u)}">`).join('')}</datalist></div>
  <div><label class="l">ราคาแม็คโคร</label><input id="f_market" type="number" min="0" step="any" value="${p.market??0}"></div>
  <div><label class="l">ราคาต้นทุนจริง</label><input id="f_cost" type="number" min="0" step="any" value="${p.cost??0}"></div>
  <div><label class="l">คงเหลือ</label><input id="f_qty" type="number" min="0" value="${p.qty??0}"></div>
@@ -449,6 +457,7 @@ document.addEventListener('click',e=>{
  case'p-new':return pForm();
  case'p-edit':return pForm(P(id));
  case'p-del':if(confirm('ลบสินค้านี้?')&&pin('ลบสินค้า')){S.products=S.products.filter(p=>p.id!=id);save();render()}return;
+ case'p-sup-add':{const name=prompt('ชื่อซัพพลายเออร์ใหม่');if(!name||!name.trim())return;const clean=name.trim();let sup=S.sups.find(x=>x.name.trim().toLowerCase()==clean.toLowerCase());if(!sup){const code=(prompt('รหัสย่อซัพพลายเออร์ (เว้นว่างได้)')||'').trim().toUpperCase();sup={id:uid(),name:clean,code,days:[],time:'12:00',lead:1};S.sups.push(sup);save()}const sel=$('#f_sup');if(sel){let opt=[...sel.options].find(o=>+o.value===sup.id);if(!opt){opt=document.createElement('option');opt.value=sup.id;opt.textContent=sup.name;sel.appendChild(opt)}sel.value=sup.id}return toast('เพิ่มและเลือกซัพพลายเออร์แล้ว')}
  case'p-save':{
   if(!g('name'))return toast('กรุณากรอกชื่อสินค้า');
   if(id&&!pin('แก้ไขสินค้า'))return;
