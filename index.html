@@ -267,6 +267,7 @@ header{background:#fff;color:var(--tx);border-bottom:1px solid #e5e7eb;box-shado
  <div class="sp"></div>
  <button class="pill" id="userBadge" data-act="logout">🔒 เข้าสู่ระบบ</button>
  <select id="br" aria-label="สาขา"></select>
+ <button class="ic" data-act="rep-refresh" aria-label="รีเฟรช" title="รีเฟรชข้อมูล">↻</button>
  <button class="ic" data-act="settings" aria-label="ตั้งค่า">⚙</button>
 </div></header>
 <section id="loginScreen" class="w" style="display:none;max-width:460px;padding-top:60px"><div class="card"><h2 style="margin-top:0">🔐 เข้าสู่ระบบ Smart Stock</h2><form id="loginForm"><div class="flower-pin-wrap" id="flowerPinWrap" role="button" tabindex="0" aria-label="กรอกรหัสเข้าสู่ระบบ 6 หลัก"><div class="flower-pin" id="flowerPin" aria-hidden="true"><span>🌸</span><span>🌸</span><span>🌸</span><span>🌸</span><span>🌸</span><span>🌸</span></div><input id="loginCode" class="flower-pin-input" inputmode="numeric" autocomplete="off" maxlength="6" pattern="[0-9]{6}" aria-label="รหัสเข้าสู่ระบบ 6 หลัก" required></div></form></div></section><main class="w" id="app"></main>
@@ -779,6 +780,11 @@ header{position:fixed!important;top:0;left:0;right:0;z-index:30}
 nav{position:fixed!important;z-index:29;top:68px;left:0;right:0}
 main{padding-top:132px!important}
 @media(max-width:600px){nav{top:48px!important}main{padding-top:108px!important}}
+/* Keep the add-product + button on the same row as the stock heading, including narrow mobile screens. */
+.stock-heading{display:flex!important;flex-wrap:nowrap!important;align-items:center!important;justify-content:space-between!important;width:100%;min-width:0;}
+.stock-heading>div:first-child{flex:1 1 auto;min-width:0;}
+.stock-heading .add-icon{flex:0 0 42px!important;width:42px;min-width:42px;height:42px;display:inline-flex;align-items:center;justify-content:center;margin-left:8px;}
+@media(max-width:600px){.stock-heading .add-icon{flex-basis:36px!important;width:36px;min-width:36px;height:36px;margin-left:6px;padding:0!important;}}
 /* On scroll, compact the active page's heading and stock filters without hiding the actual content. */
 body.scrolled .stock-heading{margin-bottom:7px;gap:6px;}
 body.scrolled .stock-heading h2.t{font-size:18px!important;line-height:1.25;}
