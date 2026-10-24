@@ -8,8 +8,8 @@
 <style>
 :root{--or:#d97706;--or2:#f59e0b;--bg:#fffaf3;--sf:#fff;--tx:#2b2118;--mu:#8a8178;--ln:#f0e6d8;--th:#fef6e0;--gn:#059669;--rd:#dc2626;--sh:0 2px 12px rgba(120,70,0,.07)}
 *{box-sizing:border-box}
-html{width:100%;max-width:100%;overflow-x:hidden; -webkit-text-size-adjust:100%; touch-action:pan-y}
-body{width:100%;max-width:100%;overflow-x:hidden}
+html{width:100%;max-width:100%;overflow-x:hidden; -webkit-text-size-adjust:100%; touch-action:pan-x pan-y; overscroll-behavior-x:none}
+body{width:100%;max-width:100%;overflow-x:hidden;touch-action:pan-x pan-y;overscroll-behavior-x:none}
 img,video,canvas,svg{max-width:100%}
 body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.5 "Noto Sans Thai Looped",system-ui,sans-serif;padding-bottom:20px;padding-top:0}
 header{background:linear-gradient(90deg,#d97706,#f59e0b);color:#fff;box-shadow:0 2px 10px rgba(217,119,6,.35)}
@@ -210,7 +210,7 @@ header{background:#fff;color:var(--tx);border-bottom:1px solid #e5e7eb;box-shado
   .hd{gap:5px;padding:7px 0;min-height:48px}
   .logo{font-size:13px;gap:3px;white-space:nowrap;flex:0 1 auto}
   .clock{display:block;flex:0 0 auto;padding:3px 5px;border-radius:7px;font-size:9px;line-height:1.15;text-align:center;white-space:nowrap}
-  .clock span{display:none}
+  .clock span{display:block;font-size:8px;line-height:1.15;max-width:76px;overflow:hidden;text-overflow:ellipsis}
   .clock b{font-size:12px;letter-spacing:0;line-height:1.2}
   .hd .sp{flex:1;min-width:0}
   .hd>.pill:not(.on){font-size:9px;padding:4px 5px;white-space:nowrap}
@@ -235,7 +235,7 @@ header{background:#fff;color:var(--tx);border-bottom:1px solid #e5e7eb;box-shado
  /* Keep each product compact on one horizontal row to show more products vertically */
  .it{display:flex;flex-wrap:nowrap;gap:7px;padding:6px 9px;min-height:48px;align-items:center;}
  .it input[type=checkbox]{flex:0 0 auto;margin:0 1px;}
- .it .ib2{position:sticky;left:0;flex:0 0 128px;width:128px;min-width:128px;max-width:128px;z-index:4;background:#fff;overflow:hidden;}
+ .it .ib2{position:sticky;left:0;flex:0 0 158px;width:158px;min-width:158px;max-width:158px;z-index:4;background:#fff;overflow:hidden;}
  .it .nm{font-size:12px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
  .it .product-meta{font-size:10px;line-height:1.15;color:var(--mu);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px;}
  .stock-col,.latest-col,.time-col{margin-left:0;min-width:48px;gap:1px;font-size:11px;}
@@ -301,7 +301,7 @@ let tab='stock',fs='all',q='',onlyLow=false,pv=null;
 let currentUser=null, editingUserCode='';
 const TABS=[['stock','📦','สต๊อก'],['order','🚚','สั่งของ'],['mv','📤','เบิกออก'],['hist','🕘','ประวัติ'],['cash','💵','รายจ่าย'],['rep','📊','รายงาน']];
 function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>t.classList.remove('on'),2200)}
-function tick(){const d=new Date();$('#dt').textContent=`${DAYS[d.getDay()].replace('วัน','').slice(0,10)} ${d.getDate()} ${MON[d.getMonth()]} ${d.getFullYear()+543}`;$('#tm').textContent=`${z(d.getHours())}:${z(d.getMinutes())}:${z(d.getSeconds())}`}
+function tick(){const d=new Date();const mobile=window.matchMedia('(max-width:600px)').matches;$('#dt').textContent=mobile?`${d.getDate()} ${MON[d.getMonth()].slice(0,3)} ${d.getFullYear()+543}`:`${DAYS[d.getDay()].replace('วัน','').slice(0,10)} ${d.getDate()} ${MON[d.getMonth()]} ${d.getFullYear()+543}`;$('#tm').textContent=`${z(d.getHours())}:${z(d.getMinutes())}:${z(d.getSeconds())}`}
 setInterval(tick,1000);
 
 function supState(s){
@@ -721,6 +721,18 @@ $('#flowerPinWrap').addEventListener('click',()=>$('#loginCode').focus());
 $('#flowerPinWrap').addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();$('#loginCode').focus()}});
 $('#loginForm').addEventListener('submit',e=>{e.preventDefault();const code=$('#loginCode').value.trim();if(code.length!==6)return toast('กรุณากรอกรหัส 6 หลัก');if(loginAs(code)){$('#loginCode').value='';paintFlowerPin()}});
 tick();loginView();
+// Keep the mobile stock layout at a fixed scale; block pinch and double-tap page zoom.
+(function(){
+  document.addEventListener('gesturestart',function(e){e.preventDefault()},{passive:false});
+  document.addEventListener('gesturechange',function(e){e.preventDefault()},{passive:false});
+  document.addEventListener('gestureend',function(e){e.preventDefault()},{passive:false});
+  document.addEventListener('wheel',function(e){if(e.ctrlKey)e.preventDefault()},{passive:false});
+  document.addEventListener('touchstart',function(e){if(e.touches && e.touches.length>1)e.preventDefault()},{passive:false});
+  let lastTouchEnd=0;
+  document.addEventListener('touchend',function(e){const now=Date.now();if(now-lastTouchEnd<=300)e.preventDefault();lastTouchEnd=now},{passive:false});
+  document.addEventListener('keydown',function(e){if((e.ctrlKey||e.metaKey)&&['+','=','-','0'].includes(e.key))e.preventDefault()});
+  if(window.visualViewport){let resetQueued=false;window.visualViewport.addEventListener('resize',function(){if(resetQueued)return;resetQueued=true;requestAnimationFrame(function(){resetQueued=false;if(window.visualViewport.scale>1.01){const vp=document.querySelector('meta[name=viewport]');if(vp){vp.setAttribute('content','width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover');setTimeout(()=>vp.setAttribute('content','width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover'),80)}}})})}
+})();
 </script>
 </body>
 </html>
