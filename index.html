@@ -245,6 +245,14 @@ header{background:#fff;color:var(--tx);border-bottom:1px solid #e5e7eb;box-shado
  .it .ra .ib{width:28px;height:28px;padding:3px;}
 }
 
+
+.flower-pin-wrap{position:relative;margin:28px auto 10px;max-width:350px;cursor:text;border-radius:14px;padding:10px 4px}
+.flower-pin{display:flex;justify-content:center;gap:8px;pointer-events:none}
+.flower-pin span{width:42px;height:48px;display:flex;align-items:center;justify-content:center;font-size:27px;border-bottom:2px solid var(--ln);transition:all .15s}
+.flower-pin span.filled{font-size:23px;font-weight:700;color:var(--or);border-bottom-color:var(--or)}
+.flower-pin-input{position:absolute;inset:0;width:100%;height:100%;opacity:.015;cursor:text;border:0;outline:0;background:transparent;color:transparent;caret-color:transparent}
+.flower-pin-wrap:focus-within .flower-pin span{border-bottom-color:var(--or2)}
+
 </style>
 </head>
 <body>
@@ -256,7 +264,7 @@ header{background:#fff;color:var(--tx);border-bottom:1px solid #e5e7eb;box-shado
  <select id="br" aria-label="สาขา"></select>
  <button class="ic" data-act="settings" aria-label="ตั้งค่า">⚙</button>
 </div></header>
-<section id="loginScreen" class="w" style="display:none;max-width:460px;padding-top:60px"><div class="card"><h2 style="margin-top:0">🔐 เข้าสู่ระบบ Smart Stock</h2><p class="sub">กรอกรหัสเข้าสู่ระบบ 6 หลัก</p><form id="loginForm"><label class="l" for="loginCode">รหัสเข้าสู่ระบบ</label><input id="loginCode" inputmode="numeric" autocomplete="off" maxlength="6" pattern="[0-9]{6}" placeholder="รหัส 6 หลัก" required style="font-size:24px;letter-spacing:8px;text-align:center;margin:8px 0 14px"><button class="bt" type="submit" style="width:100%">เข้าสู่ระบบ</button></form><p class="sub" style="margin-top:12px">ผู้ดูแลระบบเริ่มต้นใช้รหัส 123456</p></div></section><main class="w" id="app"></main>
+<section id="loginScreen" class="w" style="display:none;max-width:460px;padding-top:60px"><div class="card"><h2 style="margin-top:0">🔐 เข้าสู่ระบบ Smart Stock</h2><form id="loginForm"><div class="flower-pin-wrap" id="flowerPinWrap" role="button" tabindex="0" aria-label="กรอกรหัสเข้าสู่ระบบ 6 หลัก"><div class="flower-pin" id="flowerPin" aria-hidden="true"><span>🌸</span><span>🌸</span><span>🌸</span><span>🌸</span><span>🌸</span><span>🌸</span></div><input id="loginCode" class="flower-pin-input" inputmode="numeric" autocomplete="off" maxlength="6" pattern="[0-9]{6}" aria-label="รหัสเข้าสู่ระบบ 6 หลัก" required></div><button class="bt" type="submit" style="width:100%;margin-top:18px">เข้าสู่ระบบ</button></form></div></section><main class="w" id="app"></main>
 <nav id="nav"></nav>
 <dialog id="dlg"></dialog>
 <input type="file" id="file" accept=".json" hidden>
@@ -299,7 +307,7 @@ function supState(s){
  if(s.days.includes(n.getDay()))return hm<s.time?{t:'เปิดรับสั่งวันนี้',c:'o',d:txt,dot:'#10b981'}:{t:'ปิดรับแล้ว',c:'c',d:txt,dot:'#ef4444'};
  for(let i=1;i<=7;i++){const d=(n.getDay()+i)%7;if(s.days.includes(d))return {t:'ยังไม่ถึงรอบ (ถัดไปวัน'+DAYS[d]+')',c:'',d:txt,dot:'#9ca3af'}}
 }
-function loginView(){document.querySelector('header').style.display='none';$('#app').style.display='none';$('#nav').style.display='none';$('#loginScreen').style.display='block';$('#loginCode').value=''}
+function loginView(){document.querySelector('header').style.display='none';$('#app').style.display='none';$('#nav').style.display='none';$('#loginScreen').style.display='block';$('#loginCode').value='';if($('#flowerPin'))paintFlowerPin()}
 function loginAs(code){if(code===S.pin){currentUser={name:'แอดมิน',code:'admin',admin:true,branches:[...S.branches],perms:TABS.map(x=>x[0])};afterLogin();return true}const u=S.users.find(x=>x.code===code&&x.active!==false);if(!u){toast('รหัสเข้าสู่ระบบไม่ถูกต้อง หรือบัญชีถูกปิดใช้งาน');return false}currentUser=u;if(!currentUser.branches?.length){toast('บัญชีนี้ยังไม่ได้รับอนุญาตให้เข้าร้าน');currentUser=null;return false}if(!currentUser.branches.includes(S.br))S.br=currentUser.branches[0];afterLogin();return true}
 function afterLogin(){document.querySelector('header').style.display='';$('#app').style.display='';$('#nav').style.display='';$('#loginScreen').style.display='none';$('#userBadge').textContent=(currentUser.admin?'👑 ':'👤 ')+currentUser.name+' · ออกจากระบบ';const allowed=TABS.filter(x=>currentUser.admin||(currentUser.perms||[]).includes(x[0]));if(!allowed.some(x=>x[0]===tab))tab=allowed[0]?.[0]||'stock';render()}
 function render(){
@@ -695,7 +703,11 @@ $('#file').addEventListener('change',e=>{
  r.onload=()=>{try{const d=JSON.parse(r.result);if(!Array.isArray(d.products)||!Array.isArray(d.sups))throw 0;if(!confirm('นำเข้าข้อมูลจะแทนที่ข้อมูลปัจจุบันทั้งหมด ต้องการดำเนินการต่อ?'))return;S=d;save();$('#dlg').close();render();toast('นำเข้าข้อมูลแล้ว')}catch(x){toast('ไฟล์ไม่ถูกต้อง ใช้ไฟล์ JSON ที่ส่งออกจากระบบนี้')}e.target.value=''};
  r.readAsText(f);
 });
-$('#loginForm').addEventListener('submit',e=>{e.preventDefault();const code=$('#loginCode').value.trim();if(!/^\d{6}$/.test(code))return toast('กรุณากรอกรหัส 6 หลัก');if(loginAs(code))$('#loginCode').value=''});
+function paintFlowerPin(){const code=$('#loginCode').value.replace(/\D/g,'').slice(0,6);$('#loginCode').value=code;$('#flowerPin').querySelectorAll('span').forEach((el,i)=>{if(i<code.length){el.textContent=code[i];el.classList.add('filled')}else{el.textContent='🌸';el.classList.remove('filled')}})}
+$('#loginCode').addEventListener('input',paintFlowerPin);
+$('#flowerPinWrap').addEventListener('click',()=>$('#loginCode').focus());
+$('#flowerPinWrap').addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();$('#loginCode').focus()}});
+$('#loginForm').addEventListener('submit',e=>{e.preventDefault();const code=$('#loginCode').value.trim();if(!/^\d{6}$/.test(code))return toast('กรุณากรอกรหัส 6 หลัก');if(loginAs(code)){ $('#loginCode').value='';paintFlowerPin() }});
 tick();loginView();
 </script>
 </body>
