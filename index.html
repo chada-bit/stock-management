@@ -23,7 +23,7 @@ header{background:linear-gradient(90deg,#d97706,#f59e0b);color:#fff;box-shadow:0
 .pill.on{background:#059669;font-weight:600}
 header select{border:0;border-radius:10px;padding:8px 12px;font:inherit;font-weight:500;background:#fff;color:var(--tx);width:auto}
 .ic{width:40px;height:40px;border-radius:50%;border:0;background:rgba(255,255,255,.22);color:#fff;font-size:18px;cursor:pointer}
-main{padding-top:22px}
+main{padding-top:130px}
 h2.t{display:flex;align-items:center;gap:10px;margin:0;font-size:24px;font-weight:700}
 .row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px;flex-wrap:wrap}
 button{font:inherit;cursor:pointer}
@@ -90,6 +90,8 @@ dialog{border:0;border-radius:18px;width:min(520px,94vw);padding:22px;box-shadow
 dialog::backdrop{background:rgba(40,20,0,.45)}
 dialog h3{margin:0 0 14px;font-size:19px}
 .f{display:grid;grid-template-columns:1fr 1fr;gap:10px}.f .fw{grid-column:1/-1}
+/* Product add/edit form: compact two fields per row on desktop and mobile */
+.product-form{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.product-form .fw{grid-column:auto}.product-form>div{min-width:0}.product-form input,.product-form select{min-width:0;width:100%;box-sizing:border-box}.product-form>div:has(#f_sup){grid-column:1/-1}.product-form>div:has(#f_sup)>div{min-width:0}.product-form #f_sup{min-width:0;width:100%}
 .ac{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}
 .ln{display:grid;grid-template-columns:1fr 90px 36px;gap:6px;margin-bottom:6px}
 .dys{display:flex;gap:6px;flex-wrap:wrap}.dys label{border:1px solid var(--ln);border-radius:99px;padding:5px 12px;font-size:14px;cursor:pointer}
@@ -100,7 +102,7 @@ dialog h3{margin:0 0 14px;font-size:19px}
 /* Stock report dashboard */
 .report-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:start}.report-grid .card{margin-bottom:0;min-width:0}.rbar{margin:13px 0}.rbar-head{display:flex;justify-content:space-between;gap:10px;font-size:13px;margin-bottom:5px}.rbar-head span{overflow-wrap:anywhere}.rbar-head b{white-space:nowrap}.rbar-track{height:9px;background:#f3f4f6;border-radius:99px;overflow:hidden}.rbar-track i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#f59e0b,#fbbf24)}.report-grid .card:nth-child(4) .rbar-track i{background:linear-gradient(90deg,#ef4444,#fca5a5)}.rlist-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid var(--ln)}.rlist-row:last-child{border-bottom:0}.rlist-row span{min-width:0}.rlist-row b{display:block;font-size:13px}.rlist-row small{display:block;color:var(--mu);font-size:11px}.rlist-row strong{font-size:12px;white-space:nowrap}.warn-txt{color:#b45309}.legend{display:flex;gap:16px;font-size:12px;color:var(--mu);margin:4px 0 12px}.legend span{display:flex;align-items:center;gap:6px}.legend i{display:inline-block;width:10px;height:10px;border-radius:3px}.lg-in,.move-in{background:#10b981}.lg-out,.move-out{background:#ef4444}.move-chart{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px;align-items:end;min-height:170px}.move-day{display:flex;flex-direction:column;align-items:center;gap:5px;min-width:0}.move-bars{height:100px;width:100%;display:flex;align-items:end;justify-content:center;gap:4px;border-bottom:1px solid var(--ln)}.move-bars i{display:block;width:30%;max-width:20px;min-height:0;border-radius:4px 4px 0 0}.move-day small{font-size:10px;white-space:nowrap}.move-day span{font-size:9px;color:var(--mu);text-align:center;line-height:1.3}.report-total{font-size:25px;font-weight:700;color:#b91c1c;margin:8px 0}.report-total small{font-size:12px;font-weight:400;color:var(--mu)}.month-chart{height:175px;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;align-items:end}.month-col{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:end;gap:5px;min-width:0}.month-col b{font-size:10px;color:var(--mu);white-space:nowrap}.month-track{height:110px;width:100%;display:flex;align-items:end;justify-content:center;background:#f9fafb;border-radius:7px 7px 0 0;overflow:hidden}.month-track i{display:block;width:65%;background:#f59e0b;border-radius:5px 5px 0 0}.month-col small{font-size:11px}.report-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.report-stats div{padding:12px;border-radius:12px;background:#fffbeb}.report-stats span{display:block;font-size:12px;color:var(--mu)}.report-stats b{display:block;font-size:18px}@media(max-width:760px){.report-grid{grid-template-columns:1fr}.move-chart{gap:4px}.move-day span{font-size:8px}.month-col b{font-size:9px}.report-grid .card{padding:16px}}
 
-@media(max-width:760px){.g2{grid-template-columns:1fr}.sr{flex-direction:column}.f{grid-template-columns:1fr}.w{width:100%;max-width:100%;padding-left:12px;padding-right:12px}h2.t{font-size:20px}}
+@media(max-width:760px){.g2{grid-template-columns:1fr}.sr{flex-direction:column}.f{grid-template-columns:1fr}.product-form{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.w{width:100%;max-width:100%;padding-left:12px;padding-right:12px}h2.t{font-size:20px}}
 .kp6{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:16px}
 .kc{background:#fff;border:2px solid transparent;border-radius:14px;box-shadow:var(--sh);padding:12px 14px;text-align:left;color:var(--tx)}
 .kc b{display:block;font-size:24px;line-height:1.3}.kc span{font-size:12.5px;color:var(--mu)}.kc.on{border-color:var(--or)}
@@ -198,7 +200,7 @@ html body .it > span.vb.o { background-color: #ef4444 !important; }
 :root{--bg:#ffffff;--sf:#ffffff;--tx:#202124;--mu:#6b7280;--ln:#e5e7eb;--th:#f8fafc;--sh:0 1px 5px rgba(15,23,42,.06)}
 body,main{background:#fff}
 .w{width:100%;max-width:none;margin:0;padding-left:clamp(14px,2.2vw,36px);padding-right:clamp(14px,2.2vw,36px)}
-header{background:#fff;color:var(--tx);border-bottom:1px solid #e5e7eb;box-shadow:none;position:sticky;top:0;z-index:20}
+header{background:#fff;color:var(--tx);border-bottom:1px solid #e5e7eb;box-shadow:none;position:fixed;top:0;left:0;right:0;z-index:30}
 .logo{color:#d97706}.clock{background:#f3f4f6;color:#374151}
 .card,.tw,.kp div,.acc,.kc{box-shadow:0 1px 4px rgba(15,23,42,.06)}
 
@@ -217,7 +219,7 @@ header{background:#fff;color:var(--tx);border-bottom:1px solid #e5e7eb;box-shado
   header select#br{max-width:94px;min-width:0;padding:5px 5px;font-size:11px;border-radius:8px}
   .hd .ic{width:30px;height:30px;flex:0 0 30px;font-size:15px}
   nav{top:48px!important}
-  main{padding-top:70px!important}
+  main{padding-top:108px!important}
 }
 
 
@@ -278,8 +280,8 @@ header{background:#fff;color:var(--tx);border-bottom:1px solid #e5e7eb;box-shado
 const KEY='smart-stock-v2';
 const seed=()=>({seq:100,br:'ร้านหลัก',branches:['ร้านหลัก'],
  sups:[{id:1,name:'ซีพี',code:'CP',days:[],time:'12:00'},{id:2,name:'แม็คโคร',code:'MK',days:[],time:'12:00'}],
- products:[{id:1,br:'ร้านหลัก',sku:'FD-MK-001',cat:'นม/เครื่องดื่ม',name:'นมสดพาสเจอร์ไรส์ (เมจิ)',size:'2 ลิตร',sup:2,market:95,cost:95,qty:12,unit:'แกลลอน',min:5},
-  {id:2,br:'ร้านหลัก',sku:'BE-CP-001',cat:'กาแฟ',name:'เมล็ดกาแฟอาราบิก้า (เนสกาแฟ)',size:'500g',sup:1,market:180,cost:175,qty:5,unit:'ถุง',min:5}],
+ products:[{id:1,br:'ร้านหลัก',sku:'FD-MK-001',cat:'นม/เครื่องดื่ม',name:'นมสดพาสเจอร์ไรส์ (เมจิ)',size:'2 ลิตร',sup:2,cost:95,qty:12,unit:'แกลลอน',min:5},
+  {id:2,br:'ร้านหลัก',sku:'BE-CP-001',cat:'กาแฟ',name:'เมล็ดกาแฟอาราบิก้า (เนสกาแฟ)',size:'500g',sup:1,cost:175,qty:5,unit:'ถุง',min:5}],
  orders:[],moves:[],tx:[]});
 let S;try{S=JSON.parse(localStorage.getItem(KEY))}catch(e){}
 if(!S||!S.products)S=seed();
@@ -364,7 +366,7 @@ function makeSku(supId,cat){
 }
 function refreshAutoSku(){const sku=$('#f_sku'),sup=$('#f_sup'),cat=$('#f_cat');if(!sku||sku.dataset.manual==='1')return;sku.value=makeSku(sup?.value,cat?.value?.trim());}
 function pForm(p={}){
- dlg(`<h3>${p.id?'แก้ไขสินค้า':'เพิ่มสินค้าใหม่'}</h3><div class="f">
+ dlg(`<h3>${p.id?'แก้ไขสินค้า':'เพิ่มสินค้าใหม่'}</h3><div class="f product-form">
  <div><label class="l">รหัสสินค้า</label><input id="f_sku" value="${esc(p.sku||'')}" ${p.id?'':'readonly placeholder="ระบบสร้างรหัสให้อัตโนมัติ"'}></div>
  <div class="fw"><label class="l">ซัพพลายเออร์</label><div style="display:flex;gap:8px;align-items:center"><select id="f_sup" style="flex:1">${S.sups.map(s=>`<option value="${s.id}" ${s.id==p.sup?'selected':''}>${esc(s.name)}</option>`).join('')}</select><button type="button" class="bo" data-act="p-sup-add" style="white-space:nowrap">＋ เพิ่มซัพพลายเออร์</button></div></div>
  <div class="fw"><label class="l">ชื่อสินค้า / ยี่ห้อ</label><input id="f_name" value="${esc(p.name)}"></div>
@@ -372,7 +374,6 @@ function pForm(p={}){
  <div><label class="l">หมวดหมู่</label><input id="f_cat" list="cl" value="${esc(p.cat||'')}" placeholder="พิมพ์เพื่อค้นหาหมวดหมู่"><datalist id="cl">${[...new Set([...cats(),'นม/เครื่องดื่ม','กาแฟ'])].sort((a,b)=>a.localeCompare(b,'th')).map(c=>`<option value="${esc(c)}">`).join('')}</datalist></div>
  <div><label class="l">ขนาด / รายละเอียด</label><input id="f_size" value="${esc(p.size)}"></div>
  <div><label class="l">หน่วย</label><input id="f_unit" list="unitopts" value="${esc(p.unit||'ชิ้น')}" placeholder="เลือกหรือพิมพ์หน่วย"><datalist id="unitopts">${[...new Set([...(S.products||[]).map(x=>x.unit).filter(Boolean),'ชิ้น'])].sort().map(u=>`<option value="${esc(u)}">`).join('')}</datalist></div>
- <div><label class="l">ราคาแม็คโคร</label><input id="f_market" type="number" min="0" step="any" value="${p.market??0}"></div>
  <div><label class="l">ราคาต้นทุนจริง</label><input id="f_cost" type="number" min="0" step="any" value="${p.cost??0}"></div>
  <div><label class="l">คงเหลือ</label><input id="f_qty" type="number" min="0" value="${p.qty??0}"></div>
  <div><label class="l">ขั้นต่ำ</label><input id="f_min" type="number" min="0" value="${p.min??5}"></div></div>
@@ -442,7 +443,7 @@ function cash(){
 }
 /* ---------- report ---------- */
 function rep(){
- const ps=B(S.products),cost=ps.reduce((a,p)=>a+(+p.qty||0)*(+p.cost||0),0),mk=ps.reduce((a,p)=>a+(+p.qty||0)*(+p.market||0),0);
+ const ps=B(S.products),cost=ps.reduce((a,p)=>a+(+p.qty||0)*(+p.cost||0),0);
  const lowPs=ps.filter(low).sort((a,b)=>(a.qty-a.min)-(b.qty-b.min));
  const mv=B(S.moves),tx=B(S.tx).filter(t=>t.type=='out'),now=Date.now(),days=7*864e5;
  const sum=(arr,fn)=>arr.reduce((a,x)=>a+fn(x),0),m2v=n=>m2(n);
@@ -460,7 +461,7 @@ function rep(){
  const received=B(S.orders).filter(o=>o.status=='received'),purchaseTotal=sum(received,o=>+o.total||0),expenseTotal=sum(tx,t=>+t.amt||0);
  const purchaseTx=tx.filter(t=>t.cat=='ซื้อสินค้า');
  return `<div class="row"><div><h2 class="t">📊 รายงานสต๊อกและค่าใช้จ่าย</h2><div class="sub2">สรุปจากข้อมูลสินค้า การเคลื่อนไหว ใบสั่งซื้อที่รับจริง และรายจ่ายที่บันทึก</div></div><button class="bo sm" data-act="rep-refresh">↻ อัปเดตรายงาน</button></div>
- <div class="kp"><div><span>จำนวนสินค้าในระบบ</span><b>${ps.length.toLocaleString('th-TH')} รายการ</b></div><div><span>มูลค่าสต๊อกตามต้นทุน</span><b>${m2(cost)}</b></div><div><span>สินค้าใกล้ขั้นต่ำ/หมด</span><b class="${lowPs.length?'ex':'in2'}">${lowPs.length} รายการ</b></div><div><span>มูลค่าอ้างอิงราคาแม็คโคร</span><b>${m2(mk)}</b></div></div>
+ <div class="kp"><div><span>จำนวนสินค้าในระบบ</span><b>${ps.length.toLocaleString('th-TH')} รายการ</b></div><div><span>มูลค่าสต๊อกตามต้นทุน</span><b>${m2(cost)}</b></div><div><span>สินค้าใกล้ขั้นต่ำ/หมด</span><b class="${lowPs.length?'ex':'in2'}">${lowPs.length} รายการ</b></div></div>
  <div class="report-grid">
  <div class="card"><h3 class="k">📦 มูลค่าสต๊อกแยกตามหมวดหมู่</h3><p class="sub">คำนวณจากจำนวนคงเหลือ × ต้นทุนจริงต่อสินค้า</p>${bars(stockBars,stockMax,m2v)}</div>
  <div class="card"><h3 class="k">⚠️ รายการที่ควรตรวจสอบ/สั่งซื้อ</h3>${lowPs.length?`<div class="rlist">${lowPs.slice(0,10).map(p=>`<div class="rlist-row"><span><b>${esc(p.name)}</b><small>${esc(p.cat||'ไม่ระบุหมวด')} · ขั้นต่ำ ${p.min} ${esc(p.unit||'')}</small></span><strong class="${p.qty<=0?'ex':'warn-txt'}">เหลือ ${r3(p.qty)} ${esc(p.unit||'')}</strong></div>`).join('')}</div>`:'<div class="em">ไม่มีสินค้าใกล้หมด</div>'}</div>
@@ -542,10 +543,10 @@ function importCSV(txt){
  const R=parseCSV(txt),h0=(R[0]||[]).map(x=>x.trim()),ix=n=>h0.indexOf(n);
  if(['ชื่อสินค้า','หมวดหมู่','หน่วยนับ'].some(n=>ix(n)<0))return toast('หัวคอลัมน์ไม่ครบ ต้องมี ชื่อสินค้า, หมวดหมู่, หน่วยนับ');
  const names=new Set(B(S.products).map(p=>p.name.trim().toLowerCase())),rows=[];let skip=0;
- R.slice(1).forEach(r=>{const g=n=>ix(n)<0?'':(r[ix(n)]||'').trim(),name=g('ชื่อสินค้า'),nm=g('จำนวนขั้นต่ำ'),op=g('ยอดยกมา'),mk=g('ราคาแม็คโคร'),co=g('ต้นทุนจริง');
-  if(!name||names.has(name.toLowerCase())||[nm,op,mk,co].some(v=>v!==''&&!(+v>=0))){skip++;return}
+ R.slice(1).forEach(r=>{const g=n=>ix(n)<0?'':(r[ix(n)]||'').trim(),name=g('ชื่อสินค้า'),nm=g('จำนวนขั้นต่ำ'),op=g('ยอดยกมา'),co=g('ต้นทุนจริง');
+  if(!name||names.has(name.toLowerCase())||[nm,op,co].some(v=>v!==''&&!(+v>=0))){skip++;return}
   names.add(name.toLowerCase());const s=S.sups.find(x=>x.name==g('ซัพพลายเออร์'))||S.sups[0];
-  rows.push({name,cat:g('หมวดหมู่'),unit:g('หน่วยนับ')||'ชิ้น',min:+nm||0,open:+op||0,sku:g('รหัส'),size:g('ขนาด'),sup:s.id,market:+mk||0,cost:+co||+mk||0})});
+  rows.push({name,cat:g('หมวดหมู่'),unit:g('หน่วยนับ')||'ชิ้น',min:+nm||0,open:+op||0,sku:g('รหัส'),size:g('ขนาด'),sup:s.id,cost:+co||0})});
  if(!rows.length)return toast('ไม่มีรายการที่นำเข้าได้ (ข้าม '+skip+' รายการ)');
  if(!pin('นำเข้าสินค้า')||!confirm(`นำเข้า ${rows.length} รายการ (ข้าม ${skip} รายการที่ว่าง/ซ้ำ/ตัวเลขผิด)?`))return;
  rows.forEach(({open,...d})=>{const p={id:uid(),br:S.br,qty:0,...d};S.products.push(p);if(open>0)mv(p,open,'ยอดยกมา','open')});
@@ -607,7 +608,7 @@ document.addEventListener('click',e=>{
  case'p-edit':return pForm(P(id));
  case'p-del':return toast('กรุณาเปิดแก้ไขสินค้าแล้วเลือกขอลบสินค้า เพื่อส่งให้แอดมินอนุมัติ');
  case'product-delete-request':{const p=P(id);if(!p)return toast('ไม่พบสินค้า');if(S.deleteRequests.some(r=>r.pid==id&&r.status==='pending'))return toast('สินค้านี้มีคำขอลบที่รออนุมัติอยู่แล้ว');if(!confirm('ส่งคำขอลบสินค้า “'+p.name+'” ให้แอดมินอนุมัติใช่หรือไม่?'))return;S.deleteRequests.push({id:uid(),pid:p.id,name:p.name,br:S.br,by:currentUser?.name||WHO||'ผู้ใช้งาน',t:Date.now(),status:'pending'});save();$('#dlg').close();toast('ส่งคำขอลบให้แอดมินอนุมัติแล้ว');return}
- case'stock-edit-approve':{if(!currentUser?.admin)return toast('เฉพาะแอดมินเท่านั้น');const r=S.stockEditRequests.find(x=>x.id==t.dataset.rid&&x.status==='pending');if(!r)return toast('ไม่พบคำขอ');const p=P(r.pid);if(!p){r.status='rejected';save();settings();return toast('ไม่พบสินค้าในสต๊อก')}const d=r.data||{},qn=Number(d.qty??p.qty);Object.assign(p,{sku:d.sku??p.sku,brand:d.brand??p.brand,cat:d.cat??p.cat,name:d.name??p.name,size:d.size??p.size,sup:d.sup??p.sup,unit:d.unit??p.unit,market:d.market??p.market,cost:d.cost??p.cost,min:d.min??p.min});if(qn!==p.qty)mv(p,qn-p.qty,'แก้ไขยอดคงเหลือ (อนุมัติโดยแอดมิน)','adj');r.status='approved';r.approvedBy=currentUser.name;r.approvedAt=Date.now();save();settings();render();return toast('อนุมัติและอัปเดตข้อมูลสต๊อกแล้ว')}
+ case'stock-edit-approve':{if(!currentUser?.admin)return toast('เฉพาะแอดมินเท่านั้น');const r=S.stockEditRequests.find(x=>x.id==t.dataset.rid&&x.status==='pending');if(!r)return toast('ไม่พบคำขอ');const p=P(r.pid);if(!p){r.status='rejected';save();settings();return toast('ไม่พบสินค้าในสต๊อก')}const d=r.data||{},qn=Number(d.qty??p.qty);Object.assign(p,{sku:d.sku??p.sku,brand:d.brand??p.brand,cat:d.cat??p.cat,name:d.name??p.name,size:d.size??p.size,sup:d.sup??p.sup,unit:d.unit??p.unit,cost:d.cost??p.cost,min:d.min??p.min});if(qn!==p.qty)mv(p,qn-p.qty,'แก้ไขยอดคงเหลือ (อนุมัติโดยแอดมิน)','adj');r.status='approved';r.approvedBy=currentUser.name;r.approvedAt=Date.now();save();settings();render();return toast('อนุมัติและอัปเดตข้อมูลสต๊อกแล้ว')}
  case'stock-edit-reject':{if(!currentUser?.admin)return toast('เฉพาะแอดมินเท่านั้น');const r=S.stockEditRequests.find(x=>x.id==t.dataset.rid&&x.status==='pending');if(!r)return toast('ไม่พบคำขอ');r.status='rejected';r.approvedBy=currentUser.name;r.approvedAt=Date.now();save();settings();return toast('ไม่อนุมัติคำขอแก้ไขแล้ว')}
  case'delete-approve':{if(!currentUser?.admin)return toast('เฉพาะแอดมินเท่านั้น');const r=S.deleteRequests.find(x=>x.id==t.dataset.rid&&x.status==='pending');if(!r)return toast('ไม่พบคำขอ');const p=P(r.pid);if(p)S.products=S.products.filter(x=>x.id!==r.pid);r.status='approved';r.approvedBy=currentUser.name;r.approvedAt=Date.now();save();settings();render();return toast(p?'อนุมัติและลบสินค้าแล้ว':'อนุมัติคำขอแล้ว แต่ไม่พบสินค้าในสต๊อก')}
  case'delete-reject':{if(!currentUser?.admin)return toast('เฉพาะแอดมินเท่านั้น');const r=S.deleteRequests.find(x=>x.id==t.dataset.rid&&x.status==='pending');if(!r)return toast('ไม่พบคำขอ');r.status='rejected';r.approvedBy=currentUser.name;r.approvedAt=Date.now();save();settings();return toast('ไม่อนุมัติคำขอลบแล้ว')}
@@ -615,7 +616,7 @@ document.addEventListener('click',e=>{
  case'p-save':{
   if(!g('name'))return toast('กรุณากรอกชื่อสินค้า');
   
-  const d={sku:g('sku')||(id?'':makeSku($('#f_sup').value,g('cat'))),brand:g('brand'),cat:g('cat'),name:g('name'),size:g('size'),sup:+$('#f_sup').value,unit:g('unit')||'ชิ้น',market:+g('market')||0,cost:+g('cost')||0,min:+g('min')||0},qn=+g('qty')||0;
+  const d={sku:g('sku')||(id?'':makeSku($('#f_sup').value,g('cat'))),brand:g('brand'),cat:g('cat'),name:g('name'),size:g('size'),sup:+$('#f_sup').value,unit:g('unit')||'ชิ้น',cost:+g('cost')||0,min:+g('min')||0},qn=+g('qty')||0;
   if(S.products.some(x=>x.br==S.br&&x.id!=id&&x.name.trim().toLowerCase()==d.name.toLowerCase())&&!confirm('มีสินค้าชื่อนี้อยู่แล้ว ต้องการบันทึกซ้ำหรือไม่?'))return;
   if(id){
    const p=P(id);if(!p)return toast('ไม่พบสินค้า');
@@ -638,7 +639,7 @@ document.addEventListener('click',e=>{
  case'del-sel':return toast('การลบสินค้าต้องส่งคำขอให้แอดมินอนุมัติทีละรายการ')
  case'hexp':return download('history.csv','text/csv;charset=utf-8',csvT([['เลขที่เอกสาร','วันที่','เวลา','สินค้า','หมวดหมู่','ประเภท','รับเข้า','เบิกออก','คงเหลือ','หมายเหตุ','ผู้บันทึก'],...histRows().map(m=>[m.no,m.date,new Date(m.t).toLocaleTimeString('th-TH'),m.name,m.cat,tyl(m),m.d>0?m.d:'',m.d<0?-m.d:'',m.after,m.note,m.by])]));
  case'imp-csv':return $('#csvf').click();
- case'tpl':return download('ตัวอย่างนำเข้าสินค้า.csv','text/csv;charset=utf-8',csvT([['ชื่อสินค้า','หมวดหมู่','หน่วยนับ','จำนวนขั้นต่ำ','ยอดยกมา','รหัส','ขนาด','ซัพพลายเออร์','ราคาแม็คโคร','ต้นทุนจริง'],['น้ำตาลทราย','เครื่องปรุง','ถุง',5,20,'SG-001','1 กก.','แม็คโคร',30,29]]));
+ case'tpl':return download('ตัวอย่างนำเข้าสินค้า.csv','text/csv;charset=utf-8',csvT([['ชื่อสินค้า','หมวดหมู่','หน่วยนับ','จำนวนขั้นต่ำ','ยอดยกมา','รหัส','ขนาด','ซัพพลายเออร์','ต้นทุนจริง'],['น้ำตาลทราย','เครื่องปรุง','ถุง',5,20,'SG-001','1 กก.','ซัพพลายเออร์ตัวอย่าง',29]]));
  case'pin-set':{if(!pin('เปลี่ยนรหัสแอดมิน'))return;const n=prompt('ตั้งรหัสแอดมินใหม่เป็นตัวเลข 6 หลัก');if(n!==null){if(!/^\d{6}$/.test(n))return toast('รหัสแอดมินต้องเป็นตัวเลข 6 หลัก');if(S.users.some(u=>u.code===n))return toast('รหัสนี้ถูกใช้โดยพนักงานแล้ว');S.pin=n;save();toast('เปลี่ยนรหัสแล้ว')}return}
  case'po-new':case'po-new':return poForm();
  case'acc':CL[t.dataset.c]=CL[t.dataset.c]===false;return tbl();
@@ -687,7 +688,7 @@ document.addEventListener('click',e=>{
  case'br-add':{const n=$('#s_br').value.trim();if(!n||S.branches.includes(n))return toast('ชื่อสาขาว่างหรือซ้ำ');S.branches.push(n);save();render();return toast('เพิ่มสาขาแล้ว')}
  case'sup-add':{const n=$('#s_sn').value.trim();if(!n)return toast('กรุณากรอกชื่อ');S.sups.push({id:uid(),name:n,code:$('#s_sc').value.trim().toUpperCase(),days:[],time:'12:00'});save();render();return toast('เพิ่มซัพพลายเออร์แล้ว')}
  case'export':return download('smart-stock-backup.json','application/json',JSON.stringify(S,null,1));
- case'csv':{const c=v=>`"${String(v??'').replace(/"/g,'""')}"`;return download('products.csv','text/csv;charset=utf-8','\ufeff'+['รหัส,ชื่อสินค้า,หมวดหมู่,ขนาด,ซัพพลายเออร์,ราคาแม็คโคร,ต้นทุนจริง,คงเหลือ,หน่วย,ขั้นต่ำ',...B(S.products).map(p=>[p.sku,p.name,p.cat,p.size,SP(p.sup)?.name,p.market,p.cost,p.qty,p.unit,p.min].map(c).join(','))].join('\n'))}
+ case'csv':{const c=v=>`"${String(v??'').replace(/"/g,'""')}"`;return download('products.csv','text/csv;charset=utf-8','\ufeff'+['รหัส,ชื่อสินค้า,หมวดหมู่,ขนาด,ซัพพลายเออร์,ต้นทุนจริง,คงเหลือ,หน่วย,ขั้นต่ำ',...B(S.products).map(p=>[p.sku,p.name,p.cat,p.size,SP(p.sup)?.name,p.cost,p.qty,p.unit,p.min].map(c).join(','))].join('\n'))}
  case'import':return $('#file').click();
  case'reset':if(confirm('ล้างข้อมูลทั้งหมดและกลับเป็นข้อมูลตัวอย่าง?')&&pin('ล้างข้อมูล')){S=seed();save();$('#dlg').close();render()}return;
  }
@@ -733,6 +734,14 @@ tick();loginView();
   document.addEventListener('keydown',function(e){if((e.ctrlKey||e.metaKey)&&['+','=','-','0'].includes(e.key))e.preventDefault()});
   if(window.visualViewport){let resetQueued=false;window.visualViewport.addEventListener('resize',function(){if(resetQueued)return;resetQueued=true;requestAnimationFrame(function(){resetQueued=false;if(window.visualViewport.scale>1.01){const vp=document.querySelector('meta[name=viewport]');if(vp){vp.setAttribute('content','width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover');setTimeout(()=>vp.setAttribute('content','width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover'),80)}}})})}
 })();
+
+// Compact the page heading and stock controls after the user starts scrolling.
+(function(){
+  let ticking=false;
+  const updateScrollState=()=>{document.body.classList.toggle('scrolled',window.scrollY>24);ticking=false;};
+  window.addEventListener('scroll',()=>{if(!ticking){ticking=true;requestAnimationFrame(updateScrollState)}},{passive:true});
+  updateScrollState();
+})();
 </script>
 </body>
 </html>
@@ -761,4 +770,39 @@ body:has(#ht){padding-bottom:0}
  .hist-filters input[type=date]{min-width:0;width:22%;font-size:10px;padding:8px 2px}
  .hist-filters select{min-width:0;width:19%;font-size:10px;padding:8px 2px}
 }
+</style>
+
+<style>
+
+/* Keep the top header and topic navigation fixed together; reserve space so content never hides underneath. */
+header{position:fixed!important;top:0;left:0;right:0;z-index:30}
+nav{position:fixed!important;z-index:29;top:68px;left:0;right:0}
+main{padding-top:132px!important}
+@media(max-width:600px){nav{top:48px!important}main{padding-top:108px!important}}
+/* On scroll, compact the active page's heading and stock filters without hiding the actual content. */
+body.scrolled .stock-heading{margin-bottom:7px;gap:6px;}
+body.scrolled .stock-heading h2.t{font-size:18px!important;line-height:1.25;}
+body.scrolled .stock-heading .sub2{display:none!important}
+body.scrolled .sc4{grid-template-columns:repeat(4,minmax(0,1fr));gap:5px;margin-bottom:8px}
+body.scrolled .sc{height:38px;min-height:38px;max-height:38px;padding:2px 3px;border-width:1px;border-radius:8px;font-size:9px;line-height:1.1}
+body.scrolled .sc b{font-size:15px;line-height:1;margin:0}
+body.scrolled .sc span{font-size:9px;white-space:nowrap}
+body.scrolled .chips{gap:5px;margin-top:5px;margin-bottom:8px}
+body.scrolled .chips .chip{font-size:11px;padding:5px 9px;line-height:1.2}
+body.scrolled .sr{margin-bottom:7px}
+/* Other pages: keep page titles compact on scroll and hide only their secondary explanatory line. */
+body.scrolled h2.t{font-size:18px!important;line-height:1.25}
+body.scrolled .row:has(>div>h2.t){margin-bottom:8px;gap:6px}
+body.scrolled .row:has(>div>h2.t) .sub2{display:none!important}
+body.scrolled .stock-actions{top:116px;padding:5px 0;margin-bottom:8px}
+@media(max-width:600px){
+ body.scrolled .stock-heading h2.t,body.scrolled h2.t{font-size:18px!important}
+ body.scrolled .sc4{gap:4px}
+ body.scrolled .sc{height:36px;min-height:36px;max-height:36px;padding:2px}
+ body.scrolled .sc b{font-size:14px}
+ body.scrolled .sc span{font-size:8px}
+ body.scrolled .chips .chip{font-size:10px;padding:4px 7px}
+ body.scrolled .stock-actions{top:104px}
+}
+
 </style>
