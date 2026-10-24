@@ -275,6 +275,23 @@ header{background:#fff;color:var(--tx);border-bottom:1px solid #e5e7eb;box-shado
 }
 
 
+#loginScreen{min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:8vh 18px 30px!important;max-width:none!important;position:relative;isolation:isolate;overflow:hidden;background:linear-gradient(135deg,#fffaf0 0%,#fff 48%,#fff4dc 100%)}
+/* Background is generated from the uploaded logo: enlarged, blurred edge-fill behind the centered original. */
+#loginScreen::before{content:"";position:fixed;inset:-7vh -7vw;z-index:-2;background-image:var(--login-bg-image,none);background-position:center;background-size:cover;background-repeat:no-repeat;filter:blur(42px) saturate(1.18);opacity:.30;transform:scale(1.12);transition:opacity 1.1s ease,filter 1.1s ease}
+#loginScreen::after{content:"";position:fixed;inset:0;z-index:-1;background:radial-gradient(ellipse at center,rgba(255,255,255,.78) 0%,rgba(255,255,255,.55) 44%,rgba(255,250,240,.28) 100%);pointer-events:none}
+#loginScreen .card{position:relative;z-index:1;width:min(100%,420px);text-align:center;padding:30px 24px 28px;border-radius:24px;animation:loginFadeIn 1.15s cubic-bezier(.2,.75,.25,1) both;box-shadow:0 18px 55px rgba(120,70,0,.12);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);background:rgba(255,255,255,.84)}
+.login-brand{display:flex;flex-direction:column;align-items:center;gap:14px;margin:0 auto 18px;animation:loginLogoIn 1.35s cubic-bezier(.2,.75,.25,1) both}
+.login-logo-frame{width:124px;height:124px;display:flex;align-items:center;justify-content:center;border-radius:24px;overflow:hidden;background:linear-gradient(145deg,#fff8e8,#fff);box-shadow:0 8px 24px rgba(217,119,6,.12)}
+.login-logo-frame img{width:100%;height:100%;object-fit:contain;display:none}
+.login-logo-fallback{font-size:56px;line-height:1}
+.login-brand h2{margin:0!important;font-size:23px}
+.login-logo-tools{font-size:12px;color:var(--mu);margin-top:2px}
+.login-logo-tools label{cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+#loginForm{animation:loginFormIn .8s .55s both}
+@keyframes loginFadeIn{from{opacity:0;transform:translateY(22px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes loginLogoIn{0%{opacity:0;transform:translateY(18px) scale(.9);filter:blur(5px)}75%{opacity:1;transform:translateY(-2px) scale(1.015);filter:blur(0)}100%{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes loginFormIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@media(prefers-reduced-motion:reduce){#loginScreen .card,.login-brand,#loginForm{animation:none!important}}
 .flower-pin-wrap{position:relative;margin:28px auto 10px;max-width:350px;cursor:text;border-radius:14px;padding:10px 4px}
 .flower-pin{display:flex;justify-content:center;gap:8px;pointer-events:none}
 .flower-pin span{width:42px;height:48px;display:flex;align-items:center;justify-content:center;font-size:27px;border-bottom:2px solid var(--ln);transition:all .15s}
@@ -322,14 +339,14 @@ body { padding-bottom:max(28px, env(safe-area-inset-bottom))!important; }
 
 <style id="nav-smooth-icon-label-motion">
 /* Smooth bookmark activation: icon glides left; label fades/slides in from the icon to the right. */
-#nav button { transition: background-color .28s ease, color .28s ease, box-shadow .28s ease, transform .28s cubic-bezier(.2,.8,.2,1), flex-grow .28s ease; }
-#nav button i { transition: transform .38s cubic-bezier(.2,.8,.2,1), opacity .25s ease, color .25s ease; }
-#nav button.on i { animation: navIconGlide .38s cubic-bezier(.2,.8,.2,1) both; }
-#nav button .nav-label { display:block !important; width:0; max-width:0; opacity:0; overflow:hidden; transform:translateX(-8px); transition: width .3s ease, max-width .3s ease, opacity .22s ease, transform .3s cubic-bezier(.2,.8,.2,1); }
-#nav button.on .nav-label { width:auto; max-width:120px; opacity:1; overflow:visible; transform:translateX(0); animation: navLabelArrive .36s .04s cubic-bezier(.2,.8,.2,1) both; }
+#nav button { transition: background-color .42s ease, color .42s ease, box-shadow .42s ease, transform .42s cubic-bezier(.22,.8,.25,1), flex-grow .42s ease; }
+#nav button i { transition: transform .62s cubic-bezier(.22,.8,.25,1), opacity .42s ease, color .42s ease; }
+#nav button.on i { animation: navIconGlide .62s cubic-bezier(.22,.8,.25,1) both; }
+#nav button .nav-label { display:block !important; width:0; max-width:0; opacity:0; overflow:hidden; transform:translateX(-8px); transition: width .38s ease, max-width .38s ease, opacity .34s ease, transform .38s cubic-bezier(.22,.8,.25,1); }
+#nav button.on .nav-label { width:auto; max-width:120px; opacity:1; overflow:visible; transform:translateX(0); animation: navLabelArrive .48s .58s cubic-bezier(.22,.8,.25,1) both; }
 #nav button.on { gap:7px; }
-@keyframes navIconGlide { from { transform:translateX(7px) scale(.88); opacity:.65; } to { transform:translateX(0) scale(1); opacity:1; } }
-@keyframes navLabelArrive { from { opacity:0; transform:translateX(-10px); } to { opacity:1; transform:translateX(0); } }
+@keyframes navIconGlide { 0% { transform:translateX(12px) scale(.9); opacity:.7; } 72% { transform:translateX(-5px) scale(1.04); opacity:1; } 100% { transform:translateX(-4px) scale(1); opacity:1; } }
+@keyframes navLabelArrive { 0% { opacity:0; transform:translateX(-12px); } 65% { opacity:.85; transform:translateX(2px); } 100% { opacity:1; transform:translateX(0); } }
 @media (prefers-reduced-motion: reduce) { #nav button, #nav button i, #nav button .nav-label { animation:none !important; transition:none !important; } }
 @media(max-width:760px) { #nav button.on { gap:5px; } #nav button.on .nav-label { max-width:90px; } }
 </style>
@@ -345,7 +362,7 @@ body { padding-bottom:max(28px, env(safe-area-inset-bottom))!important; }
  <button class="ic" data-act="rep-refresh" aria-label="รีเฟรช" title="รีเฟรชข้อมูล">↻</button>
  <button class="ic" data-act="settings" aria-label="ตั้งค่า">⚙</button>
 </div></header>
-<section id="loginScreen" class="w" style="display:none;max-width:460px;padding-top:60px"><div class="card"><h2 style="margin-top:0">🔐 เข้าสู่ระบบ Smart Stock</h2><form id="loginForm"><div class="flower-pin-wrap" id="flowerPinWrap" role="button" tabindex="0" aria-label="กรอกรหัสเข้าสู่ระบบ 6 หลัก"><div class="flower-pin" id="flowerPin" aria-hidden="true"><span>🌸</span><span>🌸</span><span>🌸</span><span>🌸</span><span>🌸</span><span>🌸</span></div><input id="loginCode" class="flower-pin-input" inputmode="numeric" autocomplete="off" maxlength="6" pattern="[0-9]{6}" aria-label="รหัสเข้าสู่ระบบ 6 หลัก" required></div></form></div></section><main class="w" id="app"></main>
+<section id="loginScreen" class="w" style="display:none"><div class="card"><div class="login-brand"><div class="login-logo-frame"><span class="login-logo-fallback" id="loginLogoFallback">📦</span><img id="loginLogoImg" alt="โลโก้ร้าน"></div><h2>เข้าสู่ระบบ Smart Stock</h2><div class="login-logo-tools"><label for="loginLogoFile">＋ เพิ่ม/เปลี่ยนรูปโลโก้</label></div></div><input type="file" id="loginLogoFile" accept="image/*" hidden><form id="loginForm"><div class="flower-pin-wrap" id="flowerPinWrap" role="button" tabindex="0" aria-label="กรอกรหัสเข้าสู่ระบบ 6 หลัก"><div class="flower-pin" id="flowerPin" aria-hidden="true"><span>🌸</span><span>🌸</span><span>🌸</span><span>🌸</span><span>🌸</span><span>🌸</span></div><input id="loginCode" class="flower-pin-input" inputmode="numeric" autocomplete="off" maxlength="6" pattern="[0-9]{6}" aria-label="รหัสเข้าสู่ระบบ 6 หลัก" required></div></form></div></section><main class="w" id="app"></main>
 <nav id="nav"></nav>
 <dialog id="dlg"></dialog>
 <input type="file" id="file" accept=".json" hidden>
@@ -802,6 +819,10 @@ $('#file').addEventListener('change',e=>{
  r.readAsText(f);
 });
 function paintFlowerPin(){const code=$('#loginCode').value.replace(/\D/g,'').slice(0,6);$('#loginCode').value=code;$('#flowerPin').querySelectorAll('span').forEach((el,i)=>{if(i<code.length){el.textContent=code[i];el.classList.add('filled')}else{el.textContent='🌸';el.classList.remove('filled')}})}
+const LOGIN_LOGO_KEY='smartstock_login_logo_v1';
+function applyLoginLogo(src){const img=$('#loginLogoImg'),fallback=$('#loginLogoFallback'),screen=$('#loginScreen');if(src){img.src=src;img.style.display='block';fallback.style.display='none';screen.style.setProperty('--login-bg-image','url(\"'+src+'\")')}else{img.removeAttribute('src');img.style.display='none';fallback.style.display='block';screen.style.removeProperty('--login-bg-image')}}
+try{applyLoginLogo(localStorage.getItem(LOGIN_LOGO_KEY)||'')}catch(e){}
+$('#loginLogoFile').addEventListener('change',e=>{const file=e.target.files?.[0];if(!file)return;if(!file.type.startsWith('image/')){toast('กรุณาเลือกไฟล์รูปภาพ');return}if(file.size>2*1024*1024){toast('รูปโลโก้ต้องมีขนาดไม่เกิน 2 MB');return}const reader=new FileReader();reader.onload=()=>{try{localStorage.setItem(LOGIN_LOGO_KEY,reader.result);applyLoginLogo(reader.result);toast('บันทึกรูปโลโก้แล้ว')}catch(err){toast('บันทึกรูปไม่สำเร็จ กรุณาใช้รูปขนาดเล็กลง')}};reader.readAsDataURL(file);e.target.value=''});
 $('#loginCode').addEventListener('input',()=>{paintFlowerPin();const code=$('#loginCode').value.trim();if(code.length===6){if(loginAs(code)){$('#loginCode').value='';paintFlowerPin()}else{$('#loginCode').value='';paintFlowerPin();$('#loginCode').focus()}}});
 $('#flowerPinWrap').addEventListener('click',()=>$('#loginCode').focus());
 $('#flowerPinWrap').addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();$('#loginCode').focus()}});
