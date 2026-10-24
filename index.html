@@ -123,8 +123,8 @@ main{padding-top:90px}
 header{position:sticky;top:0;z-index:20}
 @media(max-width:760px){nav{top:68px;padding:5px 3px}nav button i{width:38px;font-size:20px}nav button .nav-label{font-size:10px}main{padding-top:82px}}
 .sc4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
-.sc{border:2px solid transparent;border-radius:18px;padding:18px 8px;text-align:center;font-size:13px}
-.sc b{display:block;font-size:30px;line-height:1.25}
+.sc{box-sizing:border-box;height:60px;min-height:60px;max-height:60px;overflow:hidden;border:2px solid transparent;border-radius:14px;padding:5px 8px;text-align:center;font-size:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0}
+.sc b{display:block;font-size:23px;line-height:1.05;margin-top:2px}
 .sc.a{background:#eef2f9;color:#1e293b}.sc.b{background:#d1fae5;color:#047857}.sc.c{background:#fef3c7;color:#b45309}.sc.d{background:#fee2e2;color:#b91c1c}
 .sc.on{border-color:currentColor}
 .acc{background:#fff;border-radius:18px;box-shadow:var(--sh);margin-bottom:16px;padding:4px 0 8px}
@@ -192,6 +192,23 @@ body,main{background:#fff}
 header{background:#fff;color:var(--tx);border-bottom:1px solid #e5e7eb;box-shadow:none;position:sticky;top:0;z-index:20}
 .logo{color:#d97706}.clock{background:#f3f4f6;color:#374151}
 .card,.tw,.kp div,.acc,.kc{box-shadow:0 1px 4px rgba(15,23,42,.06)}
+
+/* Header controls: keep admin, branch and settings grouped at the top-right */
+.hd{flex-wrap:nowrap;gap:8px}
+.hd .sp{flex:1;min-width:8px}
+.hd>.pill:not(.on){white-space:nowrap}
+@media(max-width:600px){
+  .hd{gap:5px;padding:7px 0;min-height:48px}
+  .logo{font-size:15px;gap:4px;white-space:nowrap}
+  .clock{display:none}
+  .hd .sp{flex:1;min-width:0}
+  .hd>.pill:not(.on){font-size:10px;padding:4px 7px;white-space:nowrap}
+  header select#br{max-width:94px;min-width:0;padding:5px 5px;font-size:11px;border-radius:8px}
+  .hd .ic{width:30px;height:30px;flex:0 0 30px;font-size:15px}
+  nav{top:48px!important}
+  main{padding-top:70px!important}
+}
+
 </style>
 </head>
 <body>
@@ -201,7 +218,6 @@ header{background:#fff;color:var(--tx);border-bottom:1px solid #e5e7eb;box-shado
  <div class="sp"></div>
  <span class="pill">👤 แอดมิน</span>
  <select id="br" aria-label="สาขา"></select>
- <span class="pill on">ออนไลน์</span>
  <button class="ic" data-act="settings" aria-label="ตั้งค่า">⚙</button>
 </div></header>
 <main class="w" id="app"></main>
