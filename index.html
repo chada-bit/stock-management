@@ -189,6 +189,8 @@ html body .it > span.vb.o { background-color: #ef4444 !important; }
 #rv td:first-child,#rv th:first-child{position:sticky;left:0;z-index:2;background:#fff;box-shadow:2px 0 4px rgba(120,80,0,.08)}
 #rv th:first-child{background:var(--th)}
 
+.doc-choice{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--ln);border-radius:10px;padding:9px 12px;background:#fff}.doc-choice input{width:auto}
+@media(max-width:700px){.tx-line{grid-template-columns:1fr 1fr!important}.tx-line>div:first-child{grid-column:1/-1}.tx-line-remove{justify-self:end}}
 /* User-requested clean white theme and full-width layout */
 :root{--bg:#ffffff;--sf:#ffffff;--tx:#202124;--mu:#6b7280;--ln:#e5e7eb;--th:#f8fafc;--sh:0 1px 5px rgba(15,23,42,.06)}
 body,main{background:#fff}
@@ -250,11 +252,11 @@ header{background:#fff;color:var(--tx);border-bottom:1px solid #e5e7eb;box-shado
  <div class="logo">📦 <span>Smart Stock</span></div>
  <div class="clock"><span id="dt"></span><b id="tm"></b></div>
  <div class="sp"></div>
- <span class="pill">👤 แอดมิน</span>
+ <button class="pill" id="userBadge" data-act="logout">🔒 เข้าสู่ระบบ</button>
  <select id="br" aria-label="สาขา"></select>
  <button class="ic" data-act="settings" aria-label="ตั้งค่า">⚙</button>
 </div></header>
-<main class="w" id="app"></main>
+<section id="loginScreen" class="w" style="display:none;max-width:460px;padding-top:60px"><div class="card"><h2 style="margin-top:0">🔐 เข้าสู่ระบบ Smart Stock</h2><p class="sub">กรอกรหัสเข้าสู่ระบบ 6 หลัก</p><form id="loginForm"><label class="l" for="loginCode">รหัสเข้าสู่ระบบ</label><input id="loginCode" inputmode="numeric" autocomplete="off" maxlength="6" pattern="[0-9]{6}" placeholder="รหัส 6 หลัก" required style="font-size:24px;letter-spacing:8px;text-align:center;margin:8px 0 14px"><button class="bt" type="submit" style="width:100%">เข้าสู่ระบบ</button></form><p class="sub" style="margin-top:12px">ผู้ดูแลระบบเริ่มต้นใช้รหัส 123456</p></div></section><main class="w" id="app"></main>
 <nav id="nav"></nav>
 <dialog id="dlg"></dialog>
 <input type="file" id="file" accept=".json" hidden>
@@ -270,7 +272,7 @@ const seed=()=>({seq:100,br:'ร้านหลัก',branches:['ร้าน�
  orders:[],moves:[],tx:[]});
 let S;try{S=JSON.parse(localStorage.getItem(KEY))}catch(e){}
 if(!S||!S.products)S=seed();
-S.docs=S.docs||[];S.pin=S.pin||'123456';S.expCats=S.expCats||['ค่าน้ำ','ค่าไฟฟ้า','ค่าแรง','ค่าเดินทาง','ค่าอุปกรณ์','ค่าเช่า','ค่าอินเทอร์เน็ต','อื่นๆ'];
+S.docs=S.docs||[];S.pin=S.pin||'123456';S.users=S.users||[];S.expCats=S.expCats||['ค่าน้ำ','ค่าไฟฟ้า','ค่าแรง','ค่าเดินทาง','ค่าอุปกรณ์','ค่าเช่า','ค่าอินเทอร์เน็ต','อื่นๆ'];S.receipts=S.receipts||[];
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){toast('บันทึกในเบราว์เซอร์ไม่ได้ กรุณาส่งออกข้อมูลสำรอง')}};
 const $=s=>document.querySelector(s);
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -285,6 +287,7 @@ const fd=t=>{const d=new Date(t);return `${d.getDate()} ${MON[d.getMonth()].slic
 const low=p=>p.qty<=p.min;
 const poNo=o=>'PO-'+String(o.id).padStart(4,'0');
 let tab='stock',fs='all',q='',onlyLow=false,pv=null;
+let currentUser=null, editingUserCode='';
 const TABS=[['stock','📦','สต๊อก'],['order','🚚','สั่งของ'],['mv','📤','เบิกออก'],['hist','🕘','ประวัติ'],['cash','💵','รายจ่าย'],['rep','📊','รายงาน']];
 function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>t.classList.remove('on'),2200)}
 function tick(){const d=new Date();$('#dt').textContent=`${DAYS[d.getDay()].replace('วัน','').slice(0,10)} ${d.getDate()} ${MON[d.getMonth()]} ${d.getFullYear()+543}`;$('#tm').textContent=`${z(d.getHours())}:${z(d.getMinutes())}:${z(d.getSeconds())}`}
@@ -296,11 +299,15 @@ function supState(s){
  if(s.days.includes(n.getDay()))return hm<s.time?{t:'เปิดรับสั่งวันนี้',c:'o',d:txt,dot:'#10b981'}:{t:'ปิดรับแล้ว',c:'c',d:txt,dot:'#ef4444'};
  for(let i=1;i<=7;i++){const d=(n.getDay()+i)%7;if(s.days.includes(d))return {t:'ยังไม่ถึงรอบ (ถัดไปวัน'+DAYS[d]+')',c:'',d:txt,dot:'#9ca3af'}}
 }
+function loginView(){document.querySelector('header').style.display='none';$('#app').style.display='none';$('#nav').style.display='none';$('#loginScreen').style.display='block';$('#loginCode').value=''}
+function loginAs(code){if(code===S.pin){currentUser={name:'แอดมิน',code:'admin',admin:true,branches:[...S.branches],perms:TABS.map(x=>x[0])};afterLogin();return true}const u=S.users.find(x=>x.code===code&&x.active!==false);if(!u){toast('รหัสเข้าสู่ระบบไม่ถูกต้อง หรือบัญชีถูกปิดใช้งาน');return false}currentUser=u;if(!currentUser.branches?.length){toast('บัญชีนี้ยังไม่ได้รับอนุญาตให้เข้าร้าน');currentUser=null;return false}if(!currentUser.branches.includes(S.br))S.br=currentUser.branches[0];afterLogin();return true}
+function afterLogin(){document.querySelector('header').style.display='';$('#app').style.display='';$('#nav').style.display='';$('#loginScreen').style.display='none';$('#userBadge').textContent=(currentUser.admin?'👑 ':'👤 ')+currentUser.name+' · ออกจากระบบ';const allowed=TABS.filter(x=>currentUser.admin||(currentUser.perms||[]).includes(x[0]));if(!allowed.some(x=>x[0]===tab))tab=allowed[0]?.[0]||'stock';render()}
 function render(){
- $('#br').innerHTML=S.branches.map(b=>`<option ${b==S.br?'selected':''}>${esc(b)}</option>`).join('');
- $('#nav').innerHTML=TABS.map(([k,i,l])=>`<button class="${k==tab?'on':''}" data-tab="${k}" aria-label="${l}" title="${l}"><i>${i}</i><span class="nav-label">${l}</span></button>`).join('');
- $('#app').innerHTML=({stock,order,mv:mvV,hist:histV,cash,rep})[tab]();
- if(tab=='stock')tbl();else if(tab=='mv')mtbl();else if(tab=='hist')htbl();
+ if(!currentUser){loginView();return}
+ const branches=currentUser.admin?S.branches:S.branches.filter(b=>(currentUser.branches||[]).includes(b));if(!branches.includes(S.br))S.br=branches[0]||S.br;
+ $('#br').innerHTML=branches.map(b=>`<option ${b==S.br?'selected':''}>${esc(b)}</option>`).join('');$('#br').style.display=branches.length>1?'':'none';
+ const allowed=TABS.filter(x=>currentUser.admin||(currentUser.perms||[]).includes(x[0]));$('#nav').innerHTML=allowed.map(([k,i,l])=>`<button class="${k==tab?'on':''}" data-tab="${k}" aria-label="${l}" title="${l}"><i>${i}</i><span class="nav-label">${l}</span></button>`).join('');if(!allowed.some(x=>x[0]===tab))tab=allowed[0]?.[0]||'stock';
+ $('#app').innerHTML=({stock,order,mv:mvV,hist:histV,cash,rep})[tab]?.()||'<div class="card">ไม่มีสิทธิ์เข้าถึงหน้านี้</div>';if(tab=='stock')tbl();else if(tab=='mv')mtbl();else if(tab=='hist')htbl();
 }
 /* ---------- stock ---------- */
 function stock(){
@@ -408,14 +415,20 @@ function schForm(s){
  <div class="ac"><button class="bo" data-act="close">ยกเลิก</button><button class="bt sm" data-act="sch-save" data-id="${s.id}">บันทึก</button></div>`);
 }
 /* ---------- cash ---------- */
+function expenseLine(i){return `<div class="tx-line" style="display:grid;grid-template-columns:minmax(180px,2fr) minmax(130px,1fr) minmax(110px,1fr) auto;gap:8px;align-items:end;margin:8px 0;padding:10px;border:1px solid var(--ln);border-radius:12px"><div><label class="l">ชื่อรายการ</label><input class="tx-item" placeholder="เช่น น้ำดื่ม" required></div><div><label class="l">หมวดหมู่</label><select class="tx-cat" required><option value="">เลือกหมวดหมู่</option>${S.expCats.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join('')}</select></div><div><label class="l">จำนวนเงิน (บาท)</label><input class="tx-amt" type="number" min="0.01" step="any" placeholder="0.00" required></div><button class="ib tx-line-remove" type="button" data-act="tx-line-del" aria-label="ลบรายการ" ${i===0?'disabled style="opacity:.25"':''}>✕</button></div>`}
 function cash(){
  const tx=B(S.tx).filter(t=>t.type=='out'),now=new Date(),ym=now.getFullYear()+'-'+now.getMonth();
  const mo=tx.filter(t=>{const d=new Date(t.t);return d.getFullYear()+'-'+d.getMonth()==ym});
- const sum=(a,ty)=>a.filter(t=>t.type==ty).reduce((s,t)=>s+t.amt,0),i=sum(mo,'in'),e=sum(mo,'out');
+ const e=mo.reduce((a,t)=>a+(+t.amt||0),0);
  return `<div class="row"><h2 class="t">💵 รายจ่าย</h2></div>
  <div class="kp"><div><span>รายจ่ายเดือนนี้</span><b class="ex">${m2(e)}</b></div></div>
- <div class="card"><h3>บันทึกรายการ</h3><div class="fm"><div><label class="l">จำนวนเงิน</label><input id="t_amt" type="number" min="0" step="any"></div><div><label class="l">หมวดหมู่</label><select id="t_cat" required><option value="">เลือกหมวดหมู่</option>${S.expCats.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join('')}</select></div><div><label class="l">หมายเหตุ</label><input id="t_note"></div><button class="bt" data-act="tx-add">บันทึก</button></div></div>
- <div class="tw">${tx.length?`<table style="min-width:600px"><tr><th>เวลา</th><th>หมวดหมู่</th><th>หมายเหตุ</th><th class="n">จำนวนเงิน</th><th></th></tr>${[...tx].reverse().slice(0,200).map(t=>`<tr><td>${fd(t.t)}</td><td>${esc(t.cat)}</td><td>${esc(t.note)}</td><td class="n"><b>${m2(t.amt)}</b></td><td><button class="ib" style="color:var(--rd)" data-act="tx-del" data-id="${t.id}" aria-label="ลบ">🗑</button></td></tr>`).join('')}</table>`:'<div class="em">ยังไม่มีรายการ</div>'}</div>`;
+ <div class="card"><h3>บันทึกบิลรายจ่าย</h3><p class="sub">หนึ่งบิลเพิ่มได้หลายรายการ ระบบจะบันทึกแยกแต่ละรายการและผูกไว้กับบิลเดียวกัน</p>
+ <div class="fw"><label class="l">รายการในบิล</label><div id="tx-lines">${expenseLine(0)}</div><button class="bo sm" style="margin-top:8px" data-act="tx-line-add">＋ เพิ่มรายการในบิลเดียวกัน</button></div>
+ <div class="f" style="margin-top:14px"><div class="fw"><label class="l">ประเภทเอกสาร (เลือกอย่างใดอย่างหนึ่ง)</label><div style="display:flex;gap:8px;flex-wrap:wrap"><label class="doc-choice"><input type="radio" name="tx_doc_type" value="tax" checked> ใบกำกับภาษี</label><label class="doc-choice"><input type="radio" name="tx_doc_type" value="receipt"> ใบเสร็จ</label><label class="doc-choice"><input type="radio" name="tx_doc_type" value="none"> ไม่มีบิล</label></div></div>
+ <div class="fw"><label class="l">ถ่ายรูป/แนบรูปบิล (ถ้ามี)</label><input id="tx_bill_photo" type="file" accept="image/*" capture="environment"><div class="sub">ถ่ายรูปด้วยกล้องมือถือหรือเลือกรูปจากเครื่องได้</div><img id="tx_bill_preview" alt="ตัวอย่างรูปบิล" style="display:none;max-width:220px;max-height:220px;object-fit:contain;margin-top:8px;border-radius:10px;border:1px solid var(--ln)"></div>
+ <div class="fw"><label class="l">หมายเหตุรวมของบิล (ถ้ามี)</label><input id="t_note" placeholder="เช่น ซื้อของใช้หน้าร้าน"></div></div>
+ <button class="bt" style="margin-top:14px" data-act="tx-add">บันทึกบิลรายจ่าย</button></div>
+ <div class="tw">${tx.length?`<table style="min-width:820px"><tr><th>เวลา</th><th>ชื่อรายการ</th><th>หมวดหมู่</th><th>เอกสาร</th><th>บิล</th><th>หมายเหตุ</th><th class="n">จำนวนเงิน</th><th></th></tr>${[...tx].reverse().slice(0,200).map(t=>`<tr><td>${fd(t.t)}</td><td>${esc(t.itemName||t.note||'—')}</td><td>${esc(t.cat)}</td><td>${({tax:'ใบกำกับภาษี',receipt:'ใบเสร็จ',none:'ไม่มีบิล'}[t.docType]||'ไม่ระบุ')}</td><td>${t.receiptId?`<button class="bo sm" data-act="tx-view-bill" data-rid="${t.receiptId}">ดูรูปบิล</button>`:'—'}</td><td>${esc(t.note)}</td><td class="n"><b>${m2(t.amt)}</b></td><td><button class="ib" style="color:var(--rd)" data-act="tx-del" data-id="${t.id}" aria-label="ลบ">🗑</button></td></tr>`).join('')}</table>`:'<div class="em">ยังไม่มีรายการ</div>'}</div></div>`;
 }
 /* ---------- report ---------- */
 function rep(){
@@ -510,7 +523,7 @@ function cancelDoc(no){const d=S.docs.find(x=>x.no==no);if(!d||d.cancelled)retur
 function histRows(){const q=H.q.toLowerCase();return B(S.moves).filter(m=>(!q||(m.name+(m.no||'')).toLowerCase().includes(q))&&(!H.type||(m.type||(m.d>0?'in':'out'))==H.type)&&(!H.from||(m.date||'')>=H.from)&&(!H.to||(m.date||'')<=H.to)&&(!H.by||m.by==H.by)&&(!H.cat||m.cat==H.cat)).sort((a,b)=>b.t-a.t)}
 function histV(){const by=[...new Set(B(S.moves).map(m=>m.by).filter(Boolean))];
  return `<div class="row"><h2 class="t">🕘 ประวัติการเคลื่อนไหว</h2><button class="bo" data-act="hexp">ส่งออก CSV</button></div>
- <div class="sr hist-shortcuts"><div class="in">🔍<input type="text" data-h="q" placeholder="ค้นหาชื่อสินค้า / เลขที่เอกสาร" value="${esc(H.q)}"></div><div class="hist-preset"><button class="bo" data-act="hr" data-r="t">วันนี้</button><button class="bo" data-act="hr" data-r="y">เมื่อวาน</button><button class="bo" data-act="hr" data-r="">ทั้งหมด</button></div></div>
+ <div class="sr hist-shortcuts"><div class="in">🔍<input type="text" data-h="q" placeholder="ค้นหาชื่อสินค้า / เลขที่เอกสาร" value="${esc(H.q)}"></div><div class="hist-preset"><button class="bo" data-act="hr" data-r="t">วันนี้</button><button class="bo" data-act="hr" data-r="y">เมื่อวาน</button><button class="bo" data-act="hr" data-r="">ทั้งหมด</button><button class="bo" data-act="hr-clear">เคลียร์ตัวเลือกทั้งหมด</button></div></div>
  <div class="sr hist-filters"><input type="date" data-h="from" value="${H.from}"><input type="date" data-h="to" value="${H.to}"><select data-h="type"><option value="">ทุกประเภท</option>${Object.entries(TY).map(([k,v])=>`<option value="${k}" ${H.type==k?'selected':''}>${v}</option>`).join('')}</select><select data-h="cat">${catOpts(H.cat)}</select><select data-h="by"><option value="">ทุกผู้บันทึก</option>${by.map(b=>`<option ${H.by==b?'selected':''}>${esc(b)}</option>`).join('')}</select></div>
  <div class="tw" id="ht"></div>`}
 function htbl(){const L=histRows();$('#ht').innerHTML=L.length?`<table style="min-width:900px"><tr><th>เลขที่เอกสาร</th><th>วันที่</th><th>เวลา</th><th>สินค้า</th><th>ประเภท</th><th class="n">รับเข้า</th><th class="n">เบิกออก</th><th class="n">คงเหลือ</th><th>หมายเหตุ</th><th>ผู้บันทึก</th></tr>${L.slice(0,300).map(m=>`<tr><td>${m.no&&S.docs.some(d=>d.no==m.no)?`<button class="ib sku" data-act="doc" data-no="${esc(m.no)}">${esc(m.no)}</button>`:esc(m.no||'-')}</td><td>${dmy(m.date||'')}</td><td>${new Date(m.t).toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'})}</td><td>${esc(m.name)}</td><td>${tyl(m)}</td><td class="n in2">${m.d>0?'+'+m.d:''}</td><td class="n ex">${m.d<0?m.d:''}</td><td class="n">${m.after??''}</td><td>${esc(m.note)}</td><td>${esc(m.by)}</td></tr>`).join('')}</table>`:'<div class="em">ไม่พบประวัติ</div>'}
@@ -561,16 +574,23 @@ function download(n,t,x){const a=document.createElement('a');a.href=URL.createOb
 function settings(){
  dlg(`<h3>ตั้งค่า</h3><div class="f"><div class="fw"><label class="l">เพิ่มสาขา / ร้าน</label><div style="display:flex;gap:6px"><input id="s_br" placeholder="ชื่อสาขา"><button class="bo" data-act="br-add">เพิ่ม</button></div></div>
  <div class="fw"><label class="l">เพิ่มซัพพลายเออร์</label><div style="display:flex;gap:6px"><input id="s_sn" placeholder="ชื่อ"><input id="s_sc" placeholder="รหัสย่อ" style="width:110px"><button class="bo" data-act="sup-add">เพิ่ม</button></div></div>
- <div class="fw"><label class="l">หมวดหมู่รายจ่าย (แยกจากหมวดหมู่สินค้า)</label><div style="display:flex;gap:6px;flex-wrap:wrap"><input id="s_ec" placeholder="เช่น ค่าน้ำ ค่าไฟ" style="flex:1;min-width:150px"><button class="bo" data-act="exp-cat-add">เพิ่มหมวดหมู่</button></div><div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px">${S.expCats.map(c=>`<span class="sp2">${esc(c)} <button class="ib" style="font-size:13px;color:var(--rd)" data-act="exp-cat-del" data-cat="${esc(c)}" aria-label="ลบหมวดหมู่ ${esc(c)}">×</button></span>`).join()}</div></div><div class="fw" style="display:flex;gap:8px;flex-wrap:wrap"><button class="bo" data-act="export">ส่งออกข้อมูล (JSON)</button><button class="bo" data-act="csv">ส่งออกสินค้า (CSV)</button><button class="bo" data-act="import">นำเข้าข้อมูล</button><button class="bo" data-act="imp-csv">นำเข้า CSV</button><button class="bo" data-act="tpl">ไฟล์ตัวอย่าง CSV</button><button class="bo" data-act="hexp">ส่งออกประวัติ (CSV)</button><button class="bo" data-act="pin-set">เปลี่ยนรหัสแอดมิน</button><button class="bo" style="color:var(--rd)" data-act="reset">ล้างข้อมูลทั้งหมด</button></div></div>
+ <div class="fw"><label class="l">หมวดหมู่รายจ่าย (แยกจากหมวดหมู่สินค้า)</label><div style="display:flex;gap:6px;flex-wrap:wrap"><input id="s_ec" placeholder="เช่น ค่าน้ำ ค่าไฟ" style="flex:1;min-width:150px"><button class="bo" data-act="exp-cat-add">เพิ่มหมวดหมู่</button></div><div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px">${S.expCats.map(c=>`<span class="sp2">${esc(c)} <button class="ib" style="font-size:13px;color:var(--rd)" data-act="exp-cat-del" data-cat="${esc(c)}" aria-label="ลบหมวดหมู่ ${esc(c)}">×</button></span>`).join()}</div></div><div class="fw"><label class="l">จัดการพนักงานและสิทธิ์การเข้าถึง</label><p class="sub">สร้างรหัสเข้าสู่ระบบ 6 หลัก กำหนดสาขา และเลือกเมนูที่พนักงานเข้าถึงได้</p><button class="bt sm" data-act="user-new">＋ เพิ่มพนักงาน</button><div style="margin-top:10px">${S.users.map(u=>`<div class="sup"><div><b>${esc(u.name)}</b><div class="sub">รหัส ${esc(u.code)} · ${(u.branches||[]).map(esc).join(', ')||'ยังไม่กำหนดสาขา'} · ${u.active===false?'ปิดใช้งาน':'ใช้งาน'}</div></div><div><button class="bo sm" data-act="user-edit" data-code="${esc(u.code)}">แก้ไขสิทธิ์</button> <button class="bo sm" data-act="user-toggle" data-code="${esc(u.code)}">${u.active===false?'เปิดใช้':'ปิดใช้'}</button> <button class="ib" data-act="user-del" data-code="${esc(u.code)}" aria-label="ลบพนักงาน">🗑</button></div></div>`).join('')||'<div class="em">ยังไม่มีพนักงาน</div>'}</div></div><div class="fw" style="display:flex;gap:8px;flex-wrap:wrap"><button class="bo" data-act="export">ส่งออกข้อมูล (JSON)</button><button class="bo" data-act="csv">ส่งออกสินค้า (CSV)</button><button class="bo" data-act="import">นำเข้าข้อมูล</button><button class="bo" data-act="imp-csv">นำเข้า CSV</button><button class="bo" data-act="tpl">ไฟล์ตัวอย่าง CSV</button><button class="bo" data-act="hexp">ส่งออกประวัติ (CSV)</button><button class="bo" data-act="pin-set">เปลี่ยนรหัสแอดมิน</button><button class="bo" style="color:var(--rd)" data-act="reset">ล้างข้อมูลทั้งหมด</button></div></div>
  <div class="ac"><button class="bt sm" data-act="close">ปิด</button></div>`);
 }
+function userForm(code=''){const u=S.users.find(x=>x.code===code);editingUserCode=code;const perms=TABS.map(([k,ic,l])=>`<label style="display:inline-flex;align-items:center;gap:5px;border:1px solid var(--ln);border-radius:9px;padding:7px 10px;margin:3px"><input type="checkbox" name="u_perm" value="${k}" ${(u?(u.perms||[]).includes(k):true)?'checked':''} style="width:auto">${ic} ${l}</label>`).join('');const branches=S.branches.map(b=>`<label style="display:inline-flex;align-items:center;gap:5px;border:1px solid var(--ln);border-radius:9px;padding:7px 10px;margin:3px"><input type="checkbox" name="u_branch" value="${esc(b)}" ${(u?(u.branches||[]).includes(b):true)?'checked':''} style="width:auto">${esc(b)}</label>`).join('');dlg(`<h3>${u?'แก้ไขพนักงานและสิทธิ์':'เพิ่มพนักงาน'}</h3><div class="f"><div class="fw"><label class="l">ชื่อพนักงาน</label><input id="u_name" value="${esc(u?.name||'')}" placeholder="ชื่อพนักงาน"></div><div class="fw"><label class="l">รหัสเข้าสู่ระบบ 6 หลัก (ไม่ใช่ ID)</label><input id="u_code" inputmode="numeric" maxlength="6" value="${esc(u?.code||'')}" placeholder="เช่น 284619" ${u?'readonly':''}></div><div class="fw"><label class="l">อนุญาตให้เข้าถึงสาขา</label><div>${branches}</div></div><div class="fw"><label class="l">สิทธิ์เมนู</label><div>${perms}</div></div></div><div class="ac"><button class="bo" data-act="close">ยกเลิก</button><button class="bt sm" data-act="user-save">บันทึกพนักงาน</button></div>`)}
 document.addEventListener('click',e=>{
  const t=e.target.closest('[data-tab],[data-act]');if(!t)return;
- if(t.dataset.tab){tab=t.dataset.tab;return render()}
+ if(t.dataset.tab){if(!currentUser)return;if(!currentUser.admin&&!(currentUser.perms||[]).includes(t.dataset.tab))return toast('คุณไม่มีสิทธิ์เข้าถึงเมนูนี้');tab=t.dataset.tab;return render()}
  const a=t.dataset.act,id=+t.dataset.id,g=k=>$('#f_'+k).value.trim();
  switch(a){
  case'close':return $('#dlg').close();
- case'settings':return settings();
+ case'logout':currentUser=null;return loginView();
+ case'user-new':if(!currentUser?.admin)return toast('เฉพาะแอดมินเท่านั้น');return userForm();
+ case'user-edit':if(!currentUser?.admin)return toast('เฉพาะแอดมินเท่านั้น');return userForm(t.dataset.code);
+ case'user-save':{if(!currentUser?.admin)return toast('เฉพาะแอดมินเท่านั้น');const name=$('#u_name').value.trim(),code=$('#u_code').value.trim(),branches=[...document.querySelectorAll('[name="u_branch"]:checked')].map(x=>x.value),perms=[...document.querySelectorAll('[name="u_perm"]:checked')].map(x=>x.value);if(!name)return toast('กรุณากรอกชื่อพนักงาน');if(!/^\d{6}$/.test(code))return toast('รหัสเข้าสู่ระบบต้องเป็นตัวเลข 6 หลัก');if(code===S.pin)return toast('รหัสนี้สงวนไว้สำหรับแอดมิน');if(!branches.length)return toast('กรุณาเลือกอย่างน้อย 1 สาขา');let u=S.users.find(x=>x.code===editingUserCode);if(!u&&S.users.some(x=>x.code===code))return toast('รหัสนี้มีผู้ใช้งานแล้ว');if(u){u.name=name;u.branches=branches;u.perms=perms}else S.users.push({code,name,branches,perms,active:true});save();$('#dlg').close();settings();return toast('บันทึกพนักงานและสิทธิ์แล้ว')}
+ case'user-toggle':{if(!currentUser?.admin)return toast('เฉพาะแอดมินเท่านั้น');const u=S.users.find(x=>x.code===t.dataset.code);if(u){u.active=u.active===false;save();settings();toast(u.active?'เปิดใช้งานพนักงานแล้ว':'ปิดใช้งานพนักงานแล้ว')}return}
+ case'user-del':{if(!currentUser?.admin)return toast('เฉพาะแอดมินเท่านั้น');const code=t.dataset.code;if(confirm('ลบพนักงานรหัส '+code+' ?')){S.users=S.users.filter(x=>x.code!==code);save();settings();toast('ลบพนักงานแล้ว')}return}
+ case'settings':if(!currentUser?.admin)return toast('เฉพาะแอดมินเท่านั้น');return settings();
  case'fs':fs=t.dataset.id=='all'?'all':id;return render();
  case'adj':{const p=P(id),d=+t.dataset.d;if(d<0&&p.qty<=0)return toast('สินค้าหมดแล้ว');mv(p,d,d>0?'ปรับเพิ่ม +1':'ปรับลด -1');save();return render()}
  case'p-new':return pForm();
@@ -592,11 +612,12 @@ document.addEventListener('click',e=>{
  case'doc-cancel':return cancelDoc(t.dataset.no);
  case'fst':fst=fst==t.dataset.s?'':t.dataset.s;return render();
  case'hr':{const r=t.dataset.r;H.from=H.to=r=='t'?today():r=='y'?yday():'';return render()}
+ case'hr-clear':{H.q='';H.type='';H.from='';H.to='';H.by='';H.cat='';return render()}
  case'del-sel':{if(!SEL.size)return toast('ยังไม่ได้เลือกสินค้า');if(confirm('ลบสินค้าที่เลือก '+SEL.size+' รายการ?')&&pin('ลบสินค้าที่เลือก')){S.products=S.products.filter(p=>!SEL.has(p.id));SEL.clear();save();render();toast('ลบแล้ว')}return}
  case'hexp':return download('history.csv','text/csv;charset=utf-8',csvT([['เลขที่เอกสาร','วันที่','เวลา','สินค้า','หมวดหมู่','ประเภท','รับเข้า','เบิกออก','คงเหลือ','หมายเหตุ','ผู้บันทึก'],...histRows().map(m=>[m.no,m.date,new Date(m.t).toLocaleTimeString('th-TH'),m.name,m.cat,tyl(m),m.d>0?m.d:'',m.d<0?-m.d:'',m.after,m.note,m.by])]));
  case'imp-csv':return $('#csvf').click();
  case'tpl':return download('ตัวอย่างนำเข้าสินค้า.csv','text/csv;charset=utf-8',csvT([['ชื่อสินค้า','หมวดหมู่','หน่วยนับ','จำนวนขั้นต่ำ','ยอดยกมา','รหัส','ขนาด','ซัพพลายเออร์','ราคาแม็คโคร','ต้นทุนจริง'],['น้ำตาลทราย','เครื่องปรุง','ถุง',5,20,'SG-001','1 กก.','แม็คโคร',30,29]]));
- case'pin-set':{if(!pin('เปลี่ยนรหัสแอดมิน'))return;const n=prompt('รหัสใหม่ (อย่างน้อย 4 ตัว)');if(n&&n.length>=4){S.pin=n;save();toast('เปลี่ยนรหัสแล้ว')}return}
+ case'pin-set':{if(!pin('เปลี่ยนรหัสแอดมิน'))return;const n=prompt('ตั้งรหัสแอดมินใหม่เป็นตัวเลข 6 หลัก');if(n!==null){if(!/^\d{6}$/.test(n))return toast('รหัสแอดมินต้องเป็นตัวเลข 6 หลัก');if(S.users.some(u=>u.code===n))return toast('รหัสนี้ถูกใช้โดยพนักงานแล้ว');S.pin=n;save();toast('เปลี่ยนรหัสแล้ว')}return}
  case'po-new':case'po-new':return poForm();
  case'acc':CL[t.dataset.c]=CL[t.dataset.c]===false;return tbl();
  case'ox':OX[id]=!OX[id];return render();
@@ -633,9 +654,11 @@ document.addEventListener('click',e=>{
  case'po-cancel':{const o=S.orders.find(o=>o.id==id);if(o&&o.status=='ordered'&&confirm('ยกเลิกใบสั่งซื้อ '+poNo(o)+' ?')){o.status='cancelled';o.cancelAt=Date.now();if(pv==id)pv=null;save();if($('#dlg').open)$('#dlg').close();render();toast('ยกเลิกใบสั่งซื้อแล้ว')}return}
  case'sch':return schForm(SP(id));
  case'sch-save':{const s=SP(id);s.days=[...document.querySelectorAll('.dys input:checked')].map(x=>+x.value);s.time=$('#sc_t').value||'12:00';s.lead=+$('#sc_l').value||0;save();$('#dlg').close();render();return toast('บันทึกเวลาแล้ว')}
- case'tx-add':{const amt=+$('#t_amt').value,cat=$('#t_cat').value;if(!(amt>0))return toast('กรุณากรอกจำนวนเงิน');if(!cat)return toast('กรุณาเลือกหมวดหมู่');
-  S.tx.push({id:uid(),br:S.br,t:Date.now(),type:'out',amt,cat,note:$('#t_note').value.trim()});save();render();return toast('บันทึกรายจ่ายแล้ว')}
- case'tx-del':S.tx=S.tx.filter(x=>x.id!=id);save();render();return;
+ case'tx-line-add':{const box=$('#tx-lines');box.insertAdjacentHTML('beforeend',expenseLine(box.querySelectorAll('.tx-line').length));box.querySelectorAll('.tx-line-remove').forEach(b=>{b.disabled=box.querySelectorAll('.tx-line').length<=1;b.style.opacity=b.disabled?'.25':'1'});return}
+ case'tx-line-del':{const row=t.closest('.tx-line'),box=$('#tx-lines');if(box.querySelectorAll('.tx-line').length<=1)return toast('ต้องมีอย่างน้อย 1 รายการ');row.remove();box.querySelectorAll('.tx-line-remove').forEach(b=>{b.disabled=box.querySelectorAll('.tx-line').length<=1;b.style.opacity=b.disabled?'.25':'1'});return}
+ case'tx-add':{const rows=[...document.querySelectorAll('#tx-lines .tx-line')].map(r=>({itemName:r.querySelector('.tx-item').value.trim(),amt:+r.querySelector('.tx-amt').value,cat:r.querySelector('.tx-cat').value}));if(rows.some(x=>!x.itemName||!(x.amt>0)||!x.cat))return toast('กรุณากรอกชื่อรายการ จำนวนเงิน และหมวดหมู่ให้ครบทุกแถว');const docType=document.querySelector('[name="tx_doc_type"]:checked')?.value||'none',note=$('#t_note').value.trim(),file=$('#tx_bill_photo').files[0];const commit=receiptId=>{const ts=Date.now(),group='BILL-'+ts;rows.forEach(x=>S.tx.push({id:uid(),br:S.br,t:ts,type:'out',amt:x.amt,cat:x.cat,note,itemName:x.itemName,docType,receiptId:receiptId||null,billGroup:group}));save();render();toast('บันทึกบิลแล้ว '+rows.length+' รายการ รวม '+m2(rows.reduce((a,x)=>a+x.amt,0)))};if(file){const reader=new FileReader();reader.onerror=()=>toast('อ่านรูปบิลไม่สำเร็จ');reader.onload=()=>{const im=new Image();im.onerror=()=>toast('เปิดรูปบิลไม่สำเร็จ');im.onload=()=>{const max=1200,scale=Math.min(1,max/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*scale);c.height=Math.round(im.height*scale);c.getContext('2d').drawImage(im,0,0,c.width,c.height);const data=c.toDataURL('image/jpeg',.72),rid=uid();S.receipts.push({id:rid,br:S.br,t:Date.now(),data,name:file.name||'bill.jpg'});commit(rid)};im.src=reader.result};reader.readAsDataURL(file)}else commit(null);return}
+ case'tx-view-bill':{const r=S.receipts.find(x=>x.id==+t.dataset.rid);if(!r)return toast('ไม่พบรูปบิล');dlg(`<h3>รูปบิลรายจ่าย</h3><img src="${r.data}" alt="รูปบิล" style="display:block;max-width:100%;max-height:70vh;margin:auto;border-radius:10px"><div class="ac"><button class="bo" data-act="close">ปิด</button><a class="bt sm" href="${r.data}" download="bill-${r.id}.jpg" style="text-decoration:none">ดาวน์โหลดรูป</a></div>`);return}
+ case'tx-del':{const removed=S.tx.find(x=>x.id==id);S.tx=S.tx.filter(x=>x.id!=id);if(removed?.receiptId&&!S.tx.some(x=>x.receiptId==removed.receiptId))S.receipts=S.receipts.filter(r=>r.id!=removed.receiptId);save();render();return}
  case'exp-cat-add':{const n=$('#s_ec').value.trim();if(!n)return toast('กรุณากรอกชื่อหมวดหมู่');if(S.expCats.some(c=>c.toLowerCase()==n.toLowerCase()))return toast('มีหมวดหมู่นี้แล้ว');S.expCats.push(n);save();settings();return toast('เพิ่มหมวดหมู่รายจ่ายแล้ว')}
  case'exp-cat-del':{const c=t.dataset.cat;if(S.tx.some(x=>x.cat==c))return toast('หมวดหมู่นี้มีประวัติรายจ่ายอยู่ จึงลบไม่ได้');S.expCats=S.expCats.filter(x=>x!=c);save();settings();return toast('ลบหมวดหมู่แล้ว')}
  case'rep-refresh':return render();
@@ -647,6 +670,7 @@ document.addEventListener('click',e=>{
  case'reset':if(confirm('ล้างข้อมูลทั้งหมดและกลับเป็นข้อมูลตัวอย่าง?')&&pin('ล้างข้อมูล')){S=seed();save();$('#dlg').close();render()}return;
  }
 });
+document.addEventListener('change',e=>{if(e.target.id==='tx_bill_photo'){const f=e.target.files?.[0],img=$('#tx_bill_preview');if(f&&img){img.src=URL.createObjectURL(f);img.style.display='block'}else if(img){img.removeAttribute('src');img.style.display='none'}}});
 document.addEventListener('input',e=>{const t=e.target;
  if(t.dataset.rp!==undefined||t.dataset.rq!==undefined)return recalc();
  if(t.id=='q'){q=t.value;tbl()}
@@ -659,7 +683,7 @@ document.addEventListener('change',e=>{const t=e.target;
  if(t.id=='ol'){onlyLow=t.checked;tbl()}
  else if(t.id=='fc'){fcat=t.value;tbl()}
  else if(t.id=='mc'){mcat=t.value;mtbl()}
- else if(t.id=='br'){S.br=t.value;save();SEL.clear();render()}
+ else if(t.id=='br'){if(currentUser&&!currentUser.admin&&!(currentUser.branches||[]).includes(t.value))return toast('คุณไม่มีสิทธิ์เข้าถึงสาขานี้');S.br=t.value;save();SEL.clear();render()}
  else if(t.id=='po_sup')poForm(+t.value);
  else if(t.id=='sa'){SEL.clear();if(t.checked)B(S.products).forEach(p=>SEL.add(p.id));tbl()}
  else if(t.dataset.sel){t.checked?SEL.add(+t.dataset.sel):SEL.delete(+t.dataset.sel);selN()}
@@ -671,7 +695,8 @@ $('#file').addEventListener('change',e=>{
  r.onload=()=>{try{const d=JSON.parse(r.result);if(!Array.isArray(d.products)||!Array.isArray(d.sups))throw 0;if(!confirm('นำเข้าข้อมูลจะแทนที่ข้อมูลปัจจุบันทั้งหมด ต้องการดำเนินการต่อ?'))return;S=d;save();$('#dlg').close();render();toast('นำเข้าข้อมูลแล้ว')}catch(x){toast('ไฟล์ไม่ถูกต้อง ใช้ไฟล์ JSON ที่ส่งออกจากระบบนี้')}e.target.value=''};
  r.readAsText(f);
 });
-tick();render();
+$('#loginForm').addEventListener('submit',e=>{e.preventDefault();const code=$('#loginCode').value.trim();if(!/^\d{6}$/.test(code))return toast('กรุณากรอกรหัส 6 หลัก');if(loginAs(code))$('#loginCode').value=''});
+tick();loginView();
 </script>
 </body>
 </html>
