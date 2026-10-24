@@ -8,7 +8,7 @@
 <style>
 :root{--or:#d97706;--or2:#f59e0b;--bg:#fffaf3;--sf:#fff;--tx:#2b2118;--mu:#8a8178;--ln:#f0e6d8;--th:#fef6e0;--gn:#059669;--rd:#dc2626;--sh:0 2px 12px rgba(120,70,0,.07)}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.5 "Noto Sans Thai Looped",system-ui,sans-serif;padding-bottom:84px}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.5 "Noto Sans Thai Looped",system-ui,sans-serif;padding-bottom:20px;padding-top:0}
 header{background:linear-gradient(90deg,#d97706,#f59e0b);color:#fff;box-shadow:0 2px 10px rgba(217,119,6,.35)}
 .w{max-width:1200px;margin:0 auto;padding:0 20px}
 .hd{display:flex;align-items:center;gap:12px;padding:12px 0;flex-wrap:wrap}
@@ -79,9 +79,9 @@ input,select,textarea{font:inherit;color:var(--tx);background:#fff;border:1px so
 input:focus,select:focus{outline:0;border-color:var(--or2);box-shadow:0 0 0 3px rgba(245,158,11,.2)}
 .fm{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;align-items:end}
 label.l{font-size:13px;color:var(--mu);display:block}
-nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--ln);display:flex;justify-content:space-around;padding:8px 0 10px;z-index:9}
-nav button{border:0;background:none;color:var(--mu);font-size:12.5px;display:flex;flex-direction:column;align-items:center;gap:2px;flex:1}
-nav button i{font-style:normal;font-size:23px;filter:grayscale(1);opacity:.7}
+nav{position:fixed;top:72px;left:0;right:0;background:#fff;border-bottom:1px solid var(--ln);display:flex;justify-content:space-around;padding:6px 8px;z-index:19;box-shadow:0 2px 10px rgba(15,23,42,.06)}
+nav button{border:0;background:none;color:var(--mu);font-size:12.5px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;flex:1;min-width:0;padding:0 2px;min-height:44px}
+nav button i{font-style:normal;font-size:23px;filter:grayscale(1);opacity:.7;width:42px;height:38px;display:grid;place-items:center;border-radius:12px}
 nav button.on{color:var(--or);font-weight:600}nav button.on i{filter:none;opacity:1}
 dialog{border:0;border-radius:18px;width:min(520px,94vw);padding:22px;box-shadow:0 20px 60px rgba(60,30,0,.35);color:var(--tx)}
 dialog::backdrop{background:rgba(40,20,0,.45)}
@@ -97,7 +97,7 @@ dialog h3{margin:0 0 14px;font-size:19px}
 .kp6{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:16px}
 .kc{background:#fff;border:2px solid transparent;border-radius:14px;box-shadow:var(--sh);padding:12px 14px;text-align:left;color:var(--tx)}
 .kc b{display:block;font-size:24px;line-height:1.3}.kc span{font-size:12.5px;color:var(--mu)}.kc.on{border-color:var(--or)}
-.bar2{display:flex;gap:12px;align-items:center;margin-bottom:8px;flex-wrap:wrap}.bar2 label{display:flex;align-items:center;gap:6px}
+.bar2{display:flex;gap:12px;align-items:center;margin-bottom:12px;flex-wrap:wrap}.bar2 label{display:flex;align-items:center;gap:6px}.stock-actions{position:sticky;top:76px;z-index:12;background:#fff;padding:10px 0;border-bottom:1px solid var(--ln);margin-bottom:14px}.add-icon{width:38px;height:34px;padding:0;font-size:22px;line-height:1;border-radius:9px}
 .sr select,.sr input[type=date]{width:auto}
 /* ===== theme: warm cream (stock/order style) ===== */
 :root{--or:#f59e0b;--or2:#fbbf24;--bg:#fffdf6;--tx:#1f2937;--mu:#6b7280;--ln:#f1ead9;--th:#fdf6e3;--sh:0 1px 5px rgba(120,80,0,.07)}
@@ -114,9 +114,14 @@ header select{border:1px solid var(--ln)}
 .al{background:#fef2f2;border-color:#fecaca}
 h2.t{font-size:26px;font-weight:700}
 .sub2{color:var(--mu);margin-top:2px;font-size:14.5px}
-nav{box-shadow:0 -2px 10px rgba(120,80,0,.05)}
-nav button i{width:48px;height:42px;display:grid;place-items:center;border-radius:14px;font-size:21px}
+nav{box-shadow:0 2px 10px rgba(15,23,42,.06)}
+nav button i{width:48px;height:38px;display:grid;place-items:center;border-radius:12px;font-size:21px}
 nav button.on i{background:#fef3c7}
+nav button .nav-label{display:none;font-size:11px;line-height:1.2;white-space:nowrap}
+nav button.on .nav-label{display:block}
+main{padding-top:90px}
+header{position:sticky;top:0;z-index:20}
+@media(max-width:760px){nav{top:68px;padding:5px 3px}nav button i{width:38px;font-size:20px}nav button .nav-label{font-size:10px}main{padding-top:82px}}
 .sc4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
 .sc{border:2px solid transparent;border-radius:18px;padding:18px 8px;text-align:center;font-size:13px}
 .sc b{display:block;font-size:30px;line-height:1.25}
@@ -129,7 +134,28 @@ nav button.on i{background:#fef3c7}
 .ch{color:var(--mu);font-size:18px;margin-left:6px}
 .it{display:flex;align-items:center;gap:12px;padding:10px 20px}
 .it input[type=checkbox]{width:auto}
-.vb{width:6px;height:50px;min-height:50px;max-height:50px;align-self:center;border-radius:99px;background:#10b981;flex:0 0 6px}.vb.w,.vb.o{width:6px;height:50px;min-height:50px;max-height:50px;flex:0 0 6px;align-self:center}.vb.w{background:#f59e0b}.vb.o{background:#ef4444}
+.it>.vb{display:block;box-sizing:border-box;width:6px!important;min-width:6px;max-width:6px;height:45px!important;min-height:45px!important;max-height:45px!important;flex:0 0 6px!important;align-self:center;border-radius:99px;background:#10b981}.it>.vb.w{background:#f59e0b}.it>.vb.o{background:#ef4444}
+/* Force identical status-strip dimensions for green, orange, and red */
+html body .it > span.vb,
+html body .it > span.vb.w,
+html body .it > span.vb.o {
+  box-sizing: border-box !important;
+  display: block !important;
+  width: 6px !important;
+  min-width: 6px !important;
+  max-width: 6px !important;
+  height: 45px !important;
+  min-height: 45px !important;
+  max-height: 45px !important;
+  flex: 0 0 6px !important;
+  align-self: center !important;
+  padding: 0 !important;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+html body .it > span.vb.w { background-color: #f59e0b !important; }
+html body .it > span.vb:not(.w):not(.o) { background-color: #10b981 !important; }
+html body .it > span.vb.o { background-color: #ef4444 !important; }
 .ib2{flex:1;min-width:0}.nm{font-size:16px}
 .tgc{display:inline-block;font-size:12px;border-radius:8px;padding:1px 8px;font-weight:600;margin-left:4px}
 .ql{font-size:14px;color:var(--mu)}.ql b{color:#059669}.ql b.w{color:#d97706}.ql b.o{color:#dc2626}
@@ -163,7 +189,7 @@ nav button.on i{background:#fef3c7}
 :root{--bg:#ffffff;--sf:#ffffff;--tx:#202124;--mu:#6b7280;--ln:#e5e7eb;--th:#f8fafc;--sh:0 1px 5px rgba(15,23,42,.06)}
 body,main{background:#fff}
 .w{width:100%;max-width:none;margin:0;padding-left:clamp(14px,2.2vw,36px);padding-right:clamp(14px,2.2vw,36px)}
-header{background:#fff;color:var(--tx);border-bottom:1px solid #e5e7eb;box-shadow:none}
+header{background:#fff;color:var(--tx);border-bottom:1px solid #e5e7eb;box-shadow:none;position:sticky;top:0;z-index:20}
 .logo{color:#d97706}.clock{background:#f3f4f6;color:#374151}
 .card,.tw,.kp div,.acc,.kc{box-shadow:0 1px 4px rgba(15,23,42,.06)}
 </style>
@@ -222,7 +248,7 @@ function supState(s){
 }
 function render(){
  $('#br').innerHTML=S.branches.map(b=>`<option ${b==S.br?'selected':''}>${esc(b)}</option>`).join('');
- $('#nav').innerHTML=TABS.map(([k,i,l])=>`<button class="${k==tab?'on':''}" data-tab="${k}"><i>${i}</i>${l}</button>`).join('');
+ $('#nav').innerHTML=TABS.map(([k,i,l])=>`<button class="${k==tab?'on':''}" data-tab="${k}" aria-label="${l}" title="${l}"><i>${i}</i><span class="nav-label">${l}</span></button>`).join('');
  $('#app').innerHTML=({stock,order,mv:mvV,hist:histV,cash,rep})[tab]();
  if(tab=='stock')tbl();else if(tab=='mv')mtbl();else if(tab=='hist')htbl();
 }
@@ -233,14 +259,12 @@ function stock(){
  const dd=S.docs.filter(d=>d.br==S.br&&d.date==t&&!d.cancelled),ti=dd.filter(d=>d.type=='in').reduce((a,d)=>a+d.lines.length,0),to=dd.filter(d=>d.type=='out').reduce((a,d)=>a+d.lines.length,0);
  const k=(l,v,s,c)=>`<button class="sc ${c} ${s&&fst==s?'on':''}" data-act="fst" data-s="${s}"><b>${v}</b><span>${l}</span></button>`;
  const chip=(id,l,list)=>{const n=list.filter(low).length,s=id!='all'?SP(id):null,st=s&&s.days.length?supState(s):null;
-  return `<button class="chip ${fs==id?'on':''}" data-act="fs" data-id="${id}">${st?`<span class="dot" style="background:${st.dot}"></span>`:''}${esc(l)} (${list.length})${n?` <em>⚠${n}</em>`:''}</button>`};
- return `<div class="row"><div><h2 class="t">หน้าสต๊อกคงเหลือ</h2><div class="sub2">${esc(S.br)} — จัดการสินค้าทั้งหมด · วันนี้รับเข้า ${ti} · เบิกออก ${to} รายการ</div></div><button class="bt" data-act="p-new">＋ เพิ่มสินค้าใหม่</button></div>
+  return `<button class="chip ${fs==id?'on':''}" data-act="fs" data-id="${id}">${esc(l)} (${list.length})${n?` <em>⚠${n}</em>`:''}</button>`};
+ return `<div class="row"><div><h2 class="t">หน้าสต๊อกคงเหลือ</h2><div class="sub2">${esc(S.br)} — จัดการสินค้าทั้งหมด · วันนี้รับเข้า ${ti} · เบิกออก ${to} รายการ</div></div></div>
+ <div class="stock-actions"><div class="bar2"><label><input type="checkbox" id="sa" style="width:auto"> เลือกทั้งหมด</label><span id="sn" class="sub"></span><button class="bt add-icon" data-act="p-new" title="เพิ่มสินค้าใหม่" aria-label="เพิ่มสินค้าใหม่">+</button><button class="bo sm" style="color:var(--rd)" data-act="del-sel">ลบที่เลือก</button></div></div>
  <div class="sc4">${k('ทั้งหมด',ps.length,'','a')}${k('พอเพียง',n.ok,'ok','b')}${k('ใกล้หมด',n.low,'low','c')}${k('หมดสต๊อก',n.out,'out','d')}</div>
- ${lw.length?`<div class="al"><span>⚠ สินค้าใกล้หมด/หมด ${lw.length} รายการ: ${lw.map(p=>esc(p.name)).join(', ')}</span><button class="bt sm" data-act="po-low">สร้างใบสั่งซื้อ</button></div>`:''}
  <div class="sr"><div class="in">🔍<input type="text" id="q" placeholder="ค้นหาสินค้า..." value="${esc(q)}"></div></div>
  <div class="chips">${chip('all','ทั้งหมด',ps)}${S.sups.map(s=>chip(s.id,s.name,ps.filter(p=>p.sup==s.id))).join('')}</div>
- <p class="lg">จุดสี: <span class="dot" style="background:#10b981"></span>เปิดรับสั่งวันนี้ · <span class="dot" style="background:#ef4444"></span>ปิดรับแล้ว · <span class="dot" style="background:#9ca3af"></span>ยังไม่ถึงรอบ</p>
- <div class="bar2"><label><input type="checkbox" id="sa" style="width:auto"> เลือกทั้งหมด</label><span id="sn" class="sub"></span><button class="bo sm" style="color:var(--rd)" data-act="del-sel">ลบที่เลือก</button></div>
  <div id="tbl"></div>`;
 }
 let fcat='',fst='',CL={};const SEL=new Set();
@@ -301,7 +325,7 @@ function poForm(sid,pre){
  sid=sid||S.sups[0].id;
  const ps=B(S.products).filter(p=>p.sup==sid);
  dlg(`<h3>สร้างใบสั่งซื้อ</h3><label class="l">ซัพพลายเออร์</label><select id="po_sup">${S.sups.map(s=>`<option value="${s.id}" ${s.id==sid?'selected':''}>${esc(s.name)}</option>`).join('')}</select>
- <div class="l" style="margin:12px 0 6px">รายการสินค้า</div><div id="lines"></div>
+ <div class="l" style="margin:12px 0 6px">รายชื่อสินค้าในใบสั่งซื้อ</div><div id="lines"></div>
  ${ps.length?'<button class="bo sm" data-act="line">+ เพิ่มรายการ</button>':'<div class="em">ซัพพลายเออร์นี้ยังไม่มีสินค้า</div>'}
  <div class="ac"><button class="bo" data-act="close">ยกเลิก</button><button class="bt sm" data-act="po-save">สร้างใบสั่งซื้อ</button></div>`);
  window._ps=ps;const lw=ps.filter(low).map(p=>({pid:p.id,qty:Math.max(p.min*2-p.qty,1)}));
