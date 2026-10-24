@@ -199,10 +199,12 @@ header{background:#fff;color:var(--tx);border-bottom:1px solid #e5e7eb;box-shado
 .hd>.pill:not(.on){white-space:nowrap}
 @media(max-width:600px){
   .hd{gap:5px;padding:7px 0;min-height:48px}
-  .logo{font-size:15px;gap:4px;white-space:nowrap}
-  .clock{display:none}
+  .logo{font-size:13px;gap:3px;white-space:nowrap;flex:0 1 auto}
+  .clock{display:block;flex:0 0 auto;padding:3px 5px;border-radius:7px;font-size:9px;line-height:1.15;text-align:center;white-space:nowrap}
+  .clock span{display:none}
+  .clock b{font-size:12px;letter-spacing:0;line-height:1.2}
   .hd .sp{flex:1;min-width:0}
-  .hd>.pill:not(.on){font-size:10px;padding:4px 7px;white-space:nowrap}
+  .hd>.pill:not(.on){font-size:9px;padding:4px 5px;white-space:nowrap}
   header select#br{max-width:94px;min-width:0;padding:5px 5px;font-size:11px;border-radius:8px}
   .hd .ic{width:30px;height:30px;flex:0 0 30px;font-size:15px}
   nav{top:48px!important}
