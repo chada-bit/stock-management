@@ -213,8 +213,8 @@ header{background:#fff;color:var(--tx);border-bottom:1px solid #e5e7eb;box-shado
 
 
 /* Stock list: concise name plus dedicated current stock / latest movement / timestamp columns */
-.it{gap:10px;}
-.it .ib2{flex:1 1 180px;min-width:140px;}
+.it{gap:8px;min-height:54px;}
+.it .ib2{flex:1 1 160px;min-width:130px;position:sticky;left:0;z-index:3;background:#fff;}
 .stock-col,.latest-col,.time-col{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:2px;flex:0 0 auto;min-width:76px;font-size:13px;}
 .stock-col b{font-size:15px;line-height:1.1;}
 .stock-col small{font-size:11px;color:var(--mu);}
@@ -223,11 +223,20 @@ header{background:#fff;color:var(--tx);border-bottom:1px solid #e5e7eb;box-shado
 .last-move.up{color:#059669}.last-move.down{color:#dc2626}.last-none{color:var(--mu)}
 .time-col{min-width:116px;font-size:12px;white-space:nowrap;color:var(--mu)}
 @media(max-width:700px){
- .it{display:flex;flex-wrap:wrap;gap:8px;padding:10px 12px;}
- .it .ib2{flex:1 1 calc(100% - 50px);min-width:0;}
- .stock-col,.latest-col,.time-col{margin-left:28px;min-width:64px;}
- .time-col{min-width:104px;}
- .it .ra{margin-left:auto;}
+ /* Keep each product compact on one horizontal row to show more products vertically */
+ .it{display:flex;flex-wrap:nowrap;gap:7px;padding:6px 9px;min-height:48px;align-items:center;}
+ .it input[type=checkbox]{flex:0 0 auto;margin:0 1px;}
+ .it .ib2{position:sticky;left:0;flex:0 0 128px;width:128px;min-width:128px;max-width:128px;z-index:4;background:#fff;overflow:hidden;}
+ .it .nm{font-size:12px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+ .it .nm small{font-size:10px;}
+ .stock-col,.latest-col,.time-col{margin-left:0;min-width:48px;gap:1px;font-size:11px;}
+ .stock-col b{font-size:13px;}
+ .stock-col small{font-size:10px;}
+ .col-label{font-size:9px;}
+ .last-move b{font-size:14px;}
+ .time-col{min-width:92px;font-size:10px;}
+ .it .ra{margin-left:auto;display:flex;gap:2px;flex:0 0 auto;}
+ .it .ra .ib{width:28px;height:28px;padding:3px;}
 }
 
 </style>
