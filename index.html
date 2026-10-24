@@ -211,6 +211,25 @@ header{background:#fff;color:var(--tx);border-bottom:1px solid #e5e7eb;box-shado
   main{padding-top:70px!important}
 }
 
+
+/* Stock list: concise name plus dedicated current stock / latest movement / timestamp columns */
+.it{gap:10px;}
+.it .ib2{flex:1 1 180px;min-width:140px;}
+.stock-col,.latest-col,.time-col{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:2px;flex:0 0 auto;min-width:76px;font-size:13px;}
+.stock-col b{font-size:15px;line-height:1.1;}
+.stock-col small{font-size:11px;color:var(--mu);}
+.col-label{font-size:10px;color:var(--mu);line-height:1.2;white-space:nowrap;}
+.last-move b{font-size:17px;line-height:1.1;}
+.last-move.up{color:#059669}.last-move.down{color:#dc2626}.last-none{color:var(--mu)}
+.time-col{min-width:116px;font-size:12px;white-space:nowrap;color:var(--mu)}
+@media(max-width:700px){
+ .it{display:flex;flex-wrap:wrap;gap:8px;padding:10px 12px;}
+ .it .ib2{flex:1 1 calc(100% - 50px);min-width:0;}
+ .stock-col,.latest-col,.time-col{margin-left:28px;min-width:64px;}
+ .time-col{min-width:104px;}
+ .it .ra{margin-left:auto;}
+}
+
 </style>
 </head>
 <body>
@@ -290,8 +309,12 @@ const CI=c=>/แช่แข็ง/.test(c)?'❄️':/นม|เครื่อ�
 const SC=['#fee2e2:#b91c1c','#dbeafe:#1d4ed8','#d1fae5:#047857','#ede9fe:#6d28d9','#f1f5f9:#475569','#fef3c7:#b45309'];
 const scc=id=>SC[Math.max(S.sups.findIndex(s=>s.id==id),0)%SC.length].split(':');
 const scs=id=>{const[b,c]=scc(id);return `background:${b};color:${c}`};
-const prow=p=>{const s=SP(p.sup),pc=p.market?(p.cost-p.market)/p.market*100:0,v=p.qty<=0?'o':low(p)?'w':'k';
- return `<div class="it"><input type="checkbox" data-sel="${p.id}" ${SEL.has(p.id)?'checked':''} aria-label="เลือก ${esc(p.name)}"><span class="vb ${v}"></span><div class="ib2"><div class="nm">${esc(p.name)} <small class="sub">${p.brand?esc(p.brand)+' · ':''}${esc(p.size)}</small> ${s?`<span class="tgc" style="${scs(p.sup)}">${esc(s.code||s.name)}</span>`:''}${p.sku?`<span class="sku" style="margin-left:6px">${esc(p.sku)}</span>`:''}</div><div class="ql">คงเหลือ: <b class="${v}">${p.qty.toFixed(2)}</b> ${esc(p.unit)} <small>ขั้นต่ำ ${p.min}</small></div><div class="pl">ต้นทุน ${m2(p.cost)} · แม็คโคร ${m2(p.market)} <span class="${pc>0?'up':'dn'}">(${pc.toFixed(1)}%)</span></div></div><div class="ra"><button class="ib" style="color:var(--or)" data-act="p-edit" data-id="${p.id}" aria-label="แก้ไข">✎</button><button class="ib" style="color:var(--rd)" data-act="p-del" data-id="${p.id}" aria-label="ลบ">🗑</button></div></div>`};
+const prow=p=>{
+ const v=p.qty<=0?'o':low(p)?'w':'k';
+ const last=(S.moves||[]).filter(m=>m.pid==p.id&&m.br==S.br).sort((a,b)=>(b.t||0)-(a.t||0))[0];
+ const recent=last?`<span class="last-move ${last.d>0?'up':'down'}"><b>${last.d>0?'↑':'↓'}${Math.abs(last.d)}</b></span>`:'<span class="last-none">—</span>';
+ const when=last&&last.t?new Date(last.t).toLocaleString('th-TH',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false}):'—';
+ return `<div class="it"><input type="checkbox" data-sel="${p.id}" ${SEL.has(p.id)?'checked':''} aria-label="เลือก ${esc(p.name)}"><span class="vb ${v}"></span><div class="ib2"><div class="nm">${esc(p.name)} <small class="sub">${p.brand?esc(p.brand)+' · ':''}${esc(p.size)}</small></div></div><div class="stock-col"><span class="col-label">คงเหลือ</span><b class="${v}">${p.qty.toFixed(2)}</b><small>${esc(p.unit||'')}</small></div><div class="latest-col"><span class="col-label">ล่าสุด</span>${recent}</div><div class="time-col"><span class="col-label">เวลาเปลี่ยนแปลง</span><span>${when}</span></div><div class="ra"><button class="ib" style="color:var(--or)" data-act="p-edit" data-id="${p.id}" aria-label="แก้ไข">✎</button><button class="ib" style="color:var(--rd)" data-act="p-del" data-id="${p.id}" aria-label="ลบ">🗑</button></div></div>`};
 function tbl(){
  const list=B(S.products).filter(p=>(fs=='all'||p.sup==fs)&&(!fst||(fst=='ok'?!low(p):fst=='low'?low(p)&&p.qty>0:p.qty<=0))&&(p.name+p.sku+p.size+p.cat).toLowerCase().includes(q.toLowerCase())).sort((a,b)=>(a.cat||'~').localeCompare(b.cat||'~','th')||a.name.localeCompare(b.name,'th'));
  const g={};list.forEach(p=>(g[p.cat||'ไม่ระบุหมวด']??=[]).push(p));
