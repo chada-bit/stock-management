@@ -9,7 +9,7 @@
 :root{--or:#d97706;--or2:#f59e0b;--bg:#fffaf3;--sf:#fff;--tx:#2b2118;--mu:#8a8178;--ln:#f0e6d8;--th:#fef6e0;--gn:#059669;--rd:#dc2626;--sh:0 2px 12px rgba(120,70,0,.07)}
 *{box-sizing:border-box}
 html{width:100%;max-width:100%;overflow-x:hidden; -webkit-text-size-adjust:100%; touch-action:pan-y; overscroll-behavior-x:none}
-body{width:100%;max-width:100%;overflow-x:hidden;touch-action:pan-x pan-y;overscroll-behavior-x:none}
+body{width:100%;max-width:100%;overflow-x:hidden;touch-action:pan-y;overscroll-behavior-x:none}
 img,video,canvas,svg{max-width:100%}
 body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.5 "Noto Sans Thai Looped",system-ui,sans-serif;padding-bottom:20px;padding-top:0}
 header{background:linear-gradient(90deg,#d97706,#f59e0b);color:#fff;box-shadow:0 2px 10px rgba(217,119,6,.35)}
@@ -314,7 +314,11 @@ function supState(s){
  for(let i=1;i<=7;i++){const d=(n.getDay()+i)%7;if(s.days.includes(d))return {t:'ยังไม่ถึงรอบ (ถัดไปวัน'+DAYS[d]+')',c:'',d:txt,dot:'#9ca3af'}}
 }
 function loginView(){document.querySelector('header').style.display='none';$('#app').style.display='none';$('#nav').style.display='none';$('#loginScreen').style.display='block';$('#loginCode').value='';if($('#flowerPin'))paintFlowerPin()}
-function loginAs(code){if(code===S.pin){currentUser={name:'แอดมิน',code:'admin',admin:true,branches:[...S.branches],perms:TABS.map(x=>x[0])};afterLogin();return true}const u=S.users.find(x=>x.code===code&&x.active!==false);if(!u){toast('รหัสเข้าสู่ระบบไม่ถูกต้อง หรือบัญชีถูกปิดใช้งาน');return false}currentUser=u;if(!currentUser.branches?.length){toast('บัญชีนี้ยังไม่ได้รับอนุญาตให้เข้าร้าน');currentUser=null;return false}if(!currentUser.branches.includes(S.br))S.br=currentUser.branches[0];afterLogin();return true}
+function loginAs(code,restoring=false){if(code===S.pin){currentUser={name:'แอดมิน',code:'admin',admin:true,branches:[...S.branches],perms:TABS.map(x=>x[0])};if(!restoring)saveAuth(code);afterLogin();return true}const u=S.users.find(x=>x.code===code&&x.active!==false);if(!u){toast('รหัสเข้าสู่ระบบไม่ถูกต้อง หรือบัญชีถูกปิดใช้งาน');return false}currentUser=u;if(!currentUser.branches?.length){toast('บัญชีนี้ยังไม่ได้รับอนุญาตให้เข้าร้าน');currentUser=null;return false}if(!currentUser.branches.includes(S.br))S.br=currentUser.branches[0];if(!restoring)saveAuth(code);afterLogin();return true}
+const AUTH_KEY='smart-stock-auth';
+function saveAuth(code){try{localStorage.setItem(AUTH_KEY,JSON.stringify({code,expires:Date.now()+12*60*60*1000}))}catch(e){}}
+function clearAuth(){try{localStorage.removeItem(AUTH_KEY)}catch(e){}}
+function restoreAuth(){try{const a=JSON.parse(localStorage.getItem(AUTH_KEY)||'null');if(a&&a.expires>Date.now()&&a.code&&loginAs(a.code,true))return true}catch(e){}clearAuth();return false}
 function afterLogin(){document.querySelector('header').style.display='';$('#app').style.display='';$('#nav').style.display='';$('#loginScreen').style.display='none';$('#userBadge').textContent=(currentUser.admin?'👑 ':'👤 ')+currentUser.name+' · ออกจากระบบ';const allowed=TABS.filter(x=>currentUser.admin||(currentUser.perms||[]).includes(x[0]));if(!allowed.some(x=>x[0]===tab))tab=allowed[0]?.[0]||'stock';render()}
 function render(){
  if(!currentUser){loginView();return}
@@ -596,7 +600,7 @@ document.addEventListener('click',e=>{
  const a=t.dataset.act,id=+t.dataset.id,g=k=>$('#f_'+k).value.trim();
  switch(a){
  case'close':return $('#dlg').close();
- case'logout':currentUser=null;return loginView();
+ case'logout':clearAuth();currentUser=null;return loginView();
  case'user-new':if(!currentUser?.admin)return toast('เฉพาะแอดมินเท่านั้น');return userForm();
  case'user-edit':if(!currentUser?.admin)return toast('เฉพาะแอดมินเท่านั้น');return userForm(t.dataset.code);
  case'user-save':{if(!currentUser?.admin)return toast('เฉพาะแอดมินเท่านั้น');const name=$('#u_name').value.trim(),code=$('#u_code').value.trim(),branches=[...document.querySelectorAll('[name="u_branch"]:checked')].map(x=>x.value),perms=[...document.querySelectorAll('[name="u_perm"]:checked')].map(x=>x.value);if(!name)return toast('กรุณากรอกชื่อพนักงาน');if(!/^\d{6}$/.test(code))return toast('รหัสเข้าสู่ระบบต้องเป็นตัวเลข 6 หลัก');if(code===S.pin)return toast('รหัสนี้สงวนไว้สำหรับแอดมิน');if(!branches.length)return toast('กรุณาเลือกอย่างน้อย 1 สาขา');let u=S.users.find(x=>x.code===editingUserCode);if(!u&&S.users.some(x=>x.code===code))return toast('รหัสนี้มีผู้ใช้งานแล้ว');if(u){u.name=name;u.branches=branches;u.perms=perms}else S.users.push({code,name,branches,perms,active:true});save();$('#dlg').close();settings();return toast('บันทึกพนักงานและสิทธิ์แล้ว')}
@@ -722,7 +726,7 @@ $('#loginCode').addEventListener('input',()=>{paintFlowerPin();const code=$('#lo
 $('#flowerPinWrap').addEventListener('click',()=>$('#loginCode').focus());
 $('#flowerPinWrap').addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();$('#loginCode').focus()}});
 $('#loginForm').addEventListener('submit',e=>{e.preventDefault();const code=$('#loginCode').value.trim();if(code.length!==6)return toast('กรุณากรอกรหัส 6 หลัก');if(loginAs(code)){$('#loginCode').value='';paintFlowerPin()}});
-tick();loginView();
+tick();if(!restoreAuth())loginView();
 // Keep the mobile stock layout at a fixed scale; block pinch and double-tap page zoom.
 (function(){
   document.addEventListener('gesturestart',function(e){e.preventDefault()},{passive:false});
@@ -730,10 +734,7 @@ tick();loginView();
   document.addEventListener('gestureend',function(e){e.preventDefault()},{passive:false});
   document.addEventListener('wheel',function(e){if(e.ctrlKey)e.preventDefault()},{passive:false});
   document.addEventListener('touchstart',function(e){if(e.touches && e.touches.length>1)e.preventDefault()},{passive:false});
-  let lastTouchEnd=0;
-  document.addEventListener('touchend',function(e){const now=Date.now();if(now-lastTouchEnd<=300)e.preventDefault();lastTouchEnd=now},{passive:false});
   document.addEventListener('keydown',function(e){if((e.ctrlKey||e.metaKey)&&['+','=','-','0'].includes(e.key))e.preventDefault()});
-  if(window.visualViewport){let resetQueued=false;window.visualViewport.addEventListener('resize',function(){if(resetQueued)return;resetQueued=true;requestAnimationFrame(function(){resetQueued=false;if(window.visualViewport.scale>1.01){const vp=document.querySelector('meta[name=viewport]');if(vp){vp.setAttribute('content','width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover');setTimeout(()=>vp.setAttribute('content','width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover'),80)}}})})}
 })();
 
 // Compact the page heading and stock controls after the user starts scrolling.
