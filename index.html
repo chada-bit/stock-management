@@ -8,8 +8,8 @@
 <style>
 :root{--or:#d97706;--or2:#f59e0b;--bg:#fffaf3;--sf:#fff;--tx:#2b2118;--mu:#8a8178;--ln:#f0e6d8;--th:#fef6e0;--gn:#059669;--rd:#dc2626;--sh:0 2px 12px rgba(120,70,0,.07)}
 *{box-sizing:border-box}
-html{width:100%;max-width:100%;overflow-x:hidden; -webkit-text-size-adjust:100%; touch-action:pan-y; overscroll-behavior-x:none}
-body{width:100%;max-width:100%;overflow-x:hidden;touch-action:pan-y;overscroll-behavior-x:none}
+html{width:100%;max-width:100%;overflow-x:hidden; -webkit-text-size-adjust:100%; touch-action:auto; overscroll-behavior-x:none}
+body{width:100%;max-width:100%;overflow-x:hidden;touch-action:auto;overscroll-behavior-x:none}
 img,video,canvas,svg{max-width:100%}
 body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.5 "Noto Sans Thai Looped",system-ui,sans-serif;padding-bottom:20px;padding-top:0}
 header{background:linear-gradient(90deg,#d97706,#f59e0b);color:#fff;box-shadow:0 2px 10px rgba(217,119,6,.35)}
@@ -258,6 +258,12 @@ header{background:#fff;color:var(--tx);border-bottom:1px solid #e5e7eb;box-shado
 .flower-pin-input{position:absolute;inset:0;width:100%;height:100%;opacity:.015;cursor:text;border:0;outline:0;background:transparent;color:transparent;caret-color:transparent}
 .flower-pin-wrap:focus-within .flower-pin span{border-bottom-color:var(--or2)}
 
+
+/* Native vertical scrolling: keep the whole document scrollable like the Outgoing page. */
+html, body { height:auto!important; min-height:100%!important; overflow-x:hidden!important; overflow-y:auto!important; position:static!important; touch-action:auto!important; overscroll-behavior-y:auto!important; -webkit-overflow-scrolling:touch; }
+body { padding-bottom:max(28px, env(safe-area-inset-bottom))!important; }
+#app, main.w, .w { height:auto!important; min-height:0!important; max-height:none!important; overflow:visible!important; touch-action:auto!important; -webkit-overflow-scrolling:touch; }
+@media(max-width:600px){ main.w{padding-bottom:36px!important;} .stock-actions{touch-action:pan-y!important;} }
 </style>
 </head>
 <body>
@@ -747,69 +753,3 @@ tick();if(!restoreAuth())loginView();
 </script>
 </body>
 </html>
-
-<style>
-/* Compact issue quantity input: typical quantity is one or two digits */
-#mt .rq{width:54px!important;min-width:54px!important;max-width:54px!important}
-/* History filters stay on a single line per group when space allows */
-.hist-shortcuts{align-items:center;gap:8px}
-.hist-shortcuts .in{min-width:220px}
-.hist-preset{display:flex;gap:6px;flex:0 0 auto;white-space:nowrap}
-.hist-preset .bo{padding:8px 13px}
-.hist-filters{display:flex;align-items:center;gap:8px;flex-wrap:nowrap}
-.hist-filters input[type=date]{flex:1 1 130px;min-width:118px;padding:9px 7px}
-.hist-filters select{flex:1 1 140px;min-width:0;padding:9px 7px}
-#ht{margin-bottom:0}
-#ht .em{padding:14px 10px}
-body:has(#ht){padding-bottom:0}
-@media(max-width:760px){
- .sr.hist-shortcuts{flex-direction:row;flex-wrap:nowrap;gap:6px}
- .hist-shortcuts .in{flex:1 1 auto;min-width:0;padding:0 8px}
- .hist-shortcuts input[type=text]{min-width:0;padding:10px 0;font-size:12px}
- .hist-preset{gap:4px}
- .hist-preset .bo{padding:7px 8px;font-size:12px;white-space:nowrap}
- .sr.hist-filters{flex-direction:row;flex-wrap:nowrap;gap:5px}
- .hist-filters input[type=date]{min-width:0;width:22%;font-size:10px;padding:8px 2px}
- .hist-filters select{min-width:0;width:19%;font-size:10px;padding:8px 2px}
-}
-</style>
-
-<style>
-
-/* Keep the top header and topic navigation fixed together; reserve space so content never hides underneath. */
-header{position:fixed!important;top:0;left:0;right:0;z-index:30}
-nav{position:fixed!important;z-index:29;top:68px;left:0;right:0}
-main{padding-top:132px!important}
-@media(max-width:600px){nav{top:48px!important}main{padding-top:108px!important}}
-/* Keep the add-product + button on the same row as the stock heading, including narrow mobile screens. */
-.stock-heading{display:flex!important;flex-wrap:nowrap!important;align-items:center!important;justify-content:space-between!important;width:100%;min-width:0;}
-.stock-heading>div:first-child{flex:1 1 auto;min-width:0;}
-.stock-heading .add-icon{flex:0 0 42px!important;width:42px;min-width:42px;height:42px;display:inline-flex;align-items:center;justify-content:center;margin-left:8px;}
-@media(max-width:600px){.stock-heading .add-icon{flex-basis:36px!important;width:36px;min-width:36px;height:36px;margin-left:6px;padding:0!important;}}
-/* On scroll, compact the active page's heading and stock filters without hiding the actual content. */
-body.scrolled .stock-heading{margin-bottom:7px;gap:6px;}
-body.scrolled .stock-heading h2.t{font-size:18px!important;line-height:1.25;}
-body.scrolled .stock-heading .sub2{display:none!important}
-body.scrolled .sc4{grid-template-columns:repeat(4,minmax(0,1fr));gap:5px;margin-bottom:8px}
-body.scrolled .sc{height:38px;min-height:38px;max-height:38px;padding:2px 3px;border-width:1px;border-radius:8px;font-size:9px;line-height:1.1}
-body.scrolled .sc b{font-size:15px;line-height:1;margin:0}
-body.scrolled .sc span{font-size:9px;white-space:nowrap}
-body.scrolled .chips{gap:5px;margin-top:5px;margin-bottom:8px}
-body.scrolled .chips .chip{font-size:11px;padding:5px 9px;line-height:1.2}
-body.scrolled .sr{margin-bottom:7px}
-/* Other pages: keep page titles compact on scroll and hide only their secondary explanatory line. */
-body.scrolled h2.t{font-size:18px!important;line-height:1.25}
-body.scrolled .row:has(>div>h2.t){margin-bottom:8px;gap:6px}
-body.scrolled .row:has(>div>h2.t) .sub2{display:none!important}
-body.scrolled .stock-actions{top:116px;padding:5px 0;margin-bottom:8px}
-@media(max-width:600px){
- body.scrolled .stock-heading h2.t,body.scrolled h2.t{font-size:18px!important}
- body.scrolled .sc4{gap:4px}
- body.scrolled .sc{height:36px;min-height:36px;max-height:36px;padding:2px}
- body.scrolled .sc b{font-size:14px}
- body.scrolled .sc span{font-size:8px}
- body.scrolled .chips .chip{font-size:10px;padding:4px 7px}
- body.scrolled .stock-actions{top:104px}
-}
-
-</style>
