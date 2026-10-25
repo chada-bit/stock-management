@@ -369,6 +369,12 @@ body { padding-bottom:max(28px, env(safe-area-inset-bottom))!important; }
 <input type="file" id="csvf" accept=".csv,text/csv" hidden>
 <div id="toast" role="status"></div>
 
+
+<!-- Firebase SDK: Smart Stock cloud sync (manual, no automatic overwrite) -->
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+
 <script>
 const KEY='smart-stock-v2';
 const seed=()=>({seq:100,br:'ร้านหลัก',branches:['ร้านหลัก'],
@@ -868,5 +874,32 @@ tick();if(!restoreAuth())loginView();
   updateScrollState();refreshFilters();
 })();
 </script>
+
+<button id="ssCloudBtn" type="button" style="position:fixed;right:14px;bottom:76px;z-index:9998;border:0;border-radius:24px;padding:11px 15px;background:#92400e;color:#fff;font:600 14px sans-serif;box-shadow:0 4px 16px #0002">☁️ สำรอง/ซิงก์</button>
+<dialog id="ssCloudDlg" style="border:0;border-radius:16px;max-width:440px;width:calc(100% - 32px);padding:22px;color:#2b2118;box-shadow:0 12px 50px #0004">
+<h3 style="margin-top:0">☁️ Smart Stock Cloud</h3><p style="font-size:13px">ข้อมูลเดิมยังอยู่ในเครื่องนี้ การซิงก์จะทำเมื่อคุณกดปุ่มเท่านั้น ไม่มีการซิงก์หรือเขียนทับอัตโนมัติ</p>
+<label style="display:block;margin:10px 0 4px">อีเมล Firebase</label><input id="ssEmail" type="email" autocomplete="username" style="width:100%;padding:10px;box-sizing:border-box">
+<label style="display:block;margin:10px 0 4px">รหัสผ่าน Firebase</label><input id="ssPass" type="password" autocomplete="current-password" style="width:100%;padding:10px;box-sizing:border-box">
+<button id="ssLogin" style="margin-top:12px;padding:10px 14px">เข้าสู่ระบบ Firebase</button><button id="ssLogout" style="margin-top:12px;padding:10px 14px">ออกจากระบบ</button><div id="ssUser" style="font-size:12px;margin-top:6px"></div>
+<hr style="border:0;border-top:1px solid #eee;margin:16px 0">
+<button id="ssBackup" style="display:block;width:100%;padding:11px;margin:8px 0">1. ดาวน์โหลดข้อมูลสำรองจากเครื่องนี้ (.json)</button><button id="ssUpload" style="display:block;width:100%;padding:11px;margin:8px 0">2. ส่งข้อมูลเครื่องนี้ขึ้น Firebase</button><button id="ssDownload" style="display:block;width:100%;padding:11px;margin:8px 0">3. โหลดข้อมูลจาก Firebase มาแทนข้อมูลในเครื่องนี้</button>
+<p id="ssStatus" role="status" style="font-size:12px;white-space:pre-wrap"></p><button id="ssClose" style="padding:9px 14px">ปิด</button></dialog>
+<script>
+(function(){
+ const cfg={apiKey:"AIzaSyAgCc3hcLjaIVgLREtqi9as0hCXRh3m7nw",authDomain:"chada-smart.firebaseapp.com",projectId:"chada-smart",storageBucket:"chada-smart.firebasestorage.app",messagingSenderId:"425088544484",appId:"1:425088544484:web:6704d5fa0a496a5fb5c6f1",measurementId:"G-TD44625PK2"};
+ const dlg=document.getElementById('ssCloudDlg'),status=document.getElementById('ssStatus');let auth,db;
+ const say=t=>status.textContent=t;
+ try{if(!firebase.apps.length)firebase.initializeApp(cfg);auth=firebase.auth();db=firebase.firestore();auth.onAuthStateChanged(u=>document.getElementById('ssUser').textContent=u?'เข้าสู่ระบบแล้ว: '+u.email:'ยังไม่ได้เข้าสู่ระบบ');}catch(e){say('เริ่มต้น Firebase ไม่สำเร็จ: '+e.message)}
+ document.getElementById('ssCloudBtn').onclick=()=>dlg.showModal();document.getElementById('ssClose').onclick=()=>dlg.close();
+ document.getElementById('ssLogin').onclick=async()=>{try{await auth.signInWithEmailAndPassword(document.getElementById('ssEmail').value.trim(),document.getElementById('ssPass').value);say('เข้าสู่ระบบ Firebase แล้ว')}catch(e){say('เข้าสู่ระบบไม่สำเร็จ: '+e.message)}};
+ document.getElementById('ssLogout').onclick=async()=>{try{await auth.signOut();say('ออกจากระบบแล้ว')}catch(e){say(e.message)}};
+ document.getElementById('ssBackup').onclick=()=>{try{const blob=new Blob([JSON.stringify(S,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='SmartStock_local_backup_'+new Date().toISOString().slice(0,10)+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1500);say('ดาวน์โหลดข้อมูลสำรองจากเครื่องนี้แล้ว เก็บไฟล์ไว้ก่อนซิงก์')}catch(e){say('สำรองไม่สำเร็จ: '+e.message)}};
+ document.getElementById('ssUpload').onclick=async()=>{const u=auth&&auth.currentUser;if(!u){say('กรุณาเข้าสู่ระบบ Firebase ก่อน');return}if(!confirm('จะส่งข้อมูลจากเครื่องนี้ขึ้น Firebase หากมีข้อมูล Cloud เดิม จะถูกแทนที่ โปรดดาวน์โหลดไฟล์สำรองก่อน ยืนยันหรือไม่?'))return;
+ try{const ref=db.collection('smartStockData').doc(u.uid),old=await ref.get();if(old.exists&&!confirm('พบข้อมูลเดิมบน Firebase การดำเนินการนี้จะแทนที่ข้อมูล Cloud ทั้งหมด ดำเนินการต่อหรือไม่?'))return;await ref.set({state:S,updatedAt:firebase.firestore.FieldValue.serverTimestamp(),updatedBy:u.uid,schema:1});say('ส่งข้อมูลขึ้น Firebase สำเร็จ')}catch(e){say('ส่งข้อมูลไม่สำเร็จ: '+e.message+' ตรวจสอบ Firestore Database และ Security Rules') }};
+ document.getElementById('ssDownload').onclick=async()=>{const u=auth&&auth.currentUser;if(!u){say('กรุณาเข้าสู่ระบบ Firebase ก่อน');return}if(!confirm('การโหลดจะแทนที่ข้อมูลในเครื่องนี้ โปรดดาวน์โหลดไฟล์สำรองก่อน ยืนยันหรือไม่?'))return;
+ try{const snap=await db.collection('smartStockData').doc(u.uid).get();if(!snap.exists){say('ไม่พบข้อมูล Cloud ข้อมูลในเครื่องไม่เปลี่ยนแปลง');return}const cloud=snap.data();if(!cloud||!cloud.state||!Array.isArray(cloud.state.products)){say('รูปแบบข้อมูล Cloud ไม่ถูกต้อง ข้อมูลในเครื่องไม่เปลี่ยนแปลง');return}if(!confirm('พบข้อมูล Cloud ต้องการแทนที่ข้อมูลในเครื่องนี้หรือไม่?'))return;localStorage.setItem('smart-stock-v2',JSON.stringify(cloud.state));location.reload()}catch(e){say('โหลดข้อมูลไม่สำเร็จ: '+e.message+' ตรวจสอบ Firestore Database และ Security Rules') }};
+})();
+</script>
+
 </body>
 </html>
