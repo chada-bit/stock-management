@@ -875,67 +875,32 @@ tick();if(!restoreAuth())loginView();
 })();
 </script>
 
-<button id="ssCloudBtn" type="button" style="position:fixed;right:14px;bottom:76px;z-index:9998;border:0;border-radius:24px;padding:11px 15px;background:#92400e;color:#fff;font:600 14px sans-serif;box-shadow:0 4px 16px #0002">☁️ สถานะซิงก์</button>
+<button id="ssCloudBtn" type="button" style="position:fixed;right:14px;bottom:76px;z-index:9998;border:0;border-radius:24px;padding:11px 15px;background:#92400e;color:#fff;font:600 14px sans-serif;box-shadow:0 4px 16px #0002">☁️ สำรอง/ซิงก์</button>
 <dialog id="ssCloudDlg" style="border:0;border-radius:16px;max-width:440px;width:calc(100% - 32px);padding:22px;color:#2b2118;box-shadow:0 12px 50px #0004">
-<h3 style="margin-top:0">☁️ Smart Stock Cloud</h3>
-<p style="font-size:13px;line-height:1.7">ระบบจะเชื่อมต่อและซิงก์ข้อมูลอัตโนมัติ ไม่ต้องสมัครบัญชีหรือเข้าสู่ระบบ ใช้ข้อมูลชุดเดียวกันทั้งคอมและมือถือ</p>
-<div id="ssSyncState" style="font-size:13px;margin:12px 0;padding:12px;background:#fff7ed;border-radius:10px">สถานะซิงก์: กำลังเชื่อมต่อ...</div>
-<button id="ssBackup" style="display:block;width:100%;padding:11px;margin:8px 0">ดาวน์โหลดข้อมูลสำรอง (.json)</button>
+<h3 style="margin-top:0">☁️ Smart Stock Cloud</h3><p style="font-size:13px">เข้าสู่ระบบด้วยบัญชีเดียวกันทั้งคอมและมือถือ แล้วระบบจะซิงก์ข้อมูลอัตโนมัติแบบเรียลไทม์</p>
+<label style="display:block;margin:10px 0 4px">อีเมล Firebase</label><input id="ssEmail" type="email" autocomplete="username" style="width:100%;padding:10px;box-sizing:border-box">
+<label style="display:block;margin:10px 0 4px">รหัสผ่าน Firebase</label><input id="ssPass" type="password" autocomplete="current-password" style="width:100%;padding:10px;box-sizing:border-box">
+<button id="ssLogin" style="margin-top:12px;padding:10px 14px">เข้าสู่ระบบ Firebase</button><button id="ssLogout" style="margin-top:12px;padding:10px 14px">ออกจากระบบ</button><div id="ssUser" style="font-size:12px;margin-top:6px"></div>
+<hr style="border:0;border-top:1px solid #eee;margin:16px 0">
+<button id="ssBackup" style="display:block;width:100%;padding:11px;margin:8px 0">1. ดาวน์โหลดข้อมูลสำรองจากเครื่องนี้ (.json)</button><button id="ssUpload" style="display:block;width:100%;padding:11px;margin:8px 0">ส่งข้อมูลเครื่องนี้ขึ้น Firebase (เริ่มต้น/เขียนทับ)</button><button id="ssDownload" style="display:block;width:100%;padding:11px;margin:8px 0">โหลดข้อมูลจาก Firebase มาแทนข้อมูลในเครื่องนี้</button><div id="ssSyncState" style="font-size:12px;margin-top:8px">สถานะซิงก์: ยังไม่ได้เชื่อมต่อ</div>
 <p id="ssStatus" role="status" style="font-size:12px;white-space:pre-wrap"></p><button id="ssClose" style="padding:9px 14px">ปิด</button></dialog>
 <script>
 (function(){
  const cfg={apiKey:"AIzaSyAgCc3hcLjaIVgLREtqi9as0hCXRh3m7nw",authDomain:"chada-smart.firebaseapp.com",projectId:"chada-smart",storageBucket:"chada-smart.firebasestorage.app",messagingSenderId:"425088544484",appId:"1:425088544484:web:6704d5fa0a496a5fb5c6f1",measurementId:"G-TD44625PK2"};
- const dlg=document.getElementById('ssCloudDlg'),status=document.getElementById('ssStatus'),syncState=document.getElementById('ssSyncState');
- let auth,db,unsub=null,writeTimer=null,applyingCloud=false,lastCloudJson='',ready=false,clientId='';
+ const dlg=document.getElementById('ssCloudDlg'),status=document.getElementById('ssStatus');let auth,db,unsub=null,writeTimer=null,applyingCloud=false,lastCloudJson='';const syncState=document.getElementById('ssSyncState');
  const say=t=>status.textContent=t;
- const sharedRef=()=>db.collection('smartStockData').doc('shared-stock');
- try{
-  if(!firebase.apps.length)firebase.initializeApp(cfg);
-  auth=firebase.auth();db=firebase.firestore();
-  clientId=sessionStorage.getItem('ssRealtimeClient')||('c'+Math.random().toString(36).slice(2));sessionStorage.setItem('ssRealtimeClient',clientId);
-  syncState.textContent='สถานะซิงก์: กำลังเชื่อมต่อ...';
-  auth.onAuthStateChanged(async user=>{
-   if(unsub){unsub();unsub=null} ready=false;
-   if(!user){try{await auth.signInAnonymously()}catch(e){syncState.textContent='เชื่อมต่อไม่สำเร็จ';say('เปิด Firebase Authentication → Sign-in method → Anonymous ก่อน แล้วลองรีเฟรชเว็บ ('+e.message+')')}return}
-   const ref=sharedRef();
-   try{
-    const initial=await ref.get();
-    if(!initial.exists){
-     await ref.set({state:S,updatedAt:firebase.firestore.FieldValue.serverTimestamp(),updatedBy:clientId,schema:1});
-     lastCloudJson=JSON.stringify(S);
-    }else{
-     const cloud=initial.data()?.state;
-     if(cloud&&Array.isArray(cloud.products)){
-      const cj=JSON.stringify(cloud);lastCloudJson=cj;
-      const local=localStorage.getItem('smart-stock-v2')||'';
-      if(local!==cj){applyingCloud=true;localStorage.setItem('smart-stock-v2',cj);location.reload();return}
-     }
-    }
-    unsub=ref.onSnapshot(snap=>{
-     if(!snap.exists)return;const data=snap.data()||{},cloud=data.state;
-     if(!cloud||!Array.isArray(cloud.products))return;
-     const json=JSON.stringify(cloud);if(json===lastCloudJson)return;
-     lastCloudJson=json;
-     if(data.updatedBy===clientId){syncState.textContent='สถานะซิงก์: ซิงก์ล่าสุดแล้ว';return}
-     applyingCloud=true;
-     try{localStorage.setItem('smart-stock-v2',json);syncState.textContent='มีข้อมูลใหม่จากอีกอุปกรณ์ กำลังอัปเดต...';setTimeout(()=>location.reload(),250)}finally{applyingCloud=false}
-    },e=>{syncState.textContent='ซิงก์ขัดข้อง';say('อ่านข้อมูลไม่ได้: '+e.message+' ตรวจสอบ Firestore Rules')});
-    ready=true;syncState.textContent='สถานะซิงก์: เชื่อมต่อแล้ว';
-   }catch(e){syncState.textContent='เชื่อมต่อไม่สำเร็จ';say('เชื่อมต่อ Firestore ไม่ได้: '+e.message+' ตรวจสอบ Anonymous Authentication และ Firestore Rules')}
-  });
- }catch(e){syncState.textContent='เริ่ม Firebase ไม่สำเร็จ';say(e.message)}
- window.ssScheduleSync=()=>{
-  if(applyingCloud||!ready||!auth?.currentUser||!db)return;
-  clearTimeout(writeTimer);writeTimer=setTimeout(async()=>{
-   try{const json=JSON.stringify(S);if(json===lastCloudJson)return;
-    await sharedRef().set({state:S,updatedAt:firebase.firestore.FieldValue.serverTimestamp(),updatedBy:clientId,schema:1});
-    lastCloudJson=json;syncState.textContent='สถานะซิงก์: ซิงก์ล่าสุดแล้ว '+new Date().toLocaleTimeString();
-   }catch(e){syncState.textContent='ซิงก์ไม่สำเร็จ';say('บันทึก Cloud ไม่สำเร็จ: '+e.message+' ตรวจสอบ Firestore Rules')}
-  },700);
- };
+ try{if(!firebase.apps.length)firebase.initializeApp(cfg);auth=firebase.auth();db=firebase.firestore();auth.onAuthStateChanged(async u=>{document.getElementById('ssUser').textContent=u?'เข้าสู่ระบบแล้ว: '+u.email:'ยังไม่ได้เข้าสู่ระบบ';if(unsub){unsub();unsub=null}if(!u){syncState.textContent='สถานะซิงก์: ยังไม่ได้เข้าสู่ระบบ';return}syncState.textContent='สถานะซิงก์: กำลังเชื่อมต่อ...';const ref=db.collection('smartStockData').doc(u.uid);try{const initial=await ref.get();if(!initial.exists){await ref.set({state:S,updatedAt:firebase.firestore.FieldValue.serverTimestamp(),updatedBy:u.uid,schema:1});lastCloudJson=JSON.stringify(S);say('สร้างข้อมูล Cloud จากเครื่องนี้แล้ว')}else{const cloud=initial.data()?.state;if(cloud&&Array.isArray(cloud.products)){const cj=JSON.stringify(cloud),lj=localStorage.getItem('smart-stock-v2')||'';lastCloudJson=cj;if(lj!==cj){localStorage.setItem('smart-stock-v2',cj);S=cloud;render();return}}}unsub=ref.onSnapshot(snap=>{if(!snap.exists)return;const cloud=snap.data()?.state;if(!cloud||!Array.isArray(cloud.products))return;const json=JSON.stringify(cloud);if(json===lastCloudJson)return;lastCloudJson=json;applyingCloud=true;try{localStorage.setItem('smart-stock-v2',json);syncState.textContent='สถานะซิงก์: มีข้อมูลใหม่ กำลังโหลดหน้าใหม่';S=cloud;render();}finally{applyingCloud=false}});syncState.textContent='สถานะซิงก์: เชื่อมต่อแล้ว';}catch(e){syncState.textContent='สถานะซิงก์: เชื่อมต่อไม่สำเร็จ';say('ซิงก์ไม่สำเร็จ: '+e.message+' ตรวจสอบ Firestore และ Rules')}});}catch(e){say('เริ่มต้น Firebase ไม่สำเร็จ: '+e.message)}
+ window.ssScheduleSync=()=>{if(applyingCloud||!auth?.currentUser||!db)return;clearTimeout(writeTimer);writeTimer=setTimeout(async()=>{try{const u=auth.currentUser;if(!u)return;const json=JSON.stringify(S);if(json===lastCloudJson)return;await db.collection('smartStockData').doc(u.uid).set({state:S,updatedAt:firebase.firestore.FieldValue.serverTimestamp(),updatedBy:u.uid,schema:1});lastCloudJson=json;syncState.textContent='สถานะซิงก์: ซิงก์ล่าสุดแล้ว '+new Date().toLocaleTimeString()}catch(e){syncState.textContent='สถานะซิงก์ผิดพลาด: '+e.message}},800)};
  document.getElementById('ssCloudBtn').onclick=()=>dlg.showModal();document.getElementById('ssClose').onclick=()=>dlg.close();
- document.getElementById('ssBackup').onclick=()=>{try{const blob=new Blob([JSON.stringify(S,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='SmartStock_backup_'+new Date().toISOString().slice(0,10)+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1500);say('ดาวน์โหลดข้อมูลสำรองแล้ว')}catch(e){say('สำรองไม่สำเร็จ: '+e.message)}};
+ document.getElementById('ssLogin').onclick=async()=>{try{await auth.signInWithEmailAndPassword(document.getElementById('ssEmail').value.trim(),document.getElementById('ssPass').value);say('เข้าสู่ระบบ Firebase แล้ว')}catch(e){say('เข้าสู่ระบบไม่สำเร็จ: '+e.message)}};
+ document.getElementById('ssLogout').onclick=async()=>{try{await auth.signOut();say('ออกจากระบบแล้ว')}catch(e){say(e.message)}};
+ document.getElementById('ssBackup').onclick=()=>{try{const blob=new Blob([JSON.stringify(S,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='SmartStock_local_backup_'+new Date().toISOString().slice(0,10)+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1500);say('ดาวน์โหลดข้อมูลสำรองจากเครื่องนี้แล้ว เก็บไฟล์ไว้ก่อนซิงก์')}catch(e){say('สำรองไม่สำเร็จ: '+e.message)}};
+ document.getElementById('ssUpload').onclick=async()=>{const u=auth&&auth.currentUser;if(!u){say('กรุณาเข้าสู่ระบบ Firebase ก่อน');return}if(!confirm('จะส่งข้อมูลจากเครื่องนี้ขึ้น Firebase หากมีข้อมูล Cloud เดิม จะถูกแทนที่ โปรดดาวน์โหลดไฟล์สำรองก่อน ยืนยันหรือไม่?'))return;
+ try{const ref=db.collection('smartStockData').doc(u.uid),old=await ref.get();if(old.exists&&!confirm('พบข้อมูลเดิมบน Firebase การดำเนินการนี้จะแทนที่ข้อมูล Cloud ทั้งหมด ดำเนินการต่อหรือไม่?'))return;await ref.set({state:S,updatedAt:firebase.firestore.FieldValue.serverTimestamp(),updatedBy:u.uid,schema:1});say('ส่งข้อมูลขึ้น Firebase สำเร็จ')}catch(e){say('ส่งข้อมูลไม่สำเร็จ: '+e.message+' ตรวจสอบ Firestore Database และ Security Rules') }};
+ document.getElementById('ssDownload').onclick=async()=>{const u=auth&&auth.currentUser;if(!u){say('กรุณาเข้าสู่ระบบ Firebase ก่อน');return}if(!confirm('การโหลดจะแทนที่ข้อมูลในเครื่องนี้ โปรดดาวน์โหลดไฟล์สำรองก่อน ยืนยันหรือไม่?'))return;
+ try{const snap=await db.collection('smartStockData').doc(u.uid).get();if(!snap.exists){say('ไม่พบข้อมูล Cloud ข้อมูลในเครื่องไม่เปลี่ยนแปลง');return}const cloud=snap.data();if(!cloud||!cloud.state||!Array.isArray(cloud.state.products)){say('รูปแบบข้อมูล Cloud ไม่ถูกต้อง ข้อมูลในเครื่องไม่เปลี่ยนแปลง');return}if(!confirm('พบข้อมูล Cloud ต้องการแทนที่ข้อมูลในเครื่องนี้หรือไม่?'))return;localStorage.setItem('smart-stock-v2',JSON.stringify(cloud.state));location.reload()}catch(e){say('โหลดข้อมูลไม่สำเร็จ: '+e.message+' ตรวจสอบ Firestore Database และ Security Rules') }};
 })();
 </script>
+
 </body>
 </html>
