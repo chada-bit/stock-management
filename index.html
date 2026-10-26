@@ -795,7 +795,7 @@ document.addEventListener('click',e=>{
  case'rep-refresh':return render();
  case'br-add':{const n=$('#s_br').value.trim();if(!n||S.branches.includes(n))return toast('ชื่อสาขาว่างหรือซ้ำ');S.branches.push(n);save();render();return toast('เพิ่มสาขาแล้ว')}
  case'sup-add':{const n=$('#s_sn').value.trim();if(!n)return toast('กรุณากรอกชื่อ');S.sups.push({id:uid(),name:n,code:$('#s_sc').value.trim().toUpperCase(),days:[],time:'12:00'});save();render();return toast('เพิ่มซัพพลายเออร์แล้ว')}
- case'export':return download('smart-stock-backup.json','application/json',JSON.stringify(S,null,1));
+ case'export':return download('smart-stock-data-all.json','application/json',JSON.stringify(S,null,2));
  case'csv':{const c=v=>`"${String(v??'').replace(/"/g,'""')}"`;return download('products.csv','text/csv;charset=utf-8','\ufeff'+['รหัส,ชื่อสินค้า,หมวดหมู่,ขนาด,ซัพพลายเออร์,ต้นทุนจริง,คงเหลือ,หน่วย,ขั้นต่ำ',...B(S.products).map(p=>[p.sku,p.name,p.cat,p.size,SP(p.sup)?.name,p.cost,p.qty,p.unit,p.min].map(c).join(','))].join('\n'))}
  case'import':return $('#file').click();
  case'reset':if(confirm('ล้างข้อมูลทั้งหมดและกลับเป็นข้อมูลตัวอย่าง?')&&pin('ล้างข้อมูล')){S=seed();save();$('#dlg').close();render()}return;
@@ -821,7 +821,20 @@ document.addEventListener('change',e=>{const t=e.target;
 $('#csvf').addEventListener('change',e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{e.target.value='';importCSV(r.result)};r.readAsText(f)});
 $('#file').addEventListener('change',e=>{
  const f=e.target.files[0];if(!f)return;const r=new FileReader();
- r.onload=()=>{try{const d=JSON.parse(r.result);if(!Array.isArray(d.products)||!Array.isArray(d.sups))throw 0;if(!confirm('นำเข้าข้อมูลจะแทนที่ข้อมูลปัจจุบันทั้งหมด ต้องการดำเนินการต่อ?'))return;S=d;save();$('#dlg').close();render();toast('นำเข้าข้อมูลแล้ว')}catch(x){toast('ไฟล์ไม่ถูกต้อง ใช้ไฟล์ JSON ที่ส่งออกจากระบบนี้')}e.target.value=''};
+ r.onload=()=>{try{
+  const d=JSON.parse(r.result);if(!d||!Array.isArray(d.products)||!Array.isArray(d.sups))throw 0;
+  if(!confirm('นำเข้าเฉพาะข้อมูลใหม่ที่ยังไม่มีในระบบ ข้อมูลเดิมจะไม่ถูกเขียนทับ ต้องการดำเนินการต่อ?'))return;
+  let added=0,skipped=0;
+  const merge=(key,items,match)=>{if(!Array.isArray(d[key]))return;S[key]=Array.isArray(S[key])?S[key]:[];for(const item of d[key]){if(!item||typeof item!=='object'){skipped++;continue}if(S[key].some(old=>match(old,item))){skipped++;continue}S[key].push(item);added++}};
+  // Products are considered duplicates by SKU, or by normalized name + branch + size.
+  merge('sups',d.sups,(a,b)=>(a.code&&b.code&&String(a.code).trim().toLowerCase()===String(b.code).trim().toLowerCase())||String(a.name||'').trim().toLowerCase()===String(b.name||'').trim().toLowerCase());
+  merge('products',d.products,(a,b)=>(a.sku&&b.sku&&String(a.sku).trim().toLowerCase()===String(b.sku).trim().toLowerCase()&&String(a.br||'')===String(b.br||''))||(String(a.name||'').trim().toLowerCase()===String(b.name||'').trim().toLowerCase()&&String(a.br||'')===String(b.br||'')&&String(a.size||'').trim().toLowerCase()===String(b.size||'').trim().toLowerCase()));
+  const keys={orders:(a,b)=>a.id!=null&&b.id!=null&&String(a.id)===String(b.id),moves:(a,b)=>a.id!=null&&b.id!=null&&String(a.id)===String(b.id)||(a.t&&b.t&&a.pid==b.pid&&a.no==b.no&&a.d==b.d&&a.note==b.note),docs:(a,b)=>a.no&&b.no&&String(a.no)===String(b.no),tx:(a,b)=>a.id!=null&&b.id!=null&&String(a.id)===String(b.id),receipts:(a,b)=>a.id!=null&&b.id!=null&&String(a.id)===String(b.id),expenseRequests:(a,b)=>a.id!=null&&b.id!=null&&String(a.id)===String(b.id),deleteRequests:(a,b)=>a.id!=null&&b.id!=null&&String(a.id)===String(b.id),stockEditRequests:(a,b)=>a.id!=null&&b.id!=null&&String(a.id)===String(b.id),branches:(a,b)=>String(a)===String(b),expCats:(a,b)=>String(a).trim().toLowerCase()===String(b).trim().toLowerCase(),users:(a,b)=>a.code&&b.code&&String(a.code)===String(b.code)};
+  for(const [key,match] of Object.entries(keys))merge(key,d[key],match);
+  // Keep current settings, PIN, branch and sequence; only advance sequence if imported IDs are numeric.
+  const ids=[...S.products,...S.sups,...S.docs,...S.orders,...S.moves,...S.tx].map(x=>Number(x?.id)).filter(Number.isFinite);if(ids.length)S.seq=Math.max(Number(S.seq)||1,Math.max(...ids)+1);
+  save();$('#dlg').close();render();toast(`นำเข้าใหม่ ${added} รายการ · ข้ามรายการเดิม/ซ้ำ ${skipped} รายการ`);
+ }catch(x){toast('ไฟล์ไม่ถูกต้อง ใช้ไฟล์ JSON ที่ส่งออกจากระบบนี้')}finally{e.target.value=''}};
  r.readAsText(f);
 });
 function paintFlowerPin(){const code=$('#loginCode').value.replace(/\D/g,'').slice(0,6);$('#loginCode').value=code;$('#flowerPin').querySelectorAll('span').forEach((el,i)=>{if(i<code.length){el.textContent=code[i];el.classList.add('filled')}else{el.textContent='🌸';el.classList.remove('filled')}})}
